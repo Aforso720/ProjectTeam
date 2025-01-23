@@ -1,0 +1,136 @@
+@font-face {
+  font-family: "Labil Grotesk";
+  src: url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.eot");
+  src: url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.eot?#iefix") format("embedded-opentype"),
+       url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.woff2") format("woff2"),
+       url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.woff") format("woff"),
+       url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.ttf") format("truetype"),
+       url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.svg#Labil Grotesk") format("svg");
+}
+
+.App {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100%;
+}
+
+.Header {
+  font-family: "Labil Grotesk", sans-serif;
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  border-bottom: 5px solid #4B1218;
+  text-decoration: none;
+
+    nav{
+      font-size: 30px;
+      color: black; 
+      font-size: 20px;
+      min-width: 777px;
+      height: 56px;
+      border: 3px black solid;
+      border-radius: 80px;
+      
+      ul{
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0;
+        padding-left: 10px;
+        padding-top: 5px;
+
+        li{
+          cursor: pointer;
+
+          a{
+            text-decoration: none;
+            color: inherit;
+          }
+        }
+
+        .active{
+          color: white;
+          background-color: #4B1218;
+          min-height: 46px;
+          min-width: 110px;
+          border-radius: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+      }
+    }
+
+    .Logotip{
+      width:436px;
+      height: 125px;
+    }
+}
+
+.Footer {
+  font-family: "Labil Grotesk", sans-serif;
+  min-height: 232px;
+  background-color: #212D3A;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  color: white;
+
+  .madeIn{
+    position: absolute;
+    bottom: 1em;
+    font-size: 1em;
+  }
+
+  .LogoFoot{
+    position: absolute;
+    top: 2em;
+    left: 2em;  
+      img{
+        width: 161px;
+        height: 43px;
+      }  
+  }
+
+  .inform{
+    width: 50%;
+    // color: white;
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-between;    
+    
+    .redLine{
+      position: absolute;
+      width: 50%;
+      border-top: 5px solid #4B1218 ;
+    }
+    
+    ul{
+      list-style-type: none ;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      li{
+        display: flex;
+        align-items: center;
+      }
+
+        .UlH{
+          font-size: 18px;
+        }
+    }
+  }
+}
+
