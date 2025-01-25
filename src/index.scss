@@ -1,46 +1,222 @@
-body {
-  margin: 0;
+.active{
+  color: white;
+  background-color: #4B1218;
+  min-height: 46px;
+  min-width: 110px;
+  border-radius: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .Home{
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  font-family: "Labil Grotesk", sans-serif;
 
   .Banner{
     width: 100%;
     margin-top: 1em;
     height: 687px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+
+    .swiper-slide {
+      margin: 0;
+    }
 
     .BannerImg{
       width: 100%;
       height: 687px;
-
-      // @media screen and (max-width: 2000px) {
-      //   width: 125%; 
-      // }
-    
-      // @media screen and (max-width: 1800px) {
-      //   width: 150%; 
-      // }
-
-      // @media screen and (max-width: 1600px) {
-      //   width: 175%; 
-      // }
-
-      // @media screen and (max-width: 1400px) {
-      //   width: 200%; 
-      // }
-
-      // @media screen and (max-width: 1200px) {
-      //   width: 225%; 
-      // }
-     
     }
     
   }
 
-  
-  
+  .Events{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    margin-left: 85px;
 
+    .stateEvents{
+      list-style-type: none;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      border: 2px solid black;
+      border-radius: 80px;
+      width: 675px;
+      height: 56px;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 0 5px;
+      transform: translateX(-15em);
+
+      li{
+        cursor: pointer;
+      }
+    }
+    
+    .sliderHome{
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+      flex-direction: row;
+      margin: 2em;
+      max-width: 1273px;
+    }
+  }
+
+  .TopT {
+    text-align: center;
+    position: relative;
+    border-top: 5px solid #4B1218;
+  
+    h2 {
+      color: #5C131C;
+      font-weight: bold;
+      font-size: 64px;
+    }
+  
+    .CardTop {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      width: 100%;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li:nth-child(1){
+        transform: translateX(5em)
+      }
+
+      li:nth-child(3){
+        transform: translateX(-5em)
+      }
+
+      li:nth-child(2){
+        transform: translateY(2em);
+        .KingTop{
+          transform: translateX(-8em) translateY(-25em);
+        }    
+      }
+    }
+  }
+
+  .aboutHome{
+    height: 619px;
+    width: 100%;
+    border: 1px solid #4B1218;
+    background-color: #4B1218;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    
+    .contentAbout{
+      display: flex;
+      flex-direction: row;
+      
+    .textAbout{
+      margin: 10px 33px;
+
+      h3{
+        font-size: 64px;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      p{
+        width: 649px;
+        height: 238px;
+        font-weight: 700;
+        font-size: 24px;
+      }
+
+    }  
+
+    .imgAbout{
+      height: 437px;
+      width: 692px;
+      border-radius:30px;
+      border: 1px white;
+    }
+    }
+    
+  }
+  
+  .Manajer{
+    font-family: Calibri, sans-serif;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h2{
+      font-size: 64px;
+      font-weight: 700;
+      padding-bottom: 5px;
+      transform: translateX(-7em);
+      color: #4B1218;
+    }
+
+    ul{
+      list-style-type: none;
+      display: flex;
+      align-content: center;
+      justify-content: center;
+      flex-direction: row;
+      width: 100%;
+
+        li{
+          width: 399px;
+          height: 326px;
+
+          .cardManajer{
+            width: 100%;
+            height: 326px;
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+
+            img{
+              height: 200px;
+              width: 200px;
+            }
+
+            h4{
+              font-weight: 700;
+              font-size: 40px;
+              margin: 5px 0;
+            }
+
+            p{
+              font-weight: 700;
+              font-size: 20px;
+              margin:0;
+              padding: 0 1em;
+              color: white;
+               background-color: #4B1218;
+               border-radius: 48px;
+            }
+          }
+        }
+        li:nth-child(2){
+          transform: translateY(-3em);    
+        }
+    }
+  }
 }
 

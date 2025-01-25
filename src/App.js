@@ -9,6 +9,7 @@ function App() {
   return (
     <div className="App">
       <Header/>
+      <div className='Content'>
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/contests" element={<Home/>} />
@@ -17,6 +18,7 @@ function App() {
         <Route path="/ratings" element={<Home/>} />
         <Route path="/profile" element={<Home/>} />
       </Routes>
+      </div>
       <Footer/>
     </div>
   );

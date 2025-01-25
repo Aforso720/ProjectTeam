@@ -7,19 +7,24 @@ import { Navigation } from "swiper/modules";
 
 const Banner = () => {
   return (
-    <div style={{ width: "100vw", overflow: "hidden" }}>
+    <div style={{ width: "100%", overflow: "hidden" }}>
       <Swiper
         modules={[Navigation]}
         spaceBetween={20}
         slidesPerView={1.5}
         navigation
-        pagination={{
-          clickable: true,
-          renderBullet: (index, className) => `<span class="${className}"></span>`,
-        }}
         centeredSlides={true}
         effect={"flip"}
         loop={true}
+        breakpoints={{
+          1800: {
+            spaceBetween:30,
+          },
+          2000: {
+            slidesPerView:2.5, 
+            spaceBetween:50,
+          },
+        }}
       >
         <SwiperSlide>
           <img

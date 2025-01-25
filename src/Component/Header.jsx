@@ -1,34 +1,34 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { Link,useLocation } from 'react-router'
 
 const Header = () => {
+  const {pathname} = useLocation();
   return (
     <header className='Header'>
         <img alt='Logo' src='img\logo.png' className='Logotip'/>
-        <nav>
-          <ul>
-            <li className='active'>
+          <ul className='navig'>
+            <li className={pathname === '/' ? "active":""}>
                <Link to={'/'}>
                 Главная
                </Link>
             </li>
-            <li><Link to={'/contest'}>
+            <li className={pathname === '/contests' ? "active":""}>
+              <Link to={'/contests'}>
                 Конкурсы
                </Link></li>
-            <li><Link to={'/about-us'}>
+            <li className={pathname === '/about-us' ? "active":""}>
+              <Link to={'/about-us'}>
                 О нас
                </Link></li>
-            <li><Link to={'/participants'}>
+            <li className={pathname === '/participants' ? "active":""}>
+              <Link to={'/participants'}>
                 Участники
                </Link></li>
-            <li><Link to={'/ratings'}>
-                Рейтинг
-               </Link></li>
-            <li><Link to={'/profile'}>
+            <li className={pathname === '/profile' ? "active":""}>
+              <Link to={'/profile'}>
                 <img src='img\profile-circle.svg'/>
                </Link></li>
           </ul>
-        </nav>
       </header>
   )
 }
