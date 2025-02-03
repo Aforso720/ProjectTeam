@@ -30,9 +30,9 @@ body,html{
 }
 
 .Content {
-  flex: 1; /* Заставляет этот блок занимать оставшееся доступное пространство */
-  display: flex; /* (опционально) Если внутри контента нужны элементы Flexbox */
-  flex-direction: column; /* (опционально) Направление дочерних элементов */
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
 }
 
 .Header {
@@ -47,7 +47,72 @@ body,html{
   border-bottom: 5px solid #4B1218;
   text-decoration: none;
 
-   
+  .profile-item {
+    border-radius: 30px;
+    position: relative;
+    box-sizing: border-box;
+    padding: 0;
+    width: 231px;
+    height: 46px;
+    background-color: transparent;
+    transition: 
+      background-color 0.5s ease, 
+      width 0.5s ease, 
+      height 0.5s ease;
+  
+    a {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+  }
+  
+  .profile-item.expanded {
+    background-color: #4B1218;
+    width: 231px;
+    height: 46px;
+  }
+  
+  .profile-item img {
+    width: 42px; 
+    height: 42px;
+    transition: opacity 0.5s ease;
+  }
+  
+  .profile-item img.hidden {
+    opacity: 0; 
+  }
+  
+  
+  .profile-item.expanded img {
+    transform: translateX(-0.5em); 
+    color: white;
+  }
+  
+  .profile-item span {
+    font-size: 20px;
+    font-weight: 500;
+    color: transparent;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    transition: 
+      color 0.3s ease 0.5s, 
+      transform 0.3s ease 0.5s; 
+  }
+  
+  .profile-item.expanded span {
+    transform: translateX(-0.5em); 
+    color: white; 
+  }
+  
+  
+
+
       .navig{
         display: flex;
         flex-direction: row;

@@ -15,7 +15,7 @@ const Home = () => {
                 <li className='stateEvent'>Активные конкурсы</li>
                 <li className='stateEvent'>Завершенные конкурсы</li>
             </ul>
-          <div>
+          <div className='sliderHome'>
             <Slaider/>
           </div>
         </div>

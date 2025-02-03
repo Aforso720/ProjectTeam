@@ -12,6 +12,75 @@
   box-sizing: border-box;
 }
 
+.swiper{
+  --swiper-navigation-size: 20px;
+  .swiper-button-prev,
+  .swiper-button-next {
+    content: 'public\img\arrow-circle-left.png';
+    color: #4b1218;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 2px solid #4b1218;
+    border-radius: 50%;
+  }
+
+}
+
+.sliderContainer {
+  .swiperSlide {
+    position: relative;
+    display: inline-block;
+    border: 5px solid #5C131C;
+    border-radius: 21.76px;
+  }
+
+
+  // .SlaiderImg{
+    
+  // }
+
+  .textOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 390px; 
+    height: 85px; 
+    background-color: rgba(0, 0, 0, 0.7); 
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+  }
+
+  .textOverlay p {
+    margin: 0;
+    word-wrap: break-word; 
+  }
+
+  .swiper {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding-left: 2em;
+  }
+
+  .swiper-button-prev {
+    transform: translateX(2em);
+  }
+
+  .swiper-button-next {
+    transform: translateX(0em);
+  }
+}
+
+
 .Home{
   width: 100%;
   height: 100%;
@@ -55,10 +124,11 @@
       width: 675px;
       height: 56px;
       font-size: 20px;
-      font-weight: bold;
+      font-weight: 500;
       padding: 0 5px;
       transform: translateX(-15em);
-
+    
+    
       li{
         cursor: pointer;
       }
@@ -70,7 +140,7 @@
       align-content: center;
       flex-direction: row;
       margin: 2em;
-      max-width: 1273px;
+      max-width: 1300px;
     }
   }
 
@@ -219,4 +289,141 @@
     }
   }
 }
+
+.Contests{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .MyEvents{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-bottom: 5px solid #4B1218 ;
+    
+
+    h2{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      background-color: #4B1218;
+      color: white;
+      height: 80px;
+    }
+
+    .SlaiderCont{
+      margin-top: 53px;
+      width: 1385.02px;
+      height: 272px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .BannerCont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 1415.35px;
+    height: 590px;
+    border-radius: 30px;
+    margin-top: 38px;
+
+    .bannerSlider{
+      .swiper {
+        width: 100%;
+        max-width: 1300px;
+        margin: 0 auto;
+        padding-left: 2em;
+      }
+
+
+      .swiper-button-prev {
+        transform: translateX(2em);
+      }
+    
+      .swiper-button-next {
+        transform: translateX(0em);
+      }
+    }
+  }
+
+  .EventsCont{
+    width: 1336.06px;
+    height: 1057px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    .arrEvents{
+      display: grid;
+      grid-template-columns : repeat(3, 1fr) ;
+      grid-template-rows : repeat(3, 1fr) ;
+      grid-column-gap : 10px;
+      grid-row-gap : 10px ;
+    }
+
+    .statesCont{
+      width: 918px;
+      height: 96px;
+      list-style-type: none;
+      font-size: 34px;
+      border: 5px solid black;
+      border-radius: 137px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+      align-content: center;
+      padding: 0;
+      transform: translateX(-5em);
+
+      .activeCont{
+        background-color:#4B1218;
+        border-radius: 82.29px;
+        color: white;
+      }
+
+      li{
+        width: 291.86px;
+        height: 78.86px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        font-family: "Labil Grotesk" , sans-serif;
+       
+      }
+    }
+
+    .paginationEvents{
+      list-style-type: none;
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      margin-top: 30px;
+
+      li{
+
+      }
+    }
+    
+  }
+
+
+}
+
 

@@ -24,10 +24,14 @@ const Header = () => {
               <Link to={'/participants'}>
                 Участники
                </Link></li>
-            <li className={pathname === '/profile' ? "active":""}>
-              <Link to={'/profile'}>
-                <img src='img\profile-circle.svg'/>
-               </Link></li>
+               <li
+                  className={`profile-item ${pathname === '/profile' ? "expanded" : ""}`}
+                >
+                  <Link to={'/profile'}>
+                  <img src={pathname === '/profile' ? "img/Group 78.png" : "img/profile-circle.svg"} alt="Profile" />
+                    {pathname === '/profile' && <span>Личный кабинет</span>}
+                  </Link>
+                </li>
           </ul>
       </header>
   )
