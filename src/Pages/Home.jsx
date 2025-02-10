@@ -33,7 +33,7 @@ const Home = () => {
               <h3>О нас</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est laborum.</p>
             </div>
-            <img src='img/image 4.svg' className='imgAbout'/>
+            <img src='img/image 4.svg' alt='' className='imgAbout'/>
           </div>
         </div>
         <div className='Manajer'>
@@ -41,21 +41,21 @@ const Home = () => {
           <ul>
             <li>
               <div className='cardManajer'>
-                <img src='img\Mask group.png'/>
+                <img src='img\Mask group.png' alt=''/>
                 <h4>Соло тащер</h4>
                 <p>Секретарь</p>
               </div>
             </li>
             <li>
               <div className='cardManajer'>
-                <img src='img\Mask group.png'/>
+                <img src='img\Mask group.png' alt=''/>
                 <h4>Соло тащер</h4>
                 <p>Руководитель проектной команды</p>
               </div>
             </li>
             <li>
               <div className='cardManajer'>
-                <img src='img\Mask group.png'/>
+                <img src='img\Mask group.png' alt=''/>
                 <h4>Соло тащер</h4>
                 <p>Секретарь</p>
               </div>

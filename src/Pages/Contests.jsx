@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-flip";
 import { Navigation } from "swiper/modules";
+import Event from '../Elements/Event';
 
 const Contests = () => {
   return (
@@ -61,67 +62,26 @@ const Contests = () => {
                 <li className='stateEvent'>Предстоящие</li>
         </ul>
         <div className='arrEvents'>
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
-          <img
-            src="img/image 1.png"
-            alt="Slide 1"
-            style={{ width: "400px", borderRadius: "10px" }}
-            className="SlaiderImg"
-          />
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
+          <Event image={"img/image 2.png"} description={'Хелоу'}/>
         </div>
         <ul className='paginationEvents'>
-          <li>Н</li>
-          <li>1</li>
+          <li>
+            <img src='img/arrow-circle-left.png' alt=''/>
+          </li>
+          <li className='activePagin'>1</li>
           <li>2</li>
           <li>3</li>
-          <li>Д</li>
+          <li>
+            <img src='img/arrow-circle-left.png'  alt=''/>
+          </li>
         </ul>
         </div>
     </div>
