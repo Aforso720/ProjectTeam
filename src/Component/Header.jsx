@@ -33,6 +33,7 @@ const Header = () => {
                              alt="Profile"/>
                         {pathname === '/profile' && <span>Личный кабинет</span>}
                     </Link>
+                {/*dd*/}
                 </li>
             </ul>
         </header>
