@@ -35,124 +35,11 @@ body, html {
   flex-direction: column;
 }
 
-//.Header {
-//  border-bottom: 5px solid #4B1218;
-//  text-decoration: none;
-//
-//
-//  .profile-item {
-//    border-radius: 30px;
-//    position: relative;
-//    box-sizing: border-box;
-//    padding: 0;
-//    width: 231px;
-//    height: 46px;
-//    background-color: transparent;
-//    transition:
-//            background-color 0.5s ease,
-//            width 0.5s ease,
-//            height 0.5s ease;
-//
-//    a {
-//      width: 100%;
-//      height: 100%;
-//      display: flex;
-//      justify-content: space-around;
-//      align-items: center;
-//      text-decoration: none;
-//      white-space: nowrap;
-//    }
-//  }
-//
-//  .profile-item.expanded {
-//    background-color: #4B1218;
-//    width: 231px;
-//    height: 46px;
-//  }
-//
-//  .profile-item img {
-//    width: 42px;
-//    height: 42px;
-//    transition: opacity 0.5s ease;
-//  }
-//
-//  .profile-item img.hidden {
-//    opacity: 0;
-//  }
-//
-//
-//  .profile-item.expanded img {
-//    transform: translateX(-0.5em);
-//    color: white;
-//  }
-//
-//  .profile-item span {
-//    font-size: 20px;
-//    font-weight: 500;
-//    color: transparent;
-//    display: flex;
-//    align-items: center;
-//    justify-content: center;
-//    transition:
-//            color 0.3s ease 0.5s,
-//            transform 0.3s ease 0.5s;
-//  }
-//
-//  .profile-item.expanded span {
-//    transform: translateX(-0.5em);
-//    color: white;
-//  }
-//
-//
-//  .navig{
-//    display: flex;
-//    flex-direction: row;
-//    list-style-type: none;
-//    align-items: center;
-//    align-content: center;
-//    justify-content: space-between;
-//    margin: 0 auto;
-//    padding: 0 5px;
-//    font-size: 30px;
-//    font-weight: 500;
-//    color: black;
-//    font-size: 20px;
-//    min-width: 777px;
-//    height: 56px;
-//    border: 3px black solid;
-//    border-radius: 80px;
-//    box-sizing: border-box;
-//
-//    li{
-//      position: relative;
-//      box-sizing: border-box;
-//      padding: 0;
-//      width: 127px;
-//      height: 46px;
-//      display: flex;
-//      align-items: center;
-//      justify-content: center;
-//
-//
-//      a{
-//        cursor: pointer;
-//        text-decoration: none;
-//        color: inherit;
-//      }
-//    }
-//  }
-//
-//  .Logotip{
-//    width:436px;
-//    height: 125px;
-//  }
-//}
 .Header {
   font-family: "Labil Grotesk", sans-serif;
   min-height: 230px;
   display: flex;
   flex-direction: column;
-  //font-size: 20px;;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
@@ -231,8 +118,8 @@ body, html {
     justify-content: space-between;
     margin: 0 auto;
     padding: 0 5px;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 30px;
+    font-weight: 500;
     color: black;
     min-width: 777px;
     height: 56px;
@@ -264,6 +151,7 @@ body, html {
     height: 125px;
   }
 }
+
 .Footer {
   font-family: "Labil Grotesk", sans-serif;
   min-height: 232px;
