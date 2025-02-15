@@ -4,35 +4,35 @@
   font-family: "Labil Grotesk";
   src: url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.eot");
   src: url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.eot?#iefix") format("embedded-opentype"),
-       url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.woff2") format("woff2"),
-       url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.woff") format("woff"),
-       url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.ttf") format("truetype"),
-       url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.svg#Labil Grotesk") format("svg");
+  url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.woff2") format("woff2"),
+  url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.woff") format("woff"),
+  url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.ttf") format("truetype"),
+  url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.svg#Labil Grotesk") format("svg");
 }
 
 
-body,html{
+body, html {
   margin: 0;
   padding: 0;
-  height: 100%; 
+  height: 100%;
 }
 
 #root {
-  height: 100%; 
+  height: 100%;
 }
 
 .App {
   background-color: white;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; 
+  min-height: 100vh;
   width: 100%;
 }
 
 .Content {
-  flex: 1; 
-  display: flex; 
-  flex-direction: column; 
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .Header {
@@ -55,11 +55,10 @@ body,html{
     width: 231px;
     height: 46px;
     background-color: transparent;
-    transition: 
-      background-color 0.5s ease, 
-      width 0.5s ease, 
-      height 0.5s ease;
-  
+    transition: background-color 0.5s ease,
+    width 0.5s ease,
+    height 0.5s ease;
+
     a {
       width: 100%;
       height: 100%;
@@ -70,91 +69,87 @@ body,html{
       white-space: nowrap;
     }
   }
-  
+
   .profile-item.expanded {
     background-color: #4B1218;
     width: 231px;
     height: 46px;
   }
-  
+
   .profile-item img {
-    width: 42px; 
+    width: 42px;
     height: 42px;
     transition: opacity 0.5s ease;
   }
-  
+
   .profile-item img.hidden {
-    opacity: 0; 
+    opacity: 0;
   }
-  
-  
+
+
   .profile-item.expanded img {
-    transform: translateX(-0.5em); 
+    transform: translateX(-0.5em);
     color: white;
   }
-  
+
   .profile-item span {
     font-size: 20px;
     font-weight: 500;
     color: transparent;
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     justify-content: center;
-    transition: 
-      color 0.3s ease 0.5s, 
-      transform 0.3s ease 0.5s; 
+    transition: color 0.3s ease 0.5s,
+    transform 0.3s ease 0.5s;
   }
-  
+
   .profile-item.expanded span {
-    transform: translateX(-0.5em); 
-    color: white; 
+    transform: translateX(-0.5em);
+    color: white;
   }
-  
-  
 
 
-      .navig{
-        display: flex;
-        flex-direction: row;
-        list-style-type: none;
-        align-items: center;
-        align-content: center;
-        justify-content: space-between;
-        margin: 0 auto;
-        padding: 0 5px;
-        font-size: 30px;
-        font-weight: 500;
-        color: black; 
-        font-size: 20px;
-        min-width: 777px;
-        height: 56px;
-        border: 3px black solid;
-        border-radius: 80px;
-        box-sizing: border-box;
+  .navigation {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 0 5px;
+    font-size: 30px;
+    font-weight: 500;
+    color: black;
+    min-width: 777px;
+    height: 56px;
+    border: 3px black solid;
+    border-radius: 80px;
+    box-sizing: border-box;
 
-        li{
-          position: relative;
-          box-sizing: border-box; 
-          padding: 0; 
-          width: 127px;
-          height: 46px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        
+    li {
+      position: relative;
+      box-sizing: border-box;
+      padding: 0;
+      width: 127px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-          a{
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-          }
-        }
+
+      a {
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
       }
-
-    .Logotip{
-      width:436px;
-      height: 125px;
     }
+  }
+
+  .logo {
+    width: 436px;
+    height: 125px;
+  }
 }
 
 .Footer {
@@ -168,54 +163,55 @@ body,html{
   color: white;
   font-weight: 700;
 
-  .madeIn{
+  .madeIn {
     position: absolute;
     bottom: 1em;
     font-size: 1em;
   }
 
-  .LogoFoot{
+  .LogoFoot {
     position: absolute;
     top: 2em;
-    left: 2em;  
-      img{
-        width: 161px;
-        height: 43px;
-      }  
+    left: 2em;
+
+    img {
+      width: 161px;
+      height: 43px;
+    }
   }
 
-  .inform{
+  .inform {
     width: 50%;
     margin-top: 1em;
     display: flex;
-    justify-content: space-between;    
-    
-    .redLine{
+    justify-content: space-between;
+
+    .redLine {
       position: absolute;
       width: 50%;
-      border-top: 5px solid #4B1218 ;
+      border-top: 5px solid #4B1218;
     }
-    
-    ul{
-      list-style-type: none ;
+
+    ul {
+      list-style-type: none;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
 
-      li{
+      li {
         padding: 5px;
         display: flex;
         align-items: center;
 
-          img{
-            padding-right: 5px;
-          }
+        img {
+          padding-right: 5px;
+        }
       }
 
       .UlH {
         font-family: 'Inter', sans-serif;
         font-size: 18px;
-    }    
+      }
     }
   }
 }

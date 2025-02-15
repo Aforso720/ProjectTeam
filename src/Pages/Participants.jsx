@@ -1,28 +1,28 @@
 import React from 'react'
-import { MyContext } from "../App";
+import {MyContext} from "../App";
 
 const Participants = () => {
     const {topPerson} = React.useContext(MyContext)
 
     const formatName = (fullName) => {
-        const maxLength = 12; 
+        const maxLength = 12;
         if (fullName.length <= maxLength) {
-        return fullName; 
+            return fullName;
         }
 
         const parts = fullName.split(' ');
         if (parts.length < 2) {
-        return fullName; 
+            return fullName;
         }
 
-        const lastName = parts[0]; 
-        const firstName = parts[1][0] + '.'; 
-        const middleName = parts[2] ? parts[2][0] + '.' : ''; 
+        const lastName = parts[0];
+        const firstName = parts[1][0] + '.';
+        const middleName = parts[2] ? parts[2][0] + '.' : '';
 
         return `${lastName} ${firstName} ${middleName}`.trim();
     };
 
-    if(!topPerson){
+    if (!topPerson) {
         <div>Загрузка!!!</div>
     }
 
@@ -32,17 +32,17 @@ const Participants = () => {
                 <h2>Руководители</h2>
                 <ul className='cardSupervisor'>
                     <li>
-                        <img src='img\Mask group.png' alt=''/>
+                        <img src='/img/Mask group.png' alt='top'/>
                         <h4>Соло тащер</h4>
                         <p>Секретарь</p>
                     </li>
                     <li>
-                        <img src='img\Mask group.png' alt=''/>
+                        <img src='/img/Mask group.png' alt='top'/>
                         <h4>Соло тащер</h4>
                         <p>Руководитель проектной команды</p>
                     </li>
                     <li>
-                        <img src='img\Mask group.png' alt=''/>
+                        <img src='/img/Mask group.png' alt='top'/>
                         <h4>Соло тащер</h4>
                         <p>Секретарь</p>
                     </li>
@@ -53,8 +53,8 @@ const Participants = () => {
                 <ul>
                     {topPerson.map((item, index) => (
                         <li className={`cardRating ${index >= 3 ? 'cardWithButton' : ''}`} key={index}>
-                            {index === 0 && <img src='img/crown.png' className='KingTop' alt='Корона' />}
-                            <img className='imgRating' alt='' src={item.image} />
+                            {index === 0 && <img src='/img/crown.png' className='KingTop' alt='Корона'/>}
+                            <img className='imgRating' alt='' src={item.image}/>
                             <div className='textCard'>
                                 <p className='positionRating'><b>{item.position}</b>st</p>
                                 <div className='textInfo'>
