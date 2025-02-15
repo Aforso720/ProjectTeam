@@ -6,8 +6,8 @@ const Header = () => {
 
     return (
         <header className='Header'>
-            <img alt='Logo' src='/img/logo.png' className='logo'/>
-            <ul className='navigation'>
+            <img alt='Logo' src='/img/logo.png' className='Logotip'/>
+            <ul className='navig'>
                 <li className={pathname === '/' ? "active" : ""}>
                     <Link to={'/'}>
                         Главная
