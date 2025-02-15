@@ -14,10 +14,11 @@ export const MyContext = React.createContext([]);
 
 function App() {
   const events = usePosts()
-  const person = usePerson()
+  const topPerson = usePerson()
+  const homePerson = usePerson({amount:3})
 
   return (
-    <MyContext.Provider value={{events,person}}>
+    <MyContext.Provider value={{events,topPerson,homePerson}}>
       <div className="App">
         <Header />
         <div className="Content">

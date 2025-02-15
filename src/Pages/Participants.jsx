@@ -2,7 +2,7 @@ import React from 'react'
 import { MyContext } from "../App";
 
 const Participants = () => {
-    const {person} = React.useContext(MyContext)
+    const {topPerson} = React.useContext(MyContext)
 
     const formatName = (fullName) => {
         const maxLength = 12; 
@@ -22,7 +22,7 @@ const Participants = () => {
         return `${lastName} ${firstName} ${middleName}`.trim();
     };
 
-    if(!person){
+    if(!topPerson){
         <div>Загрузка!!!</div>
     }
 
@@ -51,8 +51,9 @@ const Participants = () => {
             <div className='rating'>
                 <h2>Лидеры рейтинга</h2>
                 <ul>
-                    {person.map((item, index) => (
+                    {topPerson.map((item, index) => (
                         <li className={`cardRating ${index >= 3 ? 'cardWithButton' : ''}`} key={index}>
+                            {index === 0 && <img src='img/crown.png' className='KingTop' alt='Корона' />}
                             <img className='imgRating' alt='' src={item.image} />
                             <div className='textCard'>
                                 <p className='positionRating'><b>{item.position}</b>st</p>

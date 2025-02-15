@@ -1,0 +1,127 @@
+.profile{
+    font-family: "Calibri","sans-serif";
+    margin-top: 38px;
+    width: 1332px;
+    height: 412px;
+    background-color: #4B1218;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+
+
+    .photoProf{
+      height: 362px;
+      width: 336px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-left: 3em;
+      
+      .butPhotos{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2em;
+      }
+
+      img{
+        min-width: 300px;
+        height: 300px;
+      }
+
+      button{
+        width: 200px;
+        height: 50px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      .addPhotos{
+        background-color: white;
+        color: #4B1218;
+        border: 3px solid #4B1218;
+      }
+
+      .deletePhotos{
+        background-color: #4B1218;
+        border: 3px solid white;
+        color: white;
+      }
+
+    }
+
+
+    .InfoProfile{
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+
+      .buttonEdit{
+        width: 217px;
+        height: 60px;
+        color: #4B1218;
+        border-radius: 30px;
+        background-color: white;
+        font-size: 26px;
+        font-weight: 700;
+        transform: translateY(1.5em) translateX(10em);
+        cursor: pointer;
+      }
+
+      span{
+        position: absolute;
+        top: 5px;
+        right: 0.5em;
+        font-weight: 700;
+        font-size: 80px;
+        color: white;
+      }
+
+      .infoPerson{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+
+      .inputGroup {
+        margin-bottom: 20px;
+      }
+      
+      .inputGroup p {
+          font-size: 12px;
+          font-weight: 700;
+          margin-bottom: 5px;
+          color: #C7C7CC;
+      }
+      
+      .inputGroup input {
+          width: 321px;
+          height: 30px;
+          border: none;
+          border-bottom: 1px solid white;
+          background-color: transparent;
+          font-size: 14px;
+          outline: none;
+          padding: 5px 0;
+          font-weight: 700;
+          font-size: 20px;
+          display: flex;
+          flex-wrap: wrap;
+      }
+      
+      .inputGroup input[readonly] {
+          color: white;
+      }
+    }
+  }
