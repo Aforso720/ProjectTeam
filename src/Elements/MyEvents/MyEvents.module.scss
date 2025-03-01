@@ -17,16 +17,17 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
 
-button {
-  font-family: "Calibri", sans-serif;
-  border-radius: 15px;
-  background-color: #4B1218;
-  color: white;
-  font-size: 18px;
-  width: 183px;
-  height: 40px;
+  button {
+    font-family: "Calibri", sans-serif;
+    border-radius: 15px;
+    background-color: #4B1218;
+    color: white;
+    font-size: 18px;
+    width: 183px;
+    height: 40px;
+    cursor: pointer;
+  }
 }
 
 
@@ -91,4 +92,63 @@ button {
 
 .cardButton:hover {
   background-color: #d1c7c7;
+}
+
+
+.paginationEvents {
+  font-family: "Calibri", sans-serif;
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 32px;
+    background-color: white;
+    color: #4B1218;
+    border: 1px solid #4B1218;
+    cursor: pointer;
+
+    img {
+      width: 62px;
+      height: 62px;
+    }
+  }
+
+  li:first-child {
+    width: 62px;
+    height: 62px;
+    border: 0;
+  }
+
+  li:last-child {
+    border: 0;
+    width: 62px;
+    height: 62px;
+
+    img {
+      transform: rotate(180deg);
+    }
+  }
+
+  .active_page {
+    background-color: #4B1218;
+    color: white;
+  }
+}
+
+.wrapper{
+  display: flex;
+  justify-content: center;
 }

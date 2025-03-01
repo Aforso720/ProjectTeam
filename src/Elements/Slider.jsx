@@ -1,20 +1,15 @@
 import React from "react";
-import {Swiper, SwiperSlide} from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-flip";
-import {Navigation} from "swiper/modules";
+import { Navigation } from "swiper/modules";
 import Event from "./Event";
-import {MyContext} from "../App";
+import { MyContext } from "../App";
+import LoadEvent from "./Loading/loadingEvent";
 
-const Slider = () => {
-    const {events} = React.useContext(MyContext);
-
-    // После того как добавил запросы в слайдер он перестал отвечать на стрелки в начале , потом исправлю
-
-    if (!events) {
-        return <div>Loading...</div>;
-    }
+const Slider = ({ eventCategory }) => {
+    const { events, loadingMyEvent } = React.useContext(MyContext);
 
     return (
         <div className="sliderContainer">
@@ -27,11 +22,27 @@ const Slider = () => {
                 effect={"flip"}
                 loop={true}
             >
-                {events.map(item => (
-                    <SwiperSlide key={item.id}>
-                        <Event image={item.image} description={item.description}/>
-                    </SwiperSlide>
-                ))}
+                {loadingMyEvent ? (
+                    Array.from({ length: 4 }).map((_, index) => (
+                        <SwiperSlide key={index}>
+                            <LoadEvent width = "400px" height = "200px" />
+                        </SwiperSlide>
+                    ))
+                ) : (
+                    Array.isArray(eventCategory) && eventCategory.length > 0 ? (
+                        eventCategory.map(item => (
+                            <SwiperSlide key={item.id}>
+                                <Event image={item.image} description={item.description} />
+                            </SwiperSlide>
+                        ))
+                    ) : (
+                        events.map(item => (
+                            <SwiperSlide key={item.id}>
+                                <Event image={item.image} description={item.description} />
+                            </SwiperSlide>
+                        ))
+                    )
+                )}
             </Swiper>
         </div>
     );

@@ -3,54 +3,87 @@ import Banner from '../Elements/Banner';
 import Card from '../Elements/Card/index';
 import Slider from '../Elements/Slider';
 import {MyContext} from '../App';
+import usePosts from '../API/usePosts';
+import LoadingEvent from '../Elements/Loading/loadingEvent'
 
 const Home = () => {
-    const [isActive, setIsActive] = React.useState('Новости'); // Устанавливаем начальное значение
-    const {homePerson} = React.useContext(MyContext);
+    const [isActive, setIsActive] = React.useState('Новости');
+    const [category, setCategory] = React.useState('Новости');
+    const { events: eventCategory} = usePosts(category);
+    const {userActive} = React.useContext(MyContext)
 
-    const handleClick = (event) => {
-        setIsActive(event);
+    const {homePerson , isloadingPersHome} = React.useContext(MyContext);
+    const { events , loading : loadingBan } = usePosts();
+    const {manager, isloadingMng} = React.useContext(MyContext);
+
+
+    const handleClick = (category) => {
+        setIsActive(category);
+        setCategory(category);
     };
+
+
+  
 
     return (
         <div className='Home'>
             <div className='Banner'>
-                <Banner/>
+                {loadingBan ? <LoadingEvent width="1100px" height="700px"/> : <Banner news={events}/>}
             </div>
-            <div className='Events'>
+           <div className='Events'>
                 <ul className='stateEvents'>
                     <li
                         className={`stateEvent ${isActive === 'Новости' ? 'active' : ''}`}
                         onClick={() => handleClick('Новости')}
                     >
-                        Новости
+                        <span>Новости</span>
                     </li>
+                    {userActive ? (
+                        <li
+                            className={`stateEvent ${isActive === 'Мои конкурсы' ? 'active' : ''}`}
+                            onClick={() => handleClick('Мои конкурсы')}
+                        >
+                            <span>Мои конкурсы</span>
+                        </li>
+                    ) : null}
                     <li
                         className={`stateEvent ${isActive === 'Активные конкурсы' ? 'active' : ''}`}
                         onClick={() => handleClick('Активные конкурсы')}
                     >
-                        Активные конкурсы
+                        <span>Активные конкурсы</span>
                     </li>
                     <li
                         className={`stateEvent ${isActive === 'Завершенные конкурсы' ? 'active' : ''}`}
                         onClick={() => handleClick('Завершенные конкурсы')}
                     >
-                        Завершенные конкурсы
+                        <span>Завершенные конкурсы</span>
                     </li>
                 </ul>
+                
                 <div className='sliderHome'>
-                    <Slider/>
+                    <Slider eventCategory={eventCategory} />
                 </div>
             </div>
+
             <div className='TopT'>
                 <h2>Лидеры рейтинга</h2>
                 <ul className='CardTop'>
-                    {homePerson.map((person, index) => (
+                {isloadingPersHome ? (
+                    Array.from({ length: 3 }).map((_, index) => (
+                        <li key={index}>
+                            <LoadingEvent width="450px" height="550px"/>
+                        </li>
+                    ))
+                ) : (
+                    homePerson.map((person, index) => (
                         <li key={index}>
                             <Card {...person} />
-                            {person.position === 1 && <img src='/img/crown.png' className='KingTop' alt='Корона'/>}
+                            {person.position === 1 && (
+                                <img src='/img/crown.png' className='KingTop' alt='Корона' />
+                            )}
                         </li>
-                    ))}
+                    ))
+                )}
                 </ul>
             </div>
             <div className='aboutHome'>
@@ -69,27 +102,23 @@ const Home = () => {
             <div className='manager'>
                 <h2>Руководители</h2>
                 <ul>
-                    <li>
-                        <div className='card_manager'>
-                            <img src='/img/Mask group.png' alt=''/>
-                            <h4>Соло тащер</h4>
-                            <p>Секретарь</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div className='card_manager'>
-                            <img src='/img/Mask group.png' alt=''/>
-                            <h4>Соло тащер</h4>
-                            <p>Руководитель проектной команды</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div className='card_manager'>
-                            <img src='/img/Mask group.png' alt=''/>
-                            <h4>Соло тащер</h4>
-                            <p>Секретарь</p>
-                        </div>
-                    </li>
+                {isloadingMng ? (
+                    Array.from({ length: 3 }).map((_, index) => (
+                        <li key={index}>
+                            <LoadingEvent width="350px" height="250px"/>
+                        </li>
+                    ))
+                ) : (
+                    manager.map(item => (
+                        <li key={item.key}>
+                            <div className='card_manager'>
+                                <img src={item.image} alt=''/>
+                                <h4>{item.name}</h4>
+                                { item.status === "главный админ" ? <p>Руководитель проектной команды</p> : <p>Секретарь</p> }
+                            </div>
+                        </li>
+                    ))
+                )}
                 </ul>
             </div>
         </div>

@@ -113,35 +113,31 @@
     flex-direction: column;
     align-content: center;
     align-items: center;
-    margin-left: 85px;
 
     .stateEvents {
       list-style-type: none;
       display: flex;
-      flex-direction: row;
-      justify-content: space-between;
       align-items: center;
+      gap: 20px;
       border: 2px solid black;
       border-radius: 80px;
-      width: 675px;
-      height: 56px;
+      padding: 0 5px;
       font-size: 20px;
       font-weight: 500;
-      padding: 0 5px;
-      transform: translateX(-15em);
-
-
-      li {
-        cursor: pointer;
-        width: 100%;
-        height: 46px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: row;
-        flex-wrap: nowrap;
-      }
+      height: 56px;
+      transform: translateX(-12em);
     }
+    
+    .stateEvents li {
+      cursor: pointer;
+      width: auto;
+      padding: 0 10px;
+      height: 46px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
 
     .sliderHome {
       display: flex;
@@ -172,6 +168,10 @@
       list-style-type: none;
       margin: 0;
       padding: 0;
+
+      img{
+        border-radius: 50%;
+      }
 
       li:nth-child(3) {
         transform: translateX(-5em)
@@ -271,6 +271,7 @@
           img {
             height: 200px;
             width: 200px;
+            border-radius: 50%;
           }
 
           h4 {
@@ -292,8 +293,13 @@
       }
 
       li:nth-child(2) {
+        order: -1;
+      }
+
+      li:nth-child(1) {
         transform: translateY(-3em);
       }
+
     }
   }
 }
@@ -415,6 +421,9 @@
         font-weight: 500;
         font-family: "Labil Grotesk", sans-serif;
 
+        b{
+          cursor: pointer;
+        }
       }
     }
 
@@ -441,6 +450,7 @@
         background-color: white;
         color: #4B1218;
         border: 1px solid #4B1218;
+        cursor: pointer;
 
         img {
           width: 62px;
@@ -460,7 +470,7 @@
         height: 62px;
 
         img {
-          transform: scaleY(-1);
+          transform: rotate(180deg);
         }
       }
 
@@ -473,7 +483,7 @@
   }
 }
 
-.Participants {
+.Members {
   width: 100%;
   height: 100%;
   font-family: "Calibri", sans-serif;
@@ -504,8 +514,12 @@
       justify-content: space-around;
       gap: 2em;
 
-      li:nth-child(2) {
+      li:nth-child(1) {
         border: 5px solid #4B1218;
+      }
+
+      li:nth-child(3) {
+        order: -1;
       }
 
       li {
@@ -522,6 +536,7 @@
           height: 200px;
           width: 200px;
           transform: translateY(26px);
+          border-radius: 50%;
         }
 
 
@@ -550,6 +565,7 @@
   .rating {
     margin-top: 40px;
     background-image: url("../public/img/Фон.png");
+    background-color: #4B1218;
     color: white;
     width: 100%;
     height: 100%;
@@ -579,6 +595,7 @@
 
       li:nth-child(2) {
         transform: translateX(-15em);
+        margin-bottom: 30px;
       }
 
       li:nth-child(3) {
@@ -615,6 +632,7 @@
         width: 160px;
         height: 160px;
         margin: 20px 8px 20px 20px;
+        border-radius: 50%;
       }
 
       .KingTop {

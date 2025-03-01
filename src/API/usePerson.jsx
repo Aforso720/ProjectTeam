@@ -1,25 +1,33 @@
-import React from 'react'
-import axios from 'axios'
+import React from 'react';
+import axios from 'axios';
 
-//  Сделать фильтрацию
-
-const usePerson = ({amount} = {}) => {
+const usePerson = ({ amount } = {}) => {
     const [person, setPerson] = React.useState([]);
+    const [isloading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://67ac93e33f5a4e1477db15d4.mockapi.io/Person")
-                const filteredData = amount ? response.data.slice(0, amount) : response.data;
-                setPerson(filteredData)
-            } catch (error) {
-                console.log("Произошла ошибка:" + error)
-            }
-        }
-        fetchData();
-    }, [amount])
+                setIsLoading(true)
+                const response = await axios.get("https://67ac93e33f5a4e1477db15d4.mockapi.io/Person");
+                let sortedData = response.data.sort((a, b) => b.rating - a.rating); 
 
-    return person;
-}
+                sortedData = sortedData.map((item, index) => ({
+                    ...item,
+                    position: index + 1
+                }));
+
+                const filteredData = amount ? sortedData.slice(0, amount) : sortedData;
+                setPerson(filteredData);
+            } catch (error) {
+                console.log("Произошла ошибка:" + error);
+            }finally{
+                setIsLoading(false)
+            }
+        };
+        fetchData();
+    }, [amount]);
+    return {person,isloading};
+};
 
 export default usePerson;

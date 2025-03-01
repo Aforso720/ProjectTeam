@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link,useLocation } from 'react-router'
 
-const Header = () => {
+const Header = ({setUserActive}) => {
     const {pathname} = useLocation();
     return (
         <header className='Header'>
@@ -20,8 +20,8 @@ const Header = () => {
                     <Link to={'/about-us'}>
                         О нас
                     </Link></li>
-                <li className={pathname === '/participants' ? "active":""}>
-                    <Link to={'/participants'}>
+                <li className={pathname === '/members' ? "active":""}>
+                    <Link to={'/members'}>
                         Участники
                     </Link></li>
                 <li

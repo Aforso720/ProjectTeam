@@ -8,30 +8,58 @@
   display: flex;
   align-items: center;
 
-
   .photoProf {
-    height: 362px;
-    width: 336px;
+    height: 362px; 
+    width: 336px; 
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; 
     align-items: center;
     flex-direction: column;
     margin-left: 3em;
+    position: relative; 
 
     .butPhotos {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      margin-top: 2em;
+      margin-top: 20px; 
+      gap: 5px; 
+      position: absolute;
+      bottom: 0; 
+      left: 50%; 
+      transform: translateX(-12em);
     }
 
     img {
-      min-width: 300px;
+      width: 300px;
       height: 300px;
+      border-radius: 50%;
+      object-fit: cover; 
+      object-position: center; 
+      flex-shrink: 0; 
+      transform: translateX(0.5em);
     }
 
-    button {
+    .addPhotos {
+      background-color: white;
+      color: #4B1218;
+      border: 3px solid #4B1218;
+      width: 200px;
+      height: 50px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .deletePhotos {
+      background-color: #4B1218;
+      border: 3px solid white;
+      color: white;
       width: 200px;
       height: 50px;
       border-radius: 30px;
@@ -39,21 +67,7 @@
       font-size: 20px;
       cursor: pointer;
     }
-
-    .addPhotos {
-      background-color: white;
-      color: #4B1218;
-      border: 3px solid #4B1218;
-    }
-
-    .deletePhotos {
-      background-color: #4B1218;
-      border: 3px solid white;
-      color: white;
-    }
-
   }
-
 
   .InfoProfile {
     flex-grow: 1;
