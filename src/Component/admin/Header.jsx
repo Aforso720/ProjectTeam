@@ -1,0 +1,41 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
+import "./Header.scss";
+import {Link} from "react-router";
+
+const Header = () => {
+    const {pathname} = useLocation();
+
+    const test = [
+        ["Журнал", "journal"], //todo: поменять на journals
+        ["Конкурсы", "contest"],
+        ["Управление участниками", "managing"]
+    ]
+
+    return (
+        <header>
+            <section className={"back-container"}>
+                <img src="/img/logo.png" alt="logo"/>
+                <button>Вернуться на главную</button>
+            </section>
+
+            <section className={"active-container"}>
+                <ul>
+                    {
+                        test.map(([name,path]) => {
+                            return (
+                                <li className={pathname.includes("/admin/" + path) ? "active" : ""}>
+                                    <Link to={"/admin/"+ path}>
+                                        {name}
+                                    </Link>
+                                </li>
+                            )
+                    })
+                    }
+                </ul>
+            </section>
+        </header>
+    );
+};
+
+export default Header;

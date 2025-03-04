@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.scss";
 import Header from "./Component/Header";
+import HeaderAdmin from "./Component/admin/Header";
 import Footer from "./Component/Footer";
 import Home from "./Pages/Home";
 import {Route, Routes} from "react-router-dom";
@@ -10,6 +11,8 @@ import About from "./Pages/about/AboutUs";
 import Participants from "./Pages/Participants"
 import usePosts from "./API/usePosts";
 import usePerson from './API/usePerson';
+import Table from "./Pages/tables/Table";
+import Journals from "./Pages/journals/Journals";
 
 export const MyContext = React.createContext([]);
 
@@ -21,14 +24,19 @@ function App() {
     return (
         <MyContext.Provider value={{events, topPerson, homePerson}}>
             <div className="App">
-                <Header/>
+
+                {/*<Header/>*/}
+                <HeaderAdmin/>
                 <div className="Content">
                     <Routes>
+                        <Route path={"/admin/journal"} element={<Table/>}/>
+                        <Route path={"/admin/journals"} element={<Journals/>}/>
                         <Route path="/" element={<Home/>}/>
                         <Route path="/contests" element={<Contests/>}/>
                         <Route path="/about-us" element={<About/>}/>
                         <Route path="/participants" element={<Participants/>}/>
                         <Route path="/profile" element={<Account/>}/>
+                        {/*<Route path="/" element={<HeaderAdmin/>}/>*/}
                     </Routes>
                 </div>
                 <Footer/>
