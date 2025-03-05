@@ -7,12 +7,14 @@ import "swiper/css/effect-flip";
 import { Navigation } from "swiper/modules";
 import Event from '../Elements/Event';
 import usePosts from '../API/usePosts';
-import LoadingEvent from '../Elements/Loading/loadingEvent'
+import LoadingEvent from '../Elements/Loading/loadingEvent';
+
+
 
 const Contests = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("Активные конкурсы");
   const { events, loading } = usePosts(selectedCategory);
-  const { events : news , loading : loadingNews } = usePosts();
+  const { events: news, loading: loadingNews } = usePosts();
 
   const filteredEvents = events.filter(event => event.status === selectedCategory);
 
@@ -42,21 +44,30 @@ const Contests = () => {
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
+  const swiperRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      swiperRef.current.swiper.update();
+    }
+  }, [news]);
 
   return (
     <div className='Contests'>
       <div className='MyEvents'>
         <h2>Мои конкурсы</h2>
         <div className="slider_cont">
-          <Slider eventCategory={'Мои конкурсы'}/>
+          <Slider eventCategory={'Мои конкурсы'} />
         </div>
       </div>
       <div className='BannerCont'>
         <div className='bannerSlider' style={{ width: "100%", overflow: "hidden" }}>
-        <Swiper
+          <Swiper
+            ref={swiperRef}
+            key={news.length}
             modules={[Navigation]}
             spaceBetween={200}
             slidesPerView={1}
@@ -64,22 +75,22 @@ const Contests = () => {
             centeredSlides={true}
             effect={"flip"}
             loop={true}
-        >
+          >
             {loadingNews ? (
-                        <LoadingEvent  width="1300px" height="600px" />
-                ) : (
-                news.map((item, index) => (
-                    <SwiperSlide key={index}>
-                        <img
-                            src={item.image}
-                            alt={`Slide ${index + 1}`}
-                            style={{ width: "1334px", height: '590px', borderRadius: "10px" }}
-                            className="BannerImg"
-                        />
-                    </SwiperSlide>
-                ))
+              <LoadingEvent width="1300px" height="600px" />
+            ) : (
+              news.map((item, index) => (
+                <SwiperSlide key={index}>
+                  <img
+                    src={item.image}
+                    alt={`Slide ${index + 1}`}
+                    style={{ width: "1334px", height: '590px', borderRadius: "10px" }}
+                    className="BannerImg"
+                  />
+                </SwiperSlide>
+              ))
             )}
-        </Swiper>
+          </Swiper>
         </div>
       </div>
       <div className='EventsCont'>
@@ -104,46 +115,47 @@ const Contests = () => {
           </li>
         </ul>
         {loading ? (
-            <div className='arrEvents'>
-              {Array.from({ length: 9 }).map((_, index) => (
-                <LoadingEvent width="400px" height="250px" key={index} />
-              ))}
-            </div>
-          ) : (
-            <div className='arrEvents'>
-              {currentEvents.map(item => (
-                <Event key={item.id} image={item.image} description={item.description} />
-              ))}
-            </div>
-          )}
-        <ul className='paginationEvents'>
-        <li onClick={handlePrevPage}>
-          <img src='/img/arrow-circle-left.png' alt='arrow' />
-        </li>
-
-        {loading ? (
-          <li
-            key={1}
-            onClick={() => handlePageClick(1)}
-            className={currentPage === 1 ? 'active_page' : ''}
-          >
-            {1}
-          </li>
+          <div className='arrEvents'>
+            {Array.from({ length: 9 }).map((_, index) => (
+              <LoadingEvent width="400px" height="250px" key={index} />
+            ))}
+          </div>
         ) : (
-          Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-            <li
-              key={page}
-              onClick={() => handlePageClick(page)}
-              className={currentPage === page ? 'active_page' : ''}
-            >
-              {page}
-            </li>
-          ))
+          <div className='arrEvents'>
+            {currentEvents.map(item => (
+              <Event key={item.id} image={item.image} description={item.description} />
+            ))}
+          </div>
         )}
-        <li onClick={handleNextPage}>
-          <img src='/img/arrow-circle-left.png' alt='arrow' />
-        </li>
-      </ul>
+        
+        <ul className='paginationEvents'>
+          <li onClick={handlePrevPage}>
+            <img src='/img/arrow-circle-left.png' alt='arrow' />
+          </li>
+
+          {loading ? (
+            <li
+              key={1}
+              onClick={() => handlePageClick(1)}
+              className={currentPage === 1 ? 'active_page' : ''}
+            >
+              {1}
+            </li>
+          ) : (
+            Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              <li
+                key={page}
+                onClick={() => handlePageClick(page)}
+                className={currentPage === page ? 'active_page' : ''}
+              >
+                {page}
+              </li>
+            ))
+          )}
+          <li onClick={handleNextPage}>
+            <img src='/img/arrow-circle-left.png' alt='arrow' />
+          </li>
+        </ul>
       </div>
     </div>
   );
