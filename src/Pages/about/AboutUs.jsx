@@ -8,7 +8,7 @@ const AboutUs = () => {
                 <div className="about">
                     <div className="circle-wrapper">
                         <img src="/img/whome.svg" className="one-img" alt="e"/>
-                        <img src="/img/malik.svg" className="two-img" alt="f"/>
+                        <img src="/img/kot.jpg" className="two-img" alt="f"/>
                     </div>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
@@ -34,7 +34,7 @@ const AboutUs = () => {
                     </div>
                     <div className="circle-wrapper">
                         <div className="one-img"></div>
-                        <img src="/img/malik.svg" className="two-img" alt="e"/>
+                        <img src="/img/kot.jpg" className="two-img" alt="e"/>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@ const AboutUs = () => {
                             <li>Адрес:</li>
                         </ul>
                     </div>
-                    <img src="/img/map.png" alt="f"/>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1451.3945873813714!2d45.694475!3d43.3186726!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4051d3e1401a81b1%3A0x1292d18b30352e91!2zwqvQk9GA0L7Qt9C90LXQvdGB0LrQuNC5INCz0L7RgdGD0LTQsNGA0YHRgtCy0LXQvdC90YvQuSDQvdC10YTRgtGP0L3QvtC5INGC0LXRhdC90LjRh9C10YHQutC40Lkg0YPQvdC40LLQtdGA0YHQuNGC0LXRgiDQuNC80LXQvdC4INCw0LrQsNC00LXQvNC40LrQsCDQnC7QlC4g0JzQuNC70LvQuNC-0L3RidC40LrQvtCy0LDCuw!5e0!3m2!1sru!2suk!4v1740030382075!5m2!1sru!2suk" width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"/>
                 </div>
             </div>
         </section>

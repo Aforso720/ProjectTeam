@@ -2,9 +2,16 @@ import React from 'react'
 import Profile from '../Elements/Profile';
 import MyEvents from '../Elements/MyEvents'
 import MyDocument from '../Elements/MyDocument';
+import { useNavigate } from 'react-router-dom';
 
-const Account = () => {
+const Account = ({setUserActive}) => {
     const [activeTab, setActiveTab] = React.useState("personalData");
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        setUserActive(false); 
+        navigate('/'); 
+    };
 
     return (
 
@@ -47,6 +54,10 @@ const Account = () => {
 
             {activeTab === "MyDocument" ? (
                 <MyDocument/>
+            ) : null}
+
+            {activeTab === "LogOut" ? (
+                handleLogout()
             ) : null}
 
 

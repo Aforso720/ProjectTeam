@@ -8,25 +8,31 @@ import {Route, Routes} from "react-router-dom";
 import Contests from "./Pages/Contests";
 import Account from "./Pages/Account"
 import About from "./Pages/about/AboutUs";
-import Participants from "./Pages/Participants"
+import Members from "./Pages/Members"
 import usePosts from "./API/usePosts";
 import usePerson from './API/usePerson';
 import Table from "./Pages/tables/Table";
 import Journals from "./Pages/journals/Journals";
+import useManager from "./API/useManager";
 
 export const MyContext = React.createContext([]);
 
 function App() {
-    const events = usePosts()
-    const topPerson = usePerson()
-    const homePerson = usePerson({amount: 3})
+    const { events , loading : loadingMyEvent } = usePosts()
+    const { person: topPerson , isloading : isloadingTop} = usePerson();
+    const { person: homePerson, isloading : isloadingPersHome}  = usePerson({amount: 3})
+    const {manager , isloading : isloadingMng} = useManager()
+    const [userId,setUserId] = React.useState('1')
+
+    const [ userActive , setUserActive ] = React.useState(true)
 
     return (
-        <MyContext.Provider value={{events, topPerson, homePerson}}>
+        <MyContext.Provider value={{events, userId , topPerson, manager , homePerson , loadingMyEvent , isloadingPersHome ,  isloadingTop , isloadingMng, userActive}}>
             <div className="App">
 
                 {/*<Header/>*/}
                 <HeaderAdmin/>
+                <Header setUserActive={setUserActive}/>
                 <div className="Content">
                     <Routes>
                         <Route path={"/admin/journal"} element={<Table/>}/>
@@ -37,6 +43,8 @@ function App() {
                         <Route path="/participants" element={<Participants/>}/>
                         <Route path="/profile" element={<Account/>}/>
                         {/*<Route path="/" element={<HeaderAdmin/>}/>*/}
+                        <Route path="/members" element={<Members/>}/>
+                        <Route path="/profile" element={<Account setUserActive={setUserActive} setUserId = {setUserId}/>}/>
                     </Routes>
                 </div>
                 <Footer/>
