@@ -6,6 +6,7 @@ import {MyContext} from '../App';
 import usePosts from '../API/usePosts';
 import LoadingEvent from '../Elements/Loading/loadingEvent'
 
+
 const Home = () => {
     const [isActive, setIsActive] = React.useState('Новости');
     const [category, setCategory] = React.useState('Новости');
@@ -96,7 +97,7 @@ const Home = () => {
                             voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
                             cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                     </div>
-                    <img src='/img/image 4.svg' alt='' className='imgAbout'/>
+                    <img src='img/image 6.png' className='imgAbout' alt='' />
                 </div>
             </div>
             <div className='manager'>

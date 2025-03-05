@@ -14,12 +14,14 @@ import useManager from "./API/useManager";
 
 export const MyContext = React.createContext([]);
 
+// userId не работает , может надо исправить проверку , позже разобраться
+
 function App() {
     const { events , loading : loadingMyEvent } = usePosts()
     const { person: topPerson , isloading : isloadingTop} = usePerson();
     const { person: homePerson, isloading : isloadingPersHome}  = usePerson({amount: 3})
     const {manager , isloading : isloadingMng} = useManager()
-    const [userId,setUserId] = React.useState('1')
+    const [userId,setUserId] = React.useState(1)
 
     const [ userActive , setUserActive ] = React.useState(true)
 
