@@ -755,7 +755,6 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  align-content: center;
   align-items: center;
 
   .navigation_account {
@@ -770,6 +769,8 @@
     align-content: center;
     justify-content: space-between;
     padding: 0;
+    
+   
 
 
     .activeAcc {
@@ -793,4 +794,20 @@
       cursor: pointer;
     }
   }
+}
+
+@media (max-width: 400px) {
+    .Account{
+      align-items: center;
+      width: 375px;
+      
+
+      .navigation_account {
+        width: 200px;
+
+        li{
+          font-size: 2px;
+        }
+      }
+    }
 }

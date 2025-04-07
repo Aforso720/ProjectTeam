@@ -36,16 +36,17 @@ body, html {
 }
 
 .Header {
-  font-family: "Labil Grotesk", sans-serif;
-  min-height: 230px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  border-bottom: 5px solid #4B1218;
-  text-decoration: none;
+  // font-family: "Labil Grotesk", sans-serif;
+  // min-height: 230px;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+  // justify-content: center;
+  // font-size: calc(10px + 2vmin);
+  // color: white;
+  // border-bottom: 5px solid #4B1218;
+  // text-decoration: none;
+  display: none;
 
   .profile-item {
     border-radius: 30px;
@@ -127,6 +128,8 @@ body, html {
     border-radius: 80px;
     box-sizing: border-box;
 
+    
+
     li {
       position: relative;
       box-sizing: border-box;
@@ -153,15 +156,18 @@ body, html {
 }
 
 .Footer {
-  font-family: "Labil Grotesk", sans-serif;
-  min-height: 232px;
-  background-color: #212D3A;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  font-size: 14px;
-  color: white;
-  font-weight: 700;
+  // font-family: "Labil Grotesk", sans-serif;
+  // min-height: 232px;
+  // background-color: #212D3A;
+  // position: relative;
+  // display: flex;
+  // justify-content: center;
+  // font-size: 14px;
+  // color: white;
+  // font-weight: 700;
+  display: none;
+
+  
 
   .madeIn {
     position: absolute;
@@ -216,3 +222,8 @@ body, html {
   }
 }
 
+@media (max-width: 400px) {
+  .Content{
+    align-items: center;
+  }
+}

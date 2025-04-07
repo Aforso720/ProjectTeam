@@ -48,8 +48,10 @@ const DocumentModal = () => {
           <h2>Добавить сертификат</h2>
           <img className={style.closeModal} src="img/+.png" onClick={closeModal} alt=""/>
           <div className={style.contentDocum}>
-            <input className={style.infoDocum} placeholder='Кто выдал. Пример: Сертификат HTTM'/>
-            <input className={style.DataDocum} placeholder='Дата получения. Пример: 01.01.2025'/>
+            <div className={style.inputgroup}>
+              <input className={style.infoDocum} placeholder='Кто выдал. Пример: Сертификат HTTM'/>
+              <input className={style.DataDocum} placeholder='Дата получения. Пример: 01.01.2025'/>
+            </div>
             <div className={style.addedPhoto}>
               <img src="img/gallery-add.png" alt=""/>
               <p>Загрузите сертификат</p>

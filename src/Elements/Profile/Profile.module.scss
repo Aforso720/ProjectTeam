@@ -39,6 +39,7 @@
       object-position: center; 
       flex-shrink: 0; 
       transform: translateX(0.5em);
+
     }
 
     .addPhotos {
@@ -137,4 +138,83 @@
       color: white;
     }
   }
+}
+
+/* .............................Адаптивка..................................*/
+@media (max-width: 400px){
+  .profile{
+      width: 345px;
+      height: 660px;
+      flex-direction: column;
+      margin: 0;
+      
+      
+      
+
+      .InfoProfile{
+        position: absolute;
+        width: 345px;
+        height: 800px;
+        .infoPerson{
+          justify-content: flex-start;
+          flex-direction: column;
+          align-items: center;
+        }
+        .buttonEdit{
+          transform:  translateX(0em);
+          width: 282px;
+          height: 37px;
+          font-size: 22px;
+          margin-top: 10px;
+        }
+        span{
+          font-size: 48px ;
+        }
+        .inputGroup p{
+          font-size: 11px;
+        }
+        .inputGroup input{
+          font-size: 20px;
+          margin: 0;
+        }
+        .inputGroup{
+          margin: 0;
+        }
+        
+      }
+      
+      .photoProf{
+        
+        margin-left: 0;
+        height: 100px;
+        img{
+          padding: 5px;
+          width: 116px;
+          height: 116px;
+          transform: none;
+          
+        }
+        .deletePhotos{
+          width: 52px;
+          height: 17px;
+          font-size: 5px;
+          border: 1px solid white;
+        }
+        .addPhotos{
+          width: 74px;
+          height: 17px;
+          font-size: 8px;
+        }
+        .butPhotos {
+          justify-content: center;
+          align-items: center;
+          margin: 0;
+          bottom: 0; 
+          left: 0; 
+          transform: translateX(0em);
+          position: relative;
+        }
+    }
+  }
+  
 }
