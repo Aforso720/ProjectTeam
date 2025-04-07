@@ -1,10 +1,17 @@
-import React from 'react'
+import React from 'react';
 
 const Footer = () => {
     return (
         <footer className='Footer'>
             <div className='LogoFoot'>
-                <img alt={'logo'} src='/img/logoFoot.svg'/>
+                <picture>
+                    <source 
+                        media="(min-width: 375px) and (max-width: 800px)" 
+                        srcSet='img\LogoFoot.png' 
+                        className='mobilFootLogo'
+                    />
+                    <img alt={'logo'} src='/img/logoFoot.svg'/>
+                </picture>
             </div>
             <div className='inform'>
                 <div className='redLine'></div>
@@ -21,7 +28,7 @@ const Footer = () => {
                     </li>
                     <li><img alt={'email'} src='/img/email.svg'/></li>
                     <li><img alt={'location'} src='/img/loc.svg'/>
-                        пр. Х. Исаева, 100, Грозный
+                        пр. Х. Исаева, 100
                     </li>
                 </ul>
                 <ul>
@@ -37,4 +44,4 @@ const Footer = () => {
     )
 }
 
-export default Footer
+export default Footer;

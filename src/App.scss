@@ -10,12 +10,15 @@
   url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.svg#Labil Grotesk") format("svg");
 }
 
+*{
+  box-sizing: border-box;
+}
 
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  box-sizing: border-box;
+  
 }
 
 #root {
@@ -47,6 +50,31 @@ body, html {
   color: white;
   border-bottom: 5px solid #4B1218;
   text-decoration: none;
+  position: relative;
+
+  // Скрываем чекбокс
+  .menu-toggle {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+
+  // Стили для кнопки бургера
+  .burger-button {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
 
   .profile-item {
     border-radius: 30px;
@@ -87,7 +115,6 @@ body, html {
     opacity: 0;
   }
 
-
   .profile-item.expanded img {
     transform: translateX(-0.5em);
     color: white;
@@ -108,7 +135,6 @@ body, html {
     transform: translateX(-0.5em);
     color: white;
   }
-
 
   .navig {
     display: flex;
@@ -138,7 +164,6 @@ body, html {
       align-items: center;
       justify-content: center;
 
-
       a {
         cursor: pointer;
         text-decoration: none;
@@ -150,8 +175,132 @@ body, html {
   .Logotip {
     width: 436px;
     height: 125px;
+    cursor: pointer;
+
+    @media screen and (min-width: 375px) and (max-width: 600px) {
+      height: 40px;
+      width: 200px;
+    }
+
+    @media screen and (min-width: 600px) and (max-width: 800px) {
+      height: 50px;
+      width: 300px;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 20px;
+    min-height: 80px;
+    position: relative; 
+
+    .burger-button {
+      display: block;
+      right: 10px; 
+      top: 50%;
+      padding-top: 5px;
+
+      img{
+
+        @media screen and (min-width: 375px) and (max-width: 600px) {
+          height: 40px;
+          width: 40px;
+        }
+
+        @media screen and (min-width: 600px) and (max-width: 800px) {
+          height: 45px;
+          width: 45px;
+        }
+      }
+    }
+
+    .navig {
+      display: none;
+      position: absolute; 
+      top: 100%; 
+      right: 0px; 
+      left: auto; 
+      background: white;
+      flex-direction: column;
+      min-width: auto;
+      height: auto;
+      border-radius: 0 0 0 10px;
+      border: 1px solid #4B1218;
+      padding: 10px 0;
+      z-index: 1000;
+      width: 180px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+      margin-top: 5px; 
+      text-align: center;
+
+      li {
+        // width: 100%;
+        height: 40px; 
+        margin: 2px 0; 
+        font-size: 16px;
+
+        a {
+          width: 100%;
+          justify-content: center;
+          padding: 0 15px;
+          color: black;
+          font-weight: 400; 
+        }
+
+        &.active a {
+          font-weight: 500; // Активный пункт - полужирный
+          color: white;
+        }
+      }
+
+      .profile-item {
+        width: auto;
+        height: 40px;
+        margin: 5px 0;
+
+        a {
+          justify-content: center;
+        }
+
+        img {
+          width: 30px;
+          height: 30px;
+        }
+
+        span {
+          font-size: 16px;
+        }
+
+        
+      }
+
+      .profile-item.expanded {
+        span{
+          margin-left: 10%;
+        }
+
+        img {
+          display: none;
+        }
+      }
+    }
+
+    .menu-toggle:checked ~ .navig {
+      display: flex;
+    }
+  }
+
+  @media screen and (max-width: 375px) {
+    padding: 0 10px;
+
+    .navig {
+      right: 5px;
+      width: 160px;
+    }
   }
 }
+
 
 .Footer {
   font-family: "Labil Grotesk", sans-serif;
@@ -169,17 +318,17 @@ body, html {
     bottom: 1em;
     font-size: 1em;
   }
-
   .LogoFoot {
     position: absolute;
     top: 2em;
     left: 2em;
-
+  
     img {
       width: 161px;
       height: 43px;
     }
   }
+
 
   .inform {
     width: 50%;
@@ -206,6 +355,8 @@ body, html {
 
         img {
           padding-right: 5px;
+          width: 20px; 
+          height: 20px;
         }
       }
 
@@ -215,5 +366,148 @@ body, html {
       }
     }
   }
+
+  @media (max-width: 1250px) and (min-width: 800px) {
+    font-size: calc(12px + (14 - 12) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение шрифта
+
+    .LogoFoot {
+      top: 1.5em;
+      left: 1.5em;
+
+      img {
+        width: calc(120px + (161 - 120) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение ширины логотипа
+        height: calc(32px + (43 - 32) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение высоты логотипа
+      }
+    }
+
+    .inform {
+      width: calc(60% + (50 - 60) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение ширины блока
+
+      .redLine {
+        width: calc(60% + (50 - 60) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение ширины красной линии
+      }
+
+      ul {
+        .UlH {
+          font-size: calc(16px + (18 - 16) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение шрифта заголовков
+        }
+
+        li {
+          img {
+            width: calc(16px + (20 - 16) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение размера иконок
+            height: calc(16px + (20 - 16) * ((100vw - 800px) / (1250 - 800)));
+          }
+        }
+      }
+    }
+
+    .madeIn {
+      font-size: calc(0.9em + (1 - 0.9) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение шрифта нижнего текста
+    }
+  }
+
+  @media (min-width:600px ) and (max-width: 800px) {
+    font-size: 10px;
+    min-height: 154px;
+
+    .LogoFoot {
+      top: 1em;
+      left: 1em;
+
+      img {
+        width: 80px;
+        height: 80px;
+      }
+    }
+
+    .inform {
+      width: 70%;
+
+      .redLine {
+        border-top: 3px solid #4B1218 ;
+        width: 70%;
+      }
+
+      ul {
+        width: auto;
+        padding-left: 0;
+        .UlH {
+          font-size: 12px;
+        }
+
+        li:nth-child(1){
+          margin-bottom: 5px;
+        }
+
+        li {
+          width: auto;
+          margin: 0;
+          padding: 1px;
+          img {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+
+    .madeIn {
+      font-size: 0.9em;
+    }
+  }
+
+
+  @media (min-width:375px ) and (max-width:600px) {
+    font-size: 8px;
+    min-height: 144px;
+
+    .LogoFoot {
+      top: 3em;
+      left: 0em;
+
+      img {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+    .inform {
+      width: 80%;
+      margin-left: 50px;
+
+      .redLine {
+        border-top: 3px solid #4B1218 ;
+        width: 80%;
+      }
+
+      ul {
+        width: auto;
+        padding-left: 0;
+        .UlH {
+          font-size: 10px;
+        }
+
+        li:nth-child(1){
+          margin-bottom: 5px;
+        }
+
+        li {
+          width: auto;
+          margin: 0;
+          padding: 1px;
+          img {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+    }
+
+    .madeIn {
+      font-size: 0.9em;
+    }
+  }
+  
 }
 

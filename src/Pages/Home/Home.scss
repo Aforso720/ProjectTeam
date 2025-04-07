@@ -1,0 +1,421 @@
+.Home {
+    width: 100%;
+    height: 100%;
+    font-family: "Labil Grotesk", sans-serif;
+  
+    .Banner {
+        width: 100%;
+        margin-top: 1em;
+        height: 687px; 
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+    
+        .swiper-slide {
+            margin: 0;
+        }
+    
+        .BannerImg {
+            width: 100%;
+            height: 687px; 
+            object-fit: cover; 
+        }
+
+    
+        @media screen and (min-width: 800px) and (max-width: 1400px) {
+            height: 500px; 
+    
+            .BannerImg {
+                height: 500px; 
+            }
+        }
+    
+        // Медиа-запрос для экранов меньше 800px
+        @media screen and (max-width: 800px) {
+            height: 400px; 
+    
+            .BannerImg {
+                height: 400px; 
+            }
+        }
+    }
+  
+    .Events {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+    
+        .stateEvents {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 2px solid black;
+            border-radius: 80px;
+            padding: 0 5px;
+            font-size: 20px;
+            font-weight: 500;
+            height: 56px;
+            transform: translateX(-12em);
+    
+            li {
+                cursor: pointer;
+                width: auto;
+                padding: 0 10px;
+                height: 46px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    
+        .sliderHome {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: row;
+            margin: 2em;
+            max-width: 1300px;
+            
+          
+        }
+
+       
+
+
+
+        @media screen and (min-width: 900px) and (max-width: 1400px) {
+            .stateEvents {
+                font-size: 16px;
+                height: 46px; 
+                gap: 15px; // Уменьшаем расстояние между элементами
+                padding: 0 5px; // Уменьшаем внутренние отступы
+                transform: translateX(-6em); 
+    
+                li {
+                    height: 36px; // Уменьшаем высоту элементов
+                    padding: 0 8px; // Уменьшаем внутренние отступы
+                }
+    
+                .active {
+                    min-height: 36px; // Уменьшаем высоту активного элемента
+                    min-width: 90px; // Уменьшаем ширину активного элемента
+                    font-size: 16px;
+                }
+            }
+        }
+    
+        @media screen and (max-width: 1000px) {
+            .stateEvents {
+                font-size: 14px; // Уменьшаем размер текста
+                height: 40px; // Уменьшаем высоту панели
+                gap: 10px; // Уменьшаем расстояние между элементами
+                padding: 0 5px; // Уменьшаем внутренние отступы
+                transform: translateX(-8em); // Корректируем смещение
+    
+                li {
+                    height: 30px; // Уменьшаем высоту элементов
+                    padding: 0 6px; // Уменьшаем внутренние отступы
+                }
+    
+                .active {
+                    min-height: 30px; // Уменьшаем высоту активного элемента
+                    min-width: 80px; // Уменьшаем ширину активного элемента
+                    font-size: 14px; // Уменьшаем размер текста
+                }
+            }
+        }
+    }
+
+    .TopT {
+        text-align: center;
+        position: relative;
+        border-top: 5px solid #4B1218;
+      
+        h2 {
+          color: #5C131C;
+          font-weight: bold;
+          font-size: 64px;
+        }
+      
+        .CardTop {
+          display: flex;
+          justify-content: center;
+          align-items: flex-end;
+          width: 100%;
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+      
+          img {
+            border-radius: 50%;
+          }
+      
+          li:nth-child(3) {
+            transform: translateX(-5em);
+          }
+      
+          .KingTop {
+            transform: translateX(-8em) translateY(-25em);
+          }
+      
+          li:nth-child(2) {
+            order: -1;
+            transform: translateX(5em);
+          }
+        }
+      }
+
+    @media screen and (max-width: 1050px) {
+        .TopT {
+          h2 {
+            font-size: 44px;
+            margin-bottom: 1.5em;
+          }
+      
+          .CardTop {
+            .KingTop {
+              transform: translateX(-6em) translateY(-22em) !important;
+            }
+          }
+        }
+    }
+
+    .aboutHome {
+      max-height: 619px;
+      padding: 40px;
+      border: 1px solid #4B1218;
+      background-color: #4B1218;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+  
+      .contentAbout {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        height: 100%;
+        width: 100%;
+  
+        .textAbout {
+          height: 100%;
+          width: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 20px;
+  
+          h3 {
+            font-size: 64px;
+            font-weight: 700;
+            margin: 0;
+          }
+  
+          p {
+            font-weight: 700;
+            font-size: 24px;
+            width: 30em;
+          }
+  
+        }
+  
+        .imgAbout {
+          height: 437px;
+          width: 692px;
+          border-radius: 30px;
+          border: 1px solid white;
+          margin-right: 25px;
+        }
+      }
+  
+      ////// Адаптивка ////////
+  
+        @media screen and (max-width: 1475px) {
+      
+          .contentAbout{
+            height: 100%;
+            .imgAbout {
+                width: 400px;
+                height: 400px;
+  
+            }
+            .textAbout{
+              h3 {
+                font-size: 54px;
+                font-weight: 700;
+              }
+  
+              p {
+                font-weight: 700;
+                font-size: 24px;
+              }
+            }
+         }
+        }
+
+        @media screen and (max-width: 1250px) {
+      
+            .contentAbout{
+              .imgAbout {
+                  width: 300px;
+                  height: 300px;
+              }
+              .textAbout{
+                h3 {
+                  font-size: 44px;
+                }
+    
+                p {
+                  font-size: 20px;
+                }
+              }
+          }
+        } 
+
+
+        @media screen and (max-width: 1050px) {
+      
+            .contentAbout{
+                gap: 10px;
+                .imgAbout {
+                  width: 200px;
+                  height: 200px;
+                }
+                .textAbout{
+                    gap: 10px;
+                    h3 {
+                      font-size: 34px;
+                    }
+        
+                    p {
+                      font-size: 16px;
+                    }
+                  }
+          }
+        } 
+    }
+  
+    .manager {
+      font-family: Calibri, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 1440px; 
+      margin: 0 auto;
+      padding: 0 25px;
+  
+      h2 {
+          font-size: 64px;
+          font-weight: 700;
+          padding-bottom: 5px;
+          color: #4B1218;
+          width: 100%; 
+          margin-left: 25px; 
+      }
+  
+      ul {
+          list-style-type: none;
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          padding: 0;
+          margin: 0;
+                  
+          li {
+              width: 399px;
+              height: 326px;
+              margin: 10px;
+  
+              .card_manager {
+                  width: 100%;
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  text-align: center;
+                  justify-content: center;
+
+                  img {
+                      height: 200px;
+                      width: 200px;
+                      border-radius: 50%;
+                  }
+  
+                  h4 {
+                      font-weight: 700;
+                      font-size: 40px;
+                      margin: 5px 0;
+                  }
+  
+                  p {
+                      font-weight: 700;
+                      font-size: 20px;
+                      margin: 0;
+                      padding: 0 1em;
+                      color: white;
+                      background-color: #4B1218;
+                      border-radius: 48px;
+                  }
+              }
+          }
+  
+          li:nth-child(2) {
+              order: -1;
+          }
+  
+          li:nth-child(1) {
+              transform: translateY(-3em);
+          }
+      }
+  
+      ////Адаптивка////
+    
+    @media (max-width: 1440px) {
+        margin-left: 0; 
+        text-align: left; 
+    }
+
+    @media (max-width: 1440px) {
+      h2{
+        font-size: 54px;
+      }
+      ul{
+        li{
+            .card_manager{
+                margin: 0;
+                img{
+                    width: 150px;
+                    height: 150px;
+                }
+
+                h4{
+                    font-size: 34px;
+                }
+
+                p{
+                    font-size: 18px;
+                }
+            }
+            
+        }
+      }
+     
+    }
+
+    @media (max-width: 1050px) {
+        h2{
+          font-size: 44px;
+        }
+    }
+
+
+  }
+
+}

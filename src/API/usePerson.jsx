@@ -9,9 +9,10 @@ const usePerson = ({ amount } = {}) => {
         const fetchData = async () => {
             try {
                 setIsLoading(true)
-                const response = await axios.get("https://67ac93e33f5a4e1477db15d4.mockapi.io/Person");
+                const res = await axios.get("http://localhost:5555/api/users");
+                const response = res.data
                 let sortedData = response.data.sort((a, b) => b.rating - a.rating); 
-
+                                
                 sortedData = sortedData.map((item, index) => ({
                     ...item,
                     position: index + 1

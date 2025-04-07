@@ -15,17 +15,31 @@ const Slider = ({ eventCategory }) => {
         <div className="sliderContainer">
             <Swiper
                 modules={[Navigation]}
-                spaceBetween={30}
-                slidesPerView={3}
+                spaceBetween={30} 
+                slidesPerView={3} 
                 navigation
-                centerInsufficientSlides={false}
                 effect={"flip"}
                 loop={true}
+                initialSlide={1} // Устанавливаем начальный слайд как второй
+                breakpoints={{
+                    1400: {
+                        spaceBetween: 30, 
+                        slidesPerView: 3,
+                    },
+                    1100: {
+                        spaceBetween:1, 
+                        slidesPerView: 2,
+                    },
+                    800: {
+                        spaceBetween: 10, 
+                        slidesPerView: 1.5,
+                    },
+                }}
             >
                 {loadingMyEvent ? (
                     Array.from({ length: 4 }).map((_, index) => (
                         <SwiperSlide key={index}>
-                            <LoadEvent width = "400px" height = "200px" />
+                            <LoadEvent width="400px" height="200px" />
                         </SwiperSlide>
                     ))
                 ) : (

@@ -38,15 +38,11 @@ const Members = () => {
             <LoadMng key={index} width='400px' height='350px' />
           ))
         ) : (
-          manager.map((item) => (
+          manager.map(item => (
             <li key={item.key}>
-              <img src={item.image} alt='top' />
-              <h4>{item.name}</h4>
-              {item.status === 'главный админ' ? (
-                <p>Руководитель проектной команды</p>
-              ) : (
-                <p>Секретарь</p>
-              )}
+              <img src='img/kot.jpg' alt='top' />
+              <h4>{item.first_name}</h4>
+              { item.status === "главный админ" ? <p>Руководитель проектной команды</p> : <p>Секретарь</p> }
             </li>
           ))
         )}
@@ -76,16 +72,16 @@ const Members = () => {
                 {index === 0 && (
                   <img src='/img/crown.png' className='KingTop' alt='Корона' />
                 )}
-                <img className='imgRating' alt='' src={item.image} />
+                <img className='imgRating' alt='' src='img/kot.jpg' />
                 <div className='textCard'>
                   <p className='positionRating'>
                     <b>{item.position}</b>st
                   </p>
                   <div className='textInfo'>
                     <p className='textName'>
-                      {index < 3 ? formatName(item.name) : item.name}
+                      {index < 3 ? formatName(item.first_name) : item.first_name}
                     </p>
-                    <p className='textGroup'>{item.group}</p>
+                    <p className='textGroup'>ПИ-22-1</p>
                   </div>
                   <span className='numRating'>{item.rating}</span>
                   {index >= 3 && (
