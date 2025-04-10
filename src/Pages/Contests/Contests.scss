@@ -27,6 +27,14 @@
         background-color: #4B1218;
         color: white;
         height: 80px;
+
+        @media screen and (min-width: 600px) and (max-width: 800px) {
+          font-size: 24px;
+        }
+
+        @media screen and (min-width: 375px) and (max-width: 600px) {
+          font-size: 18px;
+        }
       }
   
       .slider_cont {
@@ -36,6 +44,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        
+        @media screen and (min-width: 600px) and (max-width: 800px) {
+          height: auto;
+          margin: 13px 0;
+        }
 
         @media screen and (min-width: 800px) and (max-width: 1100px) {
           height: auto;
@@ -181,9 +194,45 @@
           }
         }
       
-        @media (max-width: 800px) {
-          
+        @media (min-width:600px) and (max-width: 800px) {
+          height: 60px;
+          border-width: 4px;
+          border-radius: 90px;
+          width: 500px;
+          transform: translateX(0em);
+
+          li {
+            height: 45px;
+            margin: 4px;
+            width: 32%; 
+            font-size: 16px;
+
+          }
+      
+          .activeCont {
+            border-radius: 50px;
+          }
         }
+
+        @media (min-width:375px) and (max-width: 600px) {
+          height: 40px;
+          border-width: 3px;
+          border-radius: 90px;
+          width: 350px;
+          transform: translateX(0em);
+
+          li {
+            height: 30px;
+            margin: 4px 2px;
+            width: 32%; 
+            font-size: 12px;
+          }
+      
+          .activeCont {
+            border-radius: 50px;
+          }
+        }
+
       }
   
       .paginationEvents {
@@ -215,18 +264,29 @@
             width: 62px;
             height: 62px;
           }
+
+          @media (min-width:375px) and (max-width:800px) {
+            width: 34px;
+            height: 34px;
+            font-size: 28px;
+            
+            img{
+              width: 42px;
+              height: 42px;
+            }
+          }
         }
   
-        li:first-child {
-          width: 62px;
-          height: 62px;
-          border: 0;
-        }
+        // li:first-child {
+        //   width: 62px;
+        //   height: 62px;
+        //   border: 0;
+        // }
   
         li:last-child {
-          border: 0;
-          width: 62px;
-          height: 62px;
+          // border: 0;
+          // width: 62px;
+          // height: 62px;
   
           img {
             transform: rotate(180deg);

@@ -72,7 +72,7 @@
         }
     
         .sliderHome {
-            display: flex;
+            display: none;
             justify-content: center;
             align-content: center;
             flex-direction: row;
@@ -86,44 +86,90 @@
 
 
 
-        @media screen and (min-width: 900px) and (max-width: 1400px) {
+        @media screen and (min-width: 950px) and (max-width: 1400px) {
             .stateEvents {
                 font-size: 16px;
                 height: 46px; 
-                gap: 15px; // Уменьшаем расстояние между элементами
-                padding: 0 5px; // Уменьшаем внутренние отступы
+                gap: 15px; 
+                padding: 0 5px; 
                 transform: translateX(-6em); 
     
                 li {
-                    height: 36px; // Уменьшаем высоту элементов
-                    padding: 0 8px; // Уменьшаем внутренние отступы
+                    height: 36px; 
+                    padding: 0 8px; 
                 }
     
                 .active {
-                    min-height: 36px; // Уменьшаем высоту активного элемента
-                    min-width: 90px; // Уменьшаем ширину активного элемента
+                    min-height: 36px; 
+                    min-width: 90px; 
                     font-size: 16px;
                 }
             }
         }
+
+
+        @media (min-width: 600px) and (max-width: 850px) {
+          .stateEvents {
+              font-size: 12px;
+              height: 46px; 
+              gap: 5px; 
+              padding: 0 5px; 
+              transform: translateX(0em); 
+
+              
+              li {
+                  height: 36px; 
+                  padding: 0 8px; 
+              }
+  
+              .active {
+                  min-height: 36px; 
+                  min-width: 90px; 
+                  font-size: 12px;
+              }
+          }
+      }
+
+
+      @media (min-width: 375px) and (max-width: 600px) {
+        .stateEvents {
+            font-size: 7px;
+            height: 36px; 
+            gap: 5px; 
+            padding: 0 5px; 
+            transform: translateX(0em); 
+
+            
+            li {
+                height: 26px; 
+                padding: 0 8px; 
+            }
+
+            .active {
+                min-height: 26px; 
+                min-width: 90px; 
+                font-size: 8px;
+            }
+        }
+    }
     
-        @media screen and (max-width: 1000px) {
+        @media (min-width: 850px) and (max-width: 950px) {
             .stateEvents {
-                font-size: 14px; // Уменьшаем размер текста
-                height: 40px; // Уменьшаем высоту панели
-                gap: 10px; // Уменьшаем расстояние между элементами
-                padding: 0 5px; // Уменьшаем внутренние отступы
-                transform: translateX(-8em); // Корректируем смещение
+                font-size: 14px; 
+                height: 40px; 
+                gap: 10px; 
+                padding: 0 5px; 
+                transform: translateX(-8em); 
     
                 li {
-                    height: 30px; // Уменьшаем высоту элементов
-                    padding: 0 6px; // Уменьшаем внутренние отступы
+                    height: 30px; 
+                    padding: 0 6px; 
                 }
     
                 .active {
-                    min-height: 30px; // Уменьшаем высоту активного элемента
-                    min-width: 80px; // Уменьшаем ширину активного элемента
-                    font-size: 14px; // Уменьшаем размер текста
+                    min-height: 30px; 
+                    min-width: 80px; 
+                    font-size: 14px; 
                 }
             }
         }
@@ -166,22 +212,36 @@
             transform: translateX(5em);
           }
         }
+
+        @media screen and (max-width: 1050px) {
+            h2 {
+              font-size: 44px;
+              margin-bottom: 1.5em;
+            }
+        
+            .CardTop {
+              .KingTop {
+                transform: translateX(-6em) translateY(-22em) !important;
+              }
+            }
+      }
+  
+      @media (max-width:1050px) and (min-width:800px) {
+          h2{
+            font-size: 34px;
+            margin-bottom: 1em;
+          }
+      }
+  
+      @media (max-width:800px) and (min-width:375px) {
+          h2{
+            font-size: 24px;
+            margin-bottom: 0.5em;
+          }
+      }
       }
 
-    @media screen and (max-width: 1050px) {
-        .TopT {
-          h2 {
-            font-size: 44px;
-            margin-bottom: 1.5em;
-          }
-      
-          .CardTop {
-            .KingTop {
-              transform: translateX(-6em) translateY(-22em) !important;
-            }
-          }
-        }
-    }
+   
 
     .aboutHome {
       max-height: 619px;
@@ -234,8 +294,6 @@
           margin-right: 25px;
         }
       }
-  
-      ////// Адаптивка ////////
   
         @media screen and (max-width: 1475px) {
       
@@ -291,7 +349,7 @@
                 .textAbout{
                     gap: 10px;
                     h3 {
-                      font-size: 34px;
+                      font-size: 40px;
                     }
         
                     p {
@@ -300,6 +358,82 @@
                   }
           }
         } 
+
+        @media (min-width:800px) and (max-width:1050px) {
+          height: auto;
+          padding: 30px;
+
+          .contentAbout{
+
+            .imgAbout {
+              width: 180px;
+              height: 180px;
+              border: 2px solid white;
+            }
+
+            .textAbout{
+              gap: 5px;
+              h3{
+                font-size: 34px;
+              }
+              p{
+                font-size: 12px;
+              }
+            }
+           
+          }
+        }
+
+        @media (min-width:450px) and (max-width:800px) {
+          height: auto;
+          padding: 20px;
+
+          .contentAbout{
+            gap: 5px;
+            .imgAbout {
+              width: 150px;
+              height: 150px;
+              border: 2px solid white;
+            }
+
+            .textAbout{
+              gap: 10px;
+              margin-left: 20px;
+              h3{
+                font-size: 24px;
+              }
+              p{
+                font-size: 8px;
+              }
+            }
+           
+          }
+        }
+
+        @media  screen and (max-width:450px) {
+          height: auto;
+          padding: 10px;
+
+          .contentAbout{
+            gap: 5px;
+            .imgAbout {
+              width: 125px;
+              height: 125px;
+              border: 2px solid white;
+            }
+
+            .textAbout{
+              gap: 5px;
+              h3{
+                font-size: 20px;
+              }
+              p{
+                font-size: 6px;
+              }
+            }
+           
+          }
+        }
     }
   
     .manager {
@@ -374,15 +508,13 @@
               transform: translateY(-3em);
           }
       }
-  
-      ////Адаптивка////
-    
-    @media (max-width: 1440px) {
-        margin-left: 0; 
-        text-align: left; 
-    }
+
 
     @media (max-width: 1440px) {
+
+      margin-left: 0; 
+      text-align: left; 
+
       h2{
         font-size: 54px;
       }
@@ -413,6 +545,13 @@
         h2{
           font-size: 44px;
         }
+    }
+
+    @media (min-width:375px) and (max-width:800px) {
+      
+      h2{
+        font-size: 24px;
+      }
     }
 
 
