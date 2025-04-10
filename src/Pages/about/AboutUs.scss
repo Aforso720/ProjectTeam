@@ -634,71 +634,71 @@
       }
     }
 
-    // @media (max-width: 800px) {
-    //   .contacts {
-    //     display: flex; 
-    //     flex-direction: column;
-    //     align-items: center;
-    //     justify-content: start;
-    //     padding: 0 10px;
-    //   }
+    @media (max-width: 800px) {
+      // .contacts {
+      //   display: flex; 
+      //   flex-direction: column;
+      //   align-items: center;
+      //   justify-content: start;
+      //   padding: 0 10px;
+      // }
     
-    //   .about {
-    //     flex-direction: column;
-    //     align-items: center;
-    //     gap: 20px; 
-    //     margin: 20px 0;
-    //     max-height: 100px;
-    //   }
+      // .about {
+      //   flex-direction: column;
+      //   align-items: center;
+      //   gap: 20px; 
+      //   margin: 20px 0;
+      //   max-height: 100px;
+      // }
     
-    //   .contacts.container {
-    //     width: 100%;
-    //     align-items: center;
-    //     margin: 0 auto;
-    //     // transform: none !important;
-    //   }
+      .contacts.container {
+        width: 100%;
+        align-items: center;
+        margin: 0 auto;
+        // transform: none !important;
+      }
     
-    //   .contacts.container h2 {
-    //     font-size: 28px;
-    //     width: 100%;
-    //     text-align: center;
-    //     // transform: none !important;
-    //   }
+      .contacts.container h2 {
+        font-size: 28px;
+        width: 100%;
+        text-align: center;
+        // transform: none !important;
+      }
     
-    //   .contacts.container li {
-    //     width: 100%;
-    //     font-size: 16px;
-    //     height: auto;
-    //     padding: 10px;
-    //     // transform: none !important;
-    //     margin-bottom: 10px;
-    //   }
+      .contacts.container li {
+        width: 100%;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+        // transform: none !important;
+        margin-bottom: 10px;
+      }
     
-    //   .ifrMap {
-    //     width: 100%;
-    //     display: flex;
-    //     justify-content: center;
-    //     flex-direction: column;
-    //     background-color: #4B1218;
-    //     background-image: url("fon2.png");
-    //     text-align: center;
-    //     padding: 20px 0; // добавим отступы
+      .ifrMap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        background-color: #4B1218;
+        background-image: url("fon2.png");
+        text-align: center;
+        padding: 20px 0; // добавим отступы
       
-    //     h2 {
-    //       font-weight: 700;
-    //       font-size: 24px;
-    //       color: white;
-    //     }
-    //   }
+        h2 {
+          font-weight: 700;
+          font-size: 24px;
+          color: white;
+        }
+      }
       
-    //   .ifrMap iframe {
-    //     width: 100%; // пусть будет на всю ширину
-    //     height: 300px; // увеличим, чтобы не выглядело мелко
-    //     border-radius: 15px;
-    //     // border: none;
-    //     // z-index: 2;
-    //   }
-    // }
+      .ifrMap iframe {
+        width: 100%; // пусть будет на всю ширину
+        height: 300px; // увеличим, чтобы не выглядело мелко
+        border-radius: 15px;
+        // border: none;
+        // z-index: 2;
+      }
+    }
 
   }
 }
