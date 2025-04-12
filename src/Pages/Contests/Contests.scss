@@ -91,6 +91,11 @@
             max-width: 800px;
           }
 
+          
+          @media screen and (min-width: 600px) and (max-width: 800px) {
+            max-width: 580px;
+          }
+
         }
   
         .BannerImg{
@@ -119,8 +124,8 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(3, 1fr);
-        grid-column-gap: 10px;
-        grid-row-gap: 10px;
+        grid-column-gap: 5px;
+        grid-row-gap: 5px;
       }
   
       .statesCont {
