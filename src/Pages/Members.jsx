@@ -43,7 +43,7 @@ const Members = () => {
               <img src={item.image} alt='top' />
               <h4>{item.name}</h4>
               {item.status === 'главный админ' ? (
-                <p>Руководитель проектной команды</p>
+                <p>Руководитель <br /> проектной команды</p>
               ) : (
                 <p>Секретарь</p>
               )}
@@ -52,6 +52,7 @@ const Members = () => {
         )}
       </ul>
       </div>
+
       <div className='rating'>
         <h2>Лидеры рейтинга</h2>
         <ul>

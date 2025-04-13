@@ -8,7 +8,7 @@
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "leaflet": "^1.9.4",
-    "node-sass": "^9.0.0",
+    "sass": "^1.70.0",
     "react": "^19.0.0",
     "react-content-loader": "^7.0.2",
     "react-dom": "^19.0.0",
@@ -52,5 +52,10 @@
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.83.1",
     "sass-loader": "^16.0.4"
-  }
+  },
+  "resolutions": {
+  "svgo": "^2.0.0",
+  "glob": "^9.0.0",
+  "uuid": "^9.0.0"
+}
 }

@@ -36,16 +36,16 @@ body, html {
 }
 
 .Header {
-  // font-family: "Labil Grotesk", sans-serif;
-  // min-height: 230px;
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-  // justify-content: center;
-  // font-size: calc(10px + 2vmin);
-  // color: white;
-  // border-bottom: 5px solid #4B1218;
-  // text-decoration: none;
+  font-family: "Labil Grotesk", sans-serif;
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  border-bottom: 5px solid #4B1218;
+  text-decoration: none;
   display: none;
 
   .profile-item {
@@ -223,7 +223,14 @@ body, html {
 }
 
 @media (max-width: 400px) {
+
+  
   .Content{
-    align-items: center;
+    width: 100%; 
+    max-width: 400px; 
+    margin: 0 auto; 
+    padding: 0 15px; // Отступы по краям
+    box-sizing: border-box;
+    justify-content: start;
   }
 }
