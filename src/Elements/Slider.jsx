@@ -19,21 +19,20 @@ const Slider = ({ eventCategory }) => {
                 slidesPerView={3} 
                 navigation
                 effect={"flip"}
-                loop={true}
-                initialSlide={1} // Устанавливаем начальный слайд как второй
+                initialSlide={1} 
                 breakpoints={{
                     1400: {
                         spaceBetween: 30, 
                         slidesPerView: 3,
                     },
-                    1100: {
-                        spaceBetween:1, 
+                    800: {
+                        spaceBetween: 5, 
                         slidesPerView: 2,
                     },
-                    800: {
+                    375: {
                         spaceBetween: 10, 
-                        slidesPerView: 1.5,
-                    },
+                        slidesPerView: 1,
+                    }
                 }}
             >
                 {loadingMyEvent ? (
@@ -52,7 +51,7 @@ const Slider = ({ eventCategory }) => {
                     ) : (
                         events.map(item => (
                             <SwiperSlide key={item.id}>
-                                <Event image={item.image} description={item.description} />
+                                <Event image={item.image} description={item.description} contMyEvent="contMyEventMob" />
                             </SwiperSlide>
                         ))
                     )

@@ -40,7 +40,7 @@ const AboutUs = () => {
             </div>
             <div className="contacts">
                 <div className="about">
-                    <div className="contacts container">
+                    <div className="container">
                         <h2>Контакты</h2>
                         <ul>
                             <li>Телефон:</li>
