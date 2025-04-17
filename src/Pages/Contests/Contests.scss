@@ -45,7 +45,7 @@
         justify-content: center;
         align-items: center;
         
-        @media screen and (min-width: 600px) and (max-width: 800px) {
+        @media screen and (min-width: 375px) and (max-width: 800px) {
           height: auto;
           margin: 13px 0;
         }
@@ -72,10 +72,25 @@
       height: 590px;
       border-radius: 30px;
       margin-top: 38px;
+      
+
+      @media (min-width:600px) and (max-width:800px) {
+        order: -1;
+        height: 250px;
+        margin: 20px 0;
+      }
+
+      @media (min-width:375px) and (max-width:600px) {
+        order: -1;
+        height: 150px;
+        margin: 10px 0;
+      }
   
       .bannerSlider {
+        height: 100%;
         .swiper {
           width: 100%;
+          height: 100%;
           margin: 0 auto;
           display: flex;
           justify-content: center;
@@ -88,13 +103,25 @@
 
 
           @media screen and (min-width: 800px) and (max-width: 1100px) {
-            max-width: 800px;
+            max-width: 780px;
           }
+
+          
+          @media screen and (min-width: 600px) and (max-width: 800px) {
+            max-width: 580px;
+          }
+
+          @media screen and (min-width: 375px) and (max-width: 600px) {
+            max-width: calc(250px + 30vw);
+          }
+          
 
         }
   
         .BannerImg{
-
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
         }
   
         // .swiper-button-prev {
@@ -119,8 +146,22 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(3, 1fr);
-        grid-column-gap: 10px;
-        grid-row-gap: 10px;
+        grid-column-gap: 5px;
+        grid-row-gap: 5px;
+
+        @media (min-width:375px) and (max-width:800px) {
+          display: flex;
+          margin-bottom: 20px;
+          width: 100%;
+
+          
+        .swiperSlide{
+          width: 400px;
+        }    
+
+        }
+
+        
       }
   
       .statesCont {
@@ -245,6 +286,10 @@
         justify-content: center;
         gap: 10px;
         margin-top: 30px;
+
+        @media (min-width:375px) and (max-width:800px) {
+          display: none;
+        }
   
         li {
           display: flex;

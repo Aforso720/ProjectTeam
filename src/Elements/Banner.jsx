@@ -15,7 +15,7 @@ const Banner = ({ news }) => {
                 navigation
                 centeredSlides={true}
                 effect={"flip"}
-                loop={true}
+                // loop={true}
                 breakpoints={{
                     // Адаптация для экранов до 800px
                     800: {

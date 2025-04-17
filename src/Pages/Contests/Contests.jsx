@@ -17,6 +17,19 @@ const Contests = () => {
   const { events, loading } = usePosts(selectedCategory);
   const { events: news, loading: loadingNews } = usePosts();
 
+const [isMobileView, setIsMobileView] = React.useState(false);
+
+React.useEffect(() => {
+  const handleResize = () => {
+    setIsMobileView(window.innerWidth >= 375 && window.innerWidth <= 800);
+  };
+
+  handleResize(); // начальная проверка
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+
+
   const filteredEvents = events.filter(event => event.status === selectedCategory);
 
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -75,13 +88,13 @@ const Contests = () => {
             navigation
             centeredSlides={true}
             effect={"flip"}
-            loop={true}
+            // loop={true}
           >
             {loadingNews ? (
               <LoadingEvent width="1300px" height="600px" />
             ) : (
               news.map((item, index) => (
-                <SwiperSlide style={{ width: "1334px", height: '590px'}} key={index}>
+                <SwiperSlide style={{ width: "1334px", height: '100%'}} key={index}>
                   <img
                     src={item.image}
                     alt={`Slide ${index + 1}`}
@@ -116,52 +129,103 @@ const Contests = () => {
           </li>
         </ul>
         {loading ? (
-          <div className='arrEvents'>
-            {Array.from({ length: 9 }).map((_, index) => (
-              <LoadingEvent width="400px" height="250px" key={index} />
-            ))}
-          </div>
-        ) : (
-          currentEvents.length > 0 ? (
-            <div className='arrEvents'>
-              {currentEvents.map(item => (
-                <Event key={item.id} image={item.image} description={item.description} />
-              ))}
-            </div>
-          ) : (
-            <div style={{ width: '1250px', height: '770px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <p style={{ fontSize: '44px', color: '#4B1218', fontWeight: 'bold' }}>Нет мероприятий этой категории</p>
-            </div>
-          )
-        )}
-        <ul className='paginationEvents'>
-          <li onClick={handlePrevPage}>
-            <img src='/img/arrow-circle-left.png' alt='arrow' />
-          </li>
+  isMobileView ? (
+    <Swiper
+      spaceBetween={20}
+      slidesPerView={1}
+      pagination={{ clickable: true }}
+    >
+      {Array.from({ length: 9 }).map((_, index) => (
+        <SwiperSlide key={index}>
+          <LoadingEvent width="400px" height="250px" />
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  ) : (
+    <div className='arrEvents'>
+      {Array.from({ length: 9 }).map((_, index) => (
+        <LoadingEvent width="400px" height="250px" key={index} />
+      ))}
+    </div>
+  )
+) : currentEvents.length > 0 ? (
+  isMobileView ? (
+    <Swiper
+      spaceBetween={20}
+      slidesPerView={1}
+      pagination={{ clickable: true }}
+    >
+      {currentEvents.map(item => (
+        <SwiperSlide key={item.id}>
+          <Event image={item.image} description={item.description} />
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  ) : (
+    <div className='arrEvents'>
+      {currentEvents.map(item => (
+        <Event key={item.id} image={item.image} description={item.description} />
+      ))}
+    </div>
+  )
+) : (
+  <div
+  style={{
+    width: '100%',
+    maxWidth: '1250px',
+    height: 'clamp(300px, 70vh, 800px)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: '0 auto', // чтобы центрировать по горизонтали
+    padding: '0 1rem', // немного отступов на маленьких экранах
+    boxSizing: 'border-box'
+  }}
+>
+  <p
+    style={{
+      fontSize: 'clamp(1rem, 2.5vw, 2rem)',
+      color: '#4B1218',
+      fontWeight: 'bold',
+      textAlign: 'center'
+    }}
+  >
+    Нет мероприятий этой категории
+  </p>
+</div>
 
-          {loading ? (
-            <li
-              key={1}
-              onClick={() => handlePageClick(1)}
-              className={currentPage === 1 ? 'active_page' : ''}
-            >
-              {1}
-            </li>
-          ) : (
-            Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-              <li
-                key={page}
-                onClick={() => handlePageClick(page)}
-                className={currentPage === page ? 'active_page' : ''}
-              >
-                {page}
-              </li>
-            ))
-          )}
-          <li onClick={handleNextPage}>
-            <img src='/img/arrow-circle-left.png' alt='arrow' />
+)}
+    {currentEvents.length > 0 ?? (
+      
+      <ul className='paginationEvents'>
+      <li onClick={handlePrevPage}>
+        <img src='/img/arrow-circle-left.png' alt='arrow' />
+      </li>
+
+      {loading ? (
+        <li
+          key={1}
+          onClick={() => handlePageClick(1)}
+          className={currentPage === 1 ? 'active_page' : ''}
+        >
+          {1}
+        </li>
+      ) : (
+        Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+          <li
+            key={page}
+            onClick={() => handlePageClick(page)}
+            className={currentPage === page ? 'active_page' : ''}
+          >
+            {page}
           </li>
-        </ul>
+        ))
+      )}
+      <li onClick={handleNextPage}>
+        <img src='/img/arrow-circle-left.png' alt='arrow' />
+      </li>
+    </ul>
+    )}
       </div>
     </div>
   );

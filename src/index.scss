@@ -35,16 +35,52 @@
 .sliderContainer {
   .swiper {
     max-width: 1300px;
-    margin: 0 auto;
+    // margin: 0 auto;
+
+    .contMyEventMob{
+      @media screen and (min-width: 600px) and (max-width: 800px) {
+        width: 550px;
+        height: 200px;
+      }
+
+      .textOverlay p{
+        @media screen and (min-width: 600px) and (max-width: 800px) {
+          font-size: 40px;
+        }
+      }
+
+      .textOverlay{
+        @media screen and (min-width: 600px) and (max-width: 800px) {
+          height: 50px;
+        }
+      }
+    }
+
+    .swiper-slide{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media screen and (min-width: 375px) and (max-width: 800px) {
+        // width: 60vw;
+        padding: 10px;
+        // padding-left: 7vw;
+      }
+    }
 
     @media screen and (min-width: 1100px) and (max-width: 1400px) {
       width: 1100px;
-      padding-left: 100px;
+      // padding-left: 100px;
     }
 
     @media screen and (min-width: 800px) and (max-width: 1100px) {
       width: 800px;
-      padding-left: 250px;
+      // padding-left: 250px;
+    }
+
+    @media screen and (min-width: 375px) and (max-width: 800px) {
+      width: 550px;
+      padding: 10px;
     }
   }
 
@@ -62,15 +98,21 @@
   }
 
 
-  .swiper-button-next {
-    transform: translateX(-1em);
-  }
+  @media screen and (min-width: 375px) and (max-width: 800px) {
+    .swiper-button-prev{
+      transform: translateX(2em);
+    }
 
-  @media screen and (min-width: 800px) and (max-width: 1400px) {
-    .swiper-button-prev {
-      transform: translateX(-0.5em);
+    .swiper-button-next{
+      transform: translateX(-2em);
     }
   }
+
+  // @media screen and (min-width: 800px) and (max-width: 1400px) {
+  //   .swiper-button-prev {
+  //     transform: translateX(-0.5em);
+  //   }
+  // }
 }
 
 .Members {
@@ -380,6 +422,219 @@
       align-content: center;
       justify-content: center;
       cursor: pointer;
+    }
+  }
+}
+
+
+@media (min-width: 375px) and (max-width:430px){
+  .Account{
+    align-items: center;
+    width: 375px;
+
+
+    .navigation_account {
+      width: 200px;
+
+      li{
+        font-size: 2px;
+      }
+    }
+  }
+}
+
+@media (min-width: 375px) and (max-width:430px){
+  .Members {
+
+    max-width: 400px;
+    margin: 0 auto;
+    justify-content: center;
+
+
+    .supervisor {
+      justify-content: flex-start;
+      height: auto; 
+      align-items: center;
+      transform: translateX(-18px);
+
+      h2 {
+        font-size: 24px; 
+        padding: 0;
+        margin-left: 40px;
+      }
+
+      .cardSupervisor {
+        align-items: center;
+        gap: 1em;
+        flex-wrap: wrap-reverse;
+
+
+        li:nth-child(1) {
+          border: 1px solid #4B1218;
+          order: 2;
+        }
+
+
+        li {
+          width: 170px; 
+          height: 150px; 
+          padding: 15px 0;
+          border: 1px solid #4B1218;
+
+          img {
+            width: 80px; 
+            height: 80px;
+            transform: none; 
+          }
+
+          h4 {
+            font-size: 18px;
+            transform: none;
+            margin: 5px;
+          }
+
+          p {
+            font-size: 10px;
+            transform: none;
+            margin: 5px;
+          }
+        }
+      }
+    }
+    .rating{
+      width: 400px;
+      max-width: 400px;
+      margin-top: 0;
+      h2{
+        font-size: 32px;
+        margin-bottom: 0;
+      }
+      ul{
+        width: 400px;
+        transform: translateX(-18px);
+        li:nth-child(3){
+          height: auto;
+          right: 0;
+          position: absolute;
+          top: 0;
+          width: 165px;
+          height: 83px;
+          transform:  translateX(-30px) translateY(98px);
+          border: none;
+          border-radius: 8px;
+          .numRating{
+            transform: translateX(0px) translateY(-70px)!important;
+          }
+          .positionRating{
+            transform: translateX(55px) translateY(65px) !important;}
+            .textInfo{
+              transform: none !important;
+              .textName{
+                font-size: 8px !important;
+              }
+            } 
+        }
+        li:nth-child(2){
+          transform:  translateX(-85px);
+          margin-bottom: 0;
+          width: 165px;
+          height: 83px;
+          .numRating{
+            transform: translateX(0px) translateY(-70px)!important; 
+          }
+          .positionRating{
+            transform: translateX(55px) translateY(65px) !important;
+          }
+          .textInfo{
+            transform: none !important;
+            .textName{
+              font-size: 8px !important;
+            }
+          }          
+        }
+        li:nth-child(1){
+          width: 335px;
+          height: 83px;
+          .imgRating{
+            width: 71px;
+            height: 71px;
+          }
+          .numRating{
+            width: 93px;
+            height: 43px;
+          }
+          .positionRating{
+            transform: translateY(65px) translateX(215px) !important;
+          }
+          .textInfo{
+            transform: none !important;
+            .textName{
+              font-size: 8px !important;
+            }
+          } 
+        }
+        .cardRating{
+          width: 328px;
+          height: 64px;
+          border-radius: 15px;
+          .KingTop{
+            width: 41px;
+            height: 40px;
+            transform: translateX(-10px) translateY(-32px);
+          }
+          .imgRating{
+            width: 60px;
+            height: 60px;
+          }
+          .textCard{
+            align-items: start;
+              .textInfo{
+                width: 140px;
+                height: 30px;
+                left: 80px;
+                transform: translateY(-10px);
+                .textName, .textGroup{
+                  font-size: 8px;
+                  transform: none;
+                }
+                .textName{
+                  font-size: 15px;
+                }
+              }
+              .positionRating{
+                transform: translateY(70px) translateX(205px);
+                  font-size: 13px;
+                  b{
+                    font-size: 13px;
+                  }
+
+              }
+              .numRating{
+                display: block;
+
+                width: 70px;
+                height: 25px;
+                transform: translateX(6.5em) translateY(-3.5em);
+                font-size: 20px;
+              }
+              .detailsButton{
+                width: 83px;
+                height: 15px;
+                font-size: 10px;
+                transform: translateX(40px) translateY(-72px);
+              }
+
+          }
+
+        }
+        .cardWithButton{
+          width: 80%;
+          .detailsButton{
+            border: 1px solid #4B1218;
+            font-weight: 300;
+          }
+        }
+      }
     }
   }
 }

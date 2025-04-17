@@ -45,7 +45,7 @@ const usePosts = (category) => {
 
                 setEvents(filteredEvents);
             } catch (error) {
-                console.log(`Произошла ошибка ${error}`);
+                console.log(`Произошла ошибка в постах ${error}`);
             } finally {
                 setLoading(false); 
             }
