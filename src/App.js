@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.scss";
 import Header from "./Component/Header";
-import HeaderAdmin from "./Component/admin/Header";
+import HeaderAdmin from "./Component/admin/HeaderAdmin";
 import Footer from "./Component/Footer";
 import Home from "./Pages/Home";
 import {Route, Routes} from "react-router-dom";
@@ -14,12 +14,15 @@ import usePerson from './API/usePerson';
 import Table from "./Pages/tables/Table";
 import Journals from "./Pages/journals/Journals";
 import useManager from "./API/useManager";
+import {useLocation} from "react-router";
 
 export const MyContext = React.createContext([]);
 
 // userId не работает , может надо исправить проверку , позже разобраться
 
 function App() {
+
+
     const { events , loading : loadingMyEvent } = usePosts()
     const { person: topPerson , isloading : isloadingTop} = usePerson();
     const { person: homePerson, isloading : isloadingPersHome}  = usePerson({amount: 3})
@@ -31,20 +34,25 @@ function App() {
     return (
         <MyContext.Provider value={{events, userId , topPerson, manager , homePerson , loadingMyEvent , isloadingPersHome ,  isloadingTop , isloadingMng, userActive}}>
             <div className="App">
-
-                {/*<Header/>*/}
-                <HeaderAdmin/>
-                <Header setUserActive={setUserActive}/>
+                {
+                    window.location.pathname.includes("/admin/")
+                        ?
+                        <HeaderAdmin/> :
+                        <Header setUserActive={setUserActive}/>
+                }
+                {/*/!*<HeaderAdmin/>*!/*/}
+                {/*<HeaderAdmin/>*/}
+                {/*<HeaderAdmin setUserActive={setUserActive}/>*/}
                 <div className="Content">
                     <Routes>
+
                         <Route path={"/admin/journal"} element={<Table/>}/>
-                        <Route path={"/admin/journals"} element={<Journals/>}/>
+                        <Route path={"/admin/journals`"} element={<Journals/>}/>
                         <Route path="/" element={<Home/>}/>
                         <Route path="/contests" element={<Contests/>}/>
                         <Route path="/about-us" element={<About/>}/>
-                        <Route path="/participants" element={<Participants/>}/>
+                        {/*<Route path="/participants" element={<Participants/>}/>*/}
                         <Route path="/profile" element={<Account/>}/>
-                        {/*<Route path="/" element={<HeaderAdmin/>}/>*/}
                         <Route path="/members" element={<Members/>}/>
                         <Route path="/profile" element={<Account setUserActive={setUserActive} setUserId = {setUserId}/>}/>
                     </Routes>

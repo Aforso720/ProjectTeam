@@ -36,4 +36,4 @@ const Header = ({setUserActive}) => {
         </header>
     )
 }
-export default Header
+export default Header;

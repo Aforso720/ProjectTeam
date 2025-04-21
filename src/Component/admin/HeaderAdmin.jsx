@@ -3,9 +3,9 @@ import { useLocation } from "react-router-dom";
 import "./Header.scss";
 import {Link} from "react-router";
 
-const Header = () => {
-    const {pathname} = useLocation();
+const HeaderAdmin = () => {
 
+    const {pathname } = useLocation();
     const test = [
         ["Журнал", "journal"], //todo: поменять на journals
         ["Конкурсы", "contest"],
@@ -38,4 +38,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default HeaderAdmin;
