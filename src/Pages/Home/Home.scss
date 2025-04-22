@@ -30,13 +30,12 @@
                 height: 500px; 
             }
         }
-    
-        // Медиа-запрос для экранов меньше 800px
+
         @media screen and (max-width: 800px) {
-            height: 400px; 
+            height: 250px; 
     
             .BannerImg {
-                height: 400px; 
+                height: 250px; 
             }
         }
     }

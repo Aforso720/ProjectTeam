@@ -14,9 +14,53 @@ const Home = () => {
     const { events: eventCategory} = usePosts(category);
     const {userActive} = React.useContext(MyContext)
 
-    const {homePerson , isloadingPersHome} = React.useContext(MyContext);
+    // const {homePerson , isloadingPersHome} = React.useContext(MyContext);
+
+    const isloadingPersHome = false;
+    const homePerson = [
+        {
+            position : 1,
+            first_name: 'Хлеб'
+
+
+        },
+        {
+            position : 2,
+            first_name: 'Масло'
+
+
+        },
+        {
+            position : 3,
+            first_name: 'Сок'
+
+
+        }
+    ]
+
+
     const { events , loading : loadingBan } = usePosts();
-    const {manager, isloadingMng} = React.useContext(MyContext);
+
+    // const {manager, isloadingMng} = React.useContext(MyContext);
+    const isloadingMng = false;
+    const manager =[
+        {
+            first_name : "Hello World",
+            status : "главный админ",
+            id: 1
+        },
+        {
+            first_name : "Hello World",
+            status : "админ",
+            id: 2
+        },
+        {
+            first_name : "Hello World",
+            status : "админ",
+            id: 3
+        }
+
+    ]
 
 
     const handleClick = (category) => {

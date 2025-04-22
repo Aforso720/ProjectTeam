@@ -43,15 +43,28 @@
         height: 200px;
       }
 
+      @media screen and (min-width: 375px) and (max-width: 600px) {
+        width: calc(300px + 10vw);
+        height: 180px;
+      }
+
       .textOverlay p{
         @media screen and (min-width: 600px) and (max-width: 800px) {
           font-size: 40px;
+        }
+
+        @media screen and (min-width: 375px) and (max-width: 600px) {
+          font-size: 32px;
         }
       }
 
       .textOverlay{
         @media screen and (min-width: 600px) and (max-width: 800px) {
           height: 50px;
+        }
+
+        @media screen and (min-width: 375px) and (max-width: 600px) {
+          height: 80px;
         }
       }
     }
@@ -78,8 +91,13 @@
       // padding-left: 250px;
     }
 
-    @media screen and (min-width: 375px) and (max-width: 800px) {
+    @media screen and (min-width: 600px) and (max-width: 800px) {
       width: 550px;
+      padding: 10px;
+    }
+
+    @media screen and (min-width: 375px) and (max-width: 600px) {
+      width: calc(350px + 10vw);
       padding: 10px;
     }
   }
@@ -425,7 +443,6 @@
     }
   }
 }
-
 
 @media (min-width: 375px) and (max-width:430px){
   .Account{

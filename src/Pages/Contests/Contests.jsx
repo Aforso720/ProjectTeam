@@ -88,7 +88,7 @@ React.useEffect(() => {
             navigation
             centeredSlides={true}
             effect={"flip"}
-            // loop={true}
+            loop={true}
           >
             {loadingNews ? (
               <LoadingEvent width="1300px" height="600px" />
@@ -132,12 +132,13 @@ React.useEffect(() => {
   isMobileView ? (
     <Swiper
       spaceBetween={20}
-      slidesPerView={1}
+      slidesPerView={3}
+      effect={"flip"}
       pagination={{ clickable: true }}
     >
       {Array.from({ length: 9 }).map((_, index) => (
         <SwiperSlide key={index}>
-          <LoadingEvent width="400px" height="250px" />
+          <LoadingEvent width="40vw" height="250px" />
         </SwiperSlide>
       ))}
     </Swiper>
@@ -151,12 +152,14 @@ React.useEffect(() => {
 ) : currentEvents.length > 0 ? (
   isMobileView ? (
     <Swiper
+    modules={[Navigation]}
+      navigation
       spaceBetween={20}
-      slidesPerView={1}
-      pagination={{ clickable: true }}
+      slidesPerView={2}
+      className='mobSlaiderCont'
     >
       {currentEvents.map(item => (
-        <SwiperSlide key={item.id}>
+        <SwiperSlide key={item.id} >
           <Event image={item.image} description={item.description} />
         </SwiperSlide>
       ))}
@@ -173,7 +176,7 @@ React.useEffect(() => {
   style={{
     width: '100%',
     maxWidth: '1250px',
-    height: 'clamp(300px, 70vh, 800px)',
+    height: 'clamp(300px, 50vh, 800px)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
