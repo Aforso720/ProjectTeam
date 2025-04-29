@@ -71,14 +71,16 @@
         }
     
         .sliderHome {
-            display: none;
+            display: flex;
             justify-content: center;
             align-content: center;
             flex-direction: row;
             margin: 2em;
             max-width: 1300px;
-            
           
+            @media (max-width:800px) and (min-width:375px) {
+              margin: 10px;
+            }
         }
 
        
@@ -184,6 +186,14 @@
           font-weight: bold;
           font-size: 64px;
         }
+
+        .WinnerItem{
+          @media screen and (max-width: 800px) and (min-width: 375px) {
+            .Card {
+              background-color: #4B1218;
+            }
+          }
+        }
       
         .CardTop {
           display: flex;
@@ -200,6 +210,14 @@
       
           li:nth-child(3) {
             transform: translateX(-5em);
+          }
+
+          li:nth-child(1) {
+            @media screen and (max-width:800px) and (min-width:375px) {
+              .Card{
+                width: 600px;
+              }
+            }
           }
       
           .KingTop {
@@ -220,7 +238,7 @@
         
             .CardTop {
               .KingTop {
-                transform: translateX(-6em) translateY(-22em) !important;
+                transform: translateX(-6em) translateY(-22em) ;
               }
             }
       }
@@ -232,15 +250,60 @@
           }
       }
   
-      @media (max-width:800px) and (min-width:375px) {
+      @media (max-width:800px) and (min-width:600px) {
           h2{
             font-size: 24px;
             margin-bottom: 0.5em;
           }
-      }
+
+          .CardTop {
+            li:nth-child(3) {
+              transform: translateX(-4.5em);
+            }
+  
+            li:nth-child(1) {
+              transform: translateY(1em);
+            }
+        
+            .KingTop {
+              transform: translateX(-5em) translateY(-17.5em);
+              width: 125px;
+            }
+        
+            li:nth-child(2) {
+              order: -1;
+              transform: translateX(4.5em);
+            }
+          }
       }
 
-   
+          @media (max-width:600px) and (min-width:375px) {
+            h2{
+              font-size: 20px;
+              margin-bottom: 10px;  
+            }
+
+            .CardTop {
+              li:nth-child(3) {
+                transform: translateX(-4.2em);
+              }
+
+              li:nth-child(1) {
+                transform: translateY(1em);
+              }
+          
+              .KingTop {
+                transform: translateX(-3em) translateY(-13em);
+                width: 100px;
+              }
+          
+              li:nth-child(2) {
+                order: -1;
+                transform: translateX(4.2em);
+              }
+            }
+        }
+      }
 
     .aboutHome {
       max-height: 619px;
@@ -383,7 +446,7 @@
           }
         }
 
-        @media (min-width:450px) and (max-width:800px) {
+        @media (min-width:451px) and (max-width:800px) {
           height: auto;
           padding: 20px;
 
@@ -414,11 +477,12 @@
           padding: 10px;
 
           .contentAbout{
-            gap: 5px;
+            gap: 25px;
             .imgAbout {
               width: 125px;
               height: 125px;
               border: 2px solid white;
+              margin-right: 0;
             }
 
             .textAbout{
@@ -436,7 +500,7 @@
     }
   
     .manager {
-      font-family: Calibri, sans-serif;
+      font-family: "Calibri", sans-serif;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -547,7 +611,31 @@
     }
 
     @media (min-width:375px) and (max-width:800px) {
-      
+      // width: 100%;
+      // padding: 0 15px;
+
+      // ul{
+      //   li{
+      //     width: 250px;
+      //     height: 250px;
+      //     margin: 10px;
+
+      //     img {
+      //       height: 150px;
+      //       width: 150px;
+      //       border-radius: 50%;
+      //   }
+
+      //   h4 {
+      //     font-size: 34px;
+      // }
+
+      // p{
+      //   font-size: 16px;
+      // }
+      //   }
+      // }
+
       h2{
         font-size: 24px;
       }

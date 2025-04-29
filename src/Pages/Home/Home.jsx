@@ -120,7 +120,10 @@ const Home = () => {
                 ) : (
                     homePerson.map((person, index) => (
                         <li key={index}>
-                            <Card {...person} />
+                            <Card
+                                {...person}
+                                extraClass={person.position === 1 ? "WinnerCard" : ''}
+                            />
                             {person.position === 1 && (
                                 <img src='/img/crown.png' className='KingTop' alt='Корона' />
                             )}

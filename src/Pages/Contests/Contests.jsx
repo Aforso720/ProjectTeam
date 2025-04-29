@@ -131,6 +131,7 @@ React.useEffect(() => {
         {loading ? (
   isMobileView ? (
     <Swiper
+    ref={swiperRef}
       spaceBetween={20}
       slidesPerView={3}
       effect={"flip"}
@@ -152,6 +153,7 @@ React.useEffect(() => {
 ) : currentEvents.length > 0 ? (
   isMobileView ? (
     <Swiper
+    ref={swiperRef}
     modules={[Navigation]}
       navigation
       spaceBetween={20}
@@ -180,8 +182,8 @@ React.useEffect(() => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: '0 auto', // чтобы центрировать по горизонтали
-    padding: '0 1rem', // немного отступов на маленьких экранах
+    margin: '0 auto', 
+    padding: '0 1rem', 
     boxSizing: 'border-box'
   }}
 >
