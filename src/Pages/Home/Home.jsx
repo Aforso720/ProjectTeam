@@ -6,7 +6,11 @@ import Slider from '../../Elements/Slider';
 import {MyContext} from '../../App';
 import usePosts from '../../API/usePosts';
 import LoadingEvent from '../../Elements/Loading/loadingEvent'
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const Home = () => {
     const [isActive, setIsActive] = React.useState('Новости');
@@ -67,6 +71,13 @@ const Home = () => {
         setIsActive(category);
         setCategory(category);
     };
+
+    function sortManager(managerList) {
+        const admins = managerList.filter(m => m.status === "главный админ");
+        const others = managerList.filter(m => m.status !== "главный админ");
+        return [...admins, ...others]; // директор будет первым
+      }
+      
 
     return (
         <div className='Home'>
@@ -146,27 +157,58 @@ const Home = () => {
                 </div>
             </div>
             <div className='manager'>
-                <h2>Руководители</h2>
-                <ul>
+            <h2>Руководители</h2>
+
+                {/* Desktop version */}
+                <ul className="manager__list">
                 {isloadingMng ? (
                     Array.from({ length: 3 }).map((_, index) => (
-                        <li key={index}>
-                            <LoadingEvent width="350px" height="250px"/>
-                        </li>
+                    <li key={index}>
+                        <LoadingEvent width="350px" height="250px" />
+                    </li>
                     ))
                 ) : (
                     manager.map(item => (
-                        <li key={item.key}>
-                            <div className='card_manager'>
-                                <img src='img/kot.jpg' alt=''/>
-                                <h4>{item.first_name}</h4>
-                                { item.status === "главный админ" ? <p>Руководитель проектной команды</p> : <p>Секретарь</p> }
-                            </div>
-                        </li>
+                    <li key={item.key}>
+                        <div className="card_manager">
+                        <img src="img/kot.jpg" alt="" />
+                        <h4>{item.first_name}</h4>
+                        {item.status === 'главный админ' ? (
+                            <p>Руководитель проектной команды</p>
+                        ) : (
+                            <p>Секретарь</p>
+                        )}
+                        </div>
+                    </li>
                     ))
                 )}
                 </ul>
-            </div>
+
+                {/* Mobile version — Swiper */}
+                <div className="manager__slider">
+                <Swiper
+                    modules={[Navigation]}
+                    spaceBetween={10}
+                    slidesPerView={1}
+                    pagination={{ clickable: true }}
+                    navigation={true}
+                >
+                    {(isloadingMng ? Array.from({ length: 3 }) : sortManager(manager)).map((item, index) => (
+                    <SwiperSlide key={index}>
+                        <div className="card_manager">
+                        <img src="img/kot.jpg" alt="" />
+                        <h4>{item.first_name}</h4>
+                        {item.status === 'главный админ' ? (
+                            <p>Руководитель проектной команды</p>
+                        ) : (
+                            <p>Секретарь</p>
+                        )}
+                        </div>
+                    </SwiperSlide>
+                    ))}
+                </Swiper>
+                </div>
+                </div>
         </div>
     );
 };
