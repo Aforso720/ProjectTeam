@@ -1,0 +1,347 @@
+.container {
+  background-color: #450e14;
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+
+  .nav-container {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    margin-bottom: 30px;  
+    width: 100%;
+
+    ul {
+      display: flex;
+      gap: 12px;
+      background-color: #5b151b;
+      padding: 10px 10px;
+      border-radius: 40px;
+      list-style: none;
+
+      li {
+        padding: 10px 24px;
+        font-family: "Labil Grotesk", sans-serif;
+        font-size: 18px;
+        color: #fff;
+        border-radius: 40px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        white-space: nowrap;
+
+        &.active {
+          background-color: white;
+          color: #450e14;
+          padding: 10px 24px;
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
+
+  .journals-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 20px;
+  justify-items: center;
+
+  .journal-card-modern {
+  width: 400px;
+  height: 190px;
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: "Inter", sans-serif;
+  color: #450e14;
+  box-sizing: border-box;
+  border: none;
+
+  .journal-header {
+    h4 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 4px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+
+  .journal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .date {
+      font-size: 14px;
+      font-weight: 500;
+      color: #450e14;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+
+      .btn-outline {
+        background: none;
+        border: 1.5px solid #450e14;
+        color: #450e14;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      }
+
+      .btn-solid {
+        background-color: #450e14;
+        color: white;
+        border: none;
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:hover {
+          background-color: #5b151b;
+        }
+      }
+    }
+  }
+}
+
+
+  .addJournal {
+    width: 400px;
+    height: 190px;
+    border: 2px dashed white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    img {
+      max-height: 80px;
+      margin-bottom: 12px;
+    }
+
+    div {
+      background-color: white;
+      color: #5b151b;
+      border-radius: 15px;
+      padding: 5px 20px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  .journal-grid-card {
+    width: 400px;
+    height: 190px;
+    border: 2px solid white;
+    border-radius: 24px;
+    background-color: white;
+    color: #5b151b;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    h4 {
+      font-family: "Labil Grotesk", sans-serif;
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    button {
+      align-self: flex-start;
+      background-color: #450e14;
+      color: white;
+      padding: 6px 16px;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+
+      &:hover {
+        background-color: #5b151b;
+      }
+    }
+  }
+}
+
+
+  .addJournal{
+    width: 400px;
+    height: 190px;
+    border: 1px dashed white;
+    display: flex;
+    justify-items: center;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 30px;
+    // gap: 10px;
+
+    img{
+      border-radius: 0;
+    }
+
+    div{
+      cursor: pointer;
+      background-color: white;
+      color: #5b151b;
+      border-radius: 15px;
+      padding: 5px 20px;
+      font-size: 18px;
+    }
+  }
+
+  
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-journal {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 500px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  color: #5b151b;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  input[type="text"],
+  select {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  .attendees {
+    margin-top: 1rem;
+
+    p {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+
+      th, td {
+        padding: 0.7rem;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #5b151b;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      .icon-cell {
+        img {
+          width: 30px;
+          height: 30px;
+          transition: transform 0.2s ease;
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+
+    .save {
+      background-color: #5b151b;
+      color: white;
+    }
+
+    .cancel {
+      background-color: #ccc;
+      color: black;
+    }
+
+    button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}

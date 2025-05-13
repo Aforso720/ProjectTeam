@@ -11,33 +11,28 @@ const Banner = ({ news }) => {
             <Swiper
                 modules={[Navigation]}
                 spaceBetween={20}
-                slidesPerView={1.5} // Значение по умолчанию
+                slidesPerView={1.5} 
                 navigation
                 centeredSlides={true}
                 effect={"flip"}
-                // loop={true}
+                loop={true}
                 breakpoints={{
-                    // Адаптация для экранов до 800px
                     800: {
                         slidesPerView: 1.5,
                         spaceBetween: 10,
                     },
-                    // Адаптация для экранов от 800px до 1400px
                     1000: {
-                        slidesPerView: 1.5, // Указываем явно
+                        slidesPerView: 1.5,
                         spaceBetween: 15,
                     },
-                    // Адаптация для экранов от 1400px
                     1400: {
                         slidesPerView: 1.5,
                         spaceBetween: 20,
                     },
-                    // Адаптация для экранов от 1800px
                     1800: {
                         slidesPerView: 1.5,
                         spaceBetween: 30,
                     },
-                    // Адаптация для экранов от 2000px
                     2000: {
                         slidesPerView: 2.5,
                         spaceBetween: 50,

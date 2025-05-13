@@ -16,7 +16,6 @@ const Account = ({setUserActive}) => {
     return (
 
         <div className='Account'>
-
             <ul className='navigation_account'>
                 <li
                     className={activeTab === "personalData" ? 'activeAcc' : ""}

@@ -179,15 +179,15 @@
         }
 
         @media (max-width:800px) and (min-width:600px) {
-          font-size: 12px;
+          font-size: 14px;
           width: 300px;
           font-weight: 700;
-          margin-top: 90px;
+          margin-top: 60px;
           margin-right: 25px;
         }
 
         @media (max-width:600px) and (min-width:500px) {
-          font-size: 9px;
+          font-size: 10px;
           width: 250px;
           font-weight: 700;
           margin-top: 275px;
@@ -195,11 +195,11 @@
         }
 
         @media (max-width:500px) and (min-width:375px) {
-          font-size: 7px;
-          width: 150px;
+          font-size: 10px;
+          width: 180px;
           font-weight: 700;
-          margin-top: 275px;
-          margin-right: 35px;
+          margin-top: 225px;
+          margin-right: 25px;
         }
       }
     }
@@ -248,50 +248,50 @@
 
 
         h2 {
-          width: 607px;
+          width: 100%;
           height: 90px;
           font-size: 64px;
           text-align: left;
           margin: 16px 51px 32px auto;
 
           @media (max-width: 1400px) {
-            width: 580px;
+            // width: 580px;
             height: auto;
             font-size: 54px;
             margin: 56px 51px 32px 20px;
           }
 
           @media (max-width: 1200px) {
-            width: 540px;
+            // width: 540px;
             font-size: 44px;
             margin-left: 15px;
             margin: 56px 51px 32px 20px;
           }
 
           @media (max-width: 1000px) {
-            width: 200px;
+            // width: 200px;
             height: 100px;
             left: 162px;
             margin-top: 0;
           }
 
           @media (max-width: 800px) and (min-width:600px) {
-            font-size: 22px;
-            width: 220px;
+            font-size: 26px;
+            // width: 220px;
             height: 25px;
             margin-top: -30px;
           }
 
 
           @media (max-width: 600px) and (min-width:425px) {
-            font-size: 20px;
-            width: 200px;
+            font-size: 24px;
+            width: 100%;
             height: 25px;
           }
 
           @media (max-width: 425px) and (min-width:350px) {
-            font-size: 16px;
-            width: 180px;
+            font-size: 20px;
+            // width: 220px;
             height: 25px;
           }
         }
@@ -331,14 +331,14 @@
 
 
           @media (max-width: 600px) and (min-width:425px) {
-           font-size: 8px;
+           font-size: 10px;
             margin-left: 20px;
             width: 200px;
             height: 65px;
           }
 
           @media (max-width: 425px) and (min-width:375px) {
-            font-size: 7px;
+            font-size: 10px;
             margin-left: 20px;
             width: 160px;
             height: 65px;

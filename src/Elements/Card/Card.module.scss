@@ -12,6 +12,7 @@
   align-items: center;
   position: relative;
 
+
   img {
     width: 150px;
     height: 150px;
@@ -44,7 +45,6 @@
     margin-top: 0;
   }
 
-  // Медиа-запрос
   @media screen and (max-width: 1050px) {
     width: 225px; 
     height: 200px;
@@ -63,4 +63,52 @@
       color: #4B1218;
     }
   }
+
+  @media screen and (max-width: 800px) and (min-width:600px) {
+    width: 180px; 
+    height:180px;
+    font-size: 20px;
+
+    img {
+      width: 100px; 
+      height: 100px;
+    }
+
+    span {
+      position: absolute;
+      top: -5px;
+      right: 5px;
+      font-size: 16px;
+      color: #4B1218;
+
+      b{
+        font-size: 34px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 600px) and (min-width:375px) {
+    width: 125px; 
+    height: 125px;
+    font-size: 16px;
+    border: 3px solid #4B1218;
+
+    img {
+      width: 60px; 
+      height: 100px;
+    }
+
+    span {
+      position: absolute;
+      top: -1px;
+      right: 8px;
+      font-size: 16px;
+      color: #4B1218;
+
+      b{
+        font-size: 24px;
+      }
+    }
+  }
+
 }

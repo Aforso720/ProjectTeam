@@ -148,6 +148,7 @@
         grid-template-rows: repeat(3, 1fr);
         grid-column-gap: 5px;
         grid-row-gap: 5px;
+        margin-bottom: 40px;
 
         @media (min-width:375px) and (max-width:800px) {
           display: flex;
@@ -164,6 +165,24 @@
         
       }
   
+
+      .mobSlaiderCont{
+        width: 90vw;
+
+        .swiper-slide{
+          display: flex;
+          justify-content: center;
+          margin: 10px 0;
+        }
+
+        .swiper-button-prev{
+          transform: translateX(1em);
+        }
+        .swiper-button-next{
+          transform: translateX(-1em);
+        }
+      }
+
       .statesCont {
         width: 918px;
         height: 96px;
