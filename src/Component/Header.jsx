@@ -36,6 +36,13 @@ const Header = ({ setUserActive }) => {
                     </Link>
                 </li>
             </ul>
+
+            <Link to={'/admin/journal'}>
+                <div className='adminNav'>
+                    Админ Панель
+                </div>
+            </Link>
+
         </header>
     )
 }

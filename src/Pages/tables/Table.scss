@@ -1,0 +1,101 @@
+@import "~@fontsource/inter/index.css";
+
+@font-face {
+  font-family: "Labil Grotesk";
+}
+.container{
+  background-color: rgba(75, 18, 24, 1);
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  .nav-container{
+    width: 100%;
+    height: 86px;
+    border-bottom: 2px solid rgba(255, 255, 255, 1);
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    gap: 31px;
+
+    .arrow {
+      position: absolute;
+      top: 293px;
+      left: 32px;
+      content: '';
+      width: 20px;
+      height: 20px;
+      border-left: 4px solid white;
+      border-bottom: 4px solid white;
+      transform: rotate(45deg);
+      cursor: pointer;
+    }
+    p {
+      font-family: Muller, sans-serif;
+      color: white;
+      font-weight: 500;
+      font-size: 32px;
+
+    }
+
+
+    }
+  .table-container{
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 1240px;
+    margin-top: 38px;
+    margin-bottom: 100px;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-style: hidden;
+      text-align: left;
+      th, td {
+        padding: 16px;
+        font-family: "Labil Grotesk", sans-serif;
+        font-weight: 550;
+        font-size: 32px;
+        color: rgba(75, 18, 24, 1);
+        border: 2px solid rgba(75, 18, 24, 1);
+      }
+      th {
+        background-color: white;
+        height: 60px;
+        color: rgba(75, 18, 24, 1);
+        border-bottom: 2px solid rgba(75, 18, 24, 1);
+
+        text-align: center;
+      }
+      tbody tr{
+        max-height: 100px;
+        &:hover {
+          background-color: #f8fafc;
+        }
+      }
+      .table-name{
+        max-width: 744px;
+      }
+      .table-group{
+        text-align: center;
+        max-width: 306px;
+      }
+      .mark {
+        max-width: 190px;
+        text-align: center;
+        cursor: pointer;
+        img {
+          width: 75px;
+          height: 70px;
+        }
+      }
+
+    }
+
+  }
+}
+
