@@ -72,15 +72,22 @@
         align-items: center;
         gap: 12px;
 
-        input {
-          width: 70px;
-          padding: 6px;
-          border-radius: 10px 10px 0 0;
-          border: none;
-          background-color: #5b151b;
-          color: white;
+       input {
+          width: 80px;
+          padding: 8px 10px;
+          border-radius: 12px;
+          border: 1px solid #5b151b;
+          background-color: #fff;
+          color: #5b151b;
           text-align: center;
-          font-weight: bold;
+          font-weight: 600;
+          font-size: 15px;
+          transition: all 0.2s ease;
+
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(91, 21, 27, 0.2);
+          }
         }
 
         select {
@@ -132,10 +139,14 @@
   .code-edit {
     display: flex;
     align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #5b151b;
     gap: 8px;
+    border-radius: 10px;
 
     input {
-      width: 70px;
+      width: 100%;
       padding: 6px;
       border-radius: 10px 10px 0 0;
       border: none;
@@ -262,6 +273,103 @@
   color: #5b151b;
   background-color: white;
 }
-
 }
 
+@media (max-width: 600px) {
+  .person-setting {
+    padding: 16px;
+
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+
+      h2 {
+        font-size: 20px;
+      }
+
+      .add-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+    }
+
+    .people-list {
+      .person-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px;
+        gap: 12px;
+
+        .person-info {
+          flex-direction: row;
+          align-items: center;
+
+          img {
+            width: 50px;
+            height: 50px;
+            margin-right: 12px;
+          }
+
+          h3 {
+            font-size: 16px;
+          }
+
+          p {
+            font-size: 13px;
+          }
+        }
+
+        .person-controls {
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+
+          input,
+          select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+          }
+
+          .buttons {
+            flex-direction: row;
+            justify-content: space-between;
+
+            .save-btn,
+            .delete-btn {
+              flex: 1;
+              font-size: 13px;
+              padding: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .modal {
+    width: 90%;
+    padding: 20px;
+
+    h2 {
+      font-size: 20px;
+    }
+
+    .input-row {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-actions {
+      flex-direction: column;
+      align-items: stretch;
+
+      button {
+        width: 100%;
+        padding: 10px;
+      }
+    }
+  }
+}

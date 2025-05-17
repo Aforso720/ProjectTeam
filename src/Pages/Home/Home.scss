@@ -132,7 +132,7 @@
       }
 
 
-      @media (min-width: 375px) and (max-width: 600px) {
+      @media (min-width: 320px) and (max-width: 600px) {
         .stateEvents {
             font-size: 7px;
             height: 36px; 
@@ -188,7 +188,7 @@
         }
 
         .WinnerItem{
-          @media screen and (max-width: 800px) and (min-width: 375px) {
+          @media screen and (max-width: 800px) and (min-width: 320px) {
             .Card {
               background-color: #4B1218;
             }

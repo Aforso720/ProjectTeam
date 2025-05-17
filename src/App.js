@@ -3,7 +3,7 @@ import "./App.scss";
 import Header from "./Component/Header";
 import Footer from "./Component/Footer";
 import Home from "./Pages/Home/Home.jsx";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Contests from "./Pages/Contests/Contests.jsx";
 import Account from "./Pages/Account";
 import About from "./Pages/about/AboutUs";
@@ -19,8 +19,6 @@ import EventAdmin from "./Pages/eventsAdmin/EventAdmin.jsx";
 
 export const MyContext = React.createContext([]);
 
-// userId не работает , может надо исправить проверку , позже разобраться
-
 function App() {
   const { events, loading: loadingMyEvent } = usePosts();
   const { person: topPerson, isloading: isloadingTop } = usePerson();
@@ -29,8 +27,10 @@ function App() {
   });
   const { manager, isloading: isloadingMng } = useManager();
   const [userId, setUserId] = React.useState(1);
-
   const [userActive, setUserActive] = React.useState(true);
+
+  const location = useLocation();
+  const isAdminPage = location.pathname.includes("/admin");
 
   return (
     <MyContext.Provider
@@ -48,31 +48,34 @@ function App() {
       }}
     >
       <div className="App">
-      {window.location.pathname.includes("/admin") ? (
+        {/* Показываем Header или HeaderAdmin в зависимости от пути */}
+        {isAdminPage ? (
           <HeaderAdmin />
         ) : (
           <Header setUserActive={setUserActive} />
-      )}
-        {/* <Header setUserActive={setUserActive} /> */}
+        )}
+
         <div className="Content">
           <Routes>
-          <Route path="/admin/journal" element={<Journals />} />
-          <Route path="/admin/managing" element={<PersonSetting />} />
-           <Route path="/admin/contest" element={<EventAdmin />} />
-          <Route path="/admin/journals/:id" element={<Table />} />
-          <Route path="*" element={<div>Страница не найдена</div>} />
-          <Route path="/" element={<Home />} />
-          <Route path="/contests" element={<Contests />} />
-          <Route path="/about-us" element={<About />} />
-          <Route path="/members" element={<Members />} />
-          <Route
+            <Route path="/admin/journal" element={<Journals />} />
+            <Route path="/admin/managing" element={<PersonSetting />} />
+            <Route path="/admin/contest" element={<EventAdmin />} />
+            <Route path="/admin/journals/:id" element={<Table />} />
+
+            <Route path="/" element={<Home />} />
+            <Route path="/contests" element={<Contests />} />
+            <Route path="/about-us" element={<About />} />
+            <Route path="/members" element={<Members />} />
+            <Route
               path="/profile"
               element={
                 <Account setUserActive={setUserActive} setUserId={setUserId} />
               }
-          />
+            />
+            <Route path="*" element={<div>Страница не найдена</div>} />
           </Routes>
         </div>
+
         <Footer />
       </div>
     </MyContext.Provider>

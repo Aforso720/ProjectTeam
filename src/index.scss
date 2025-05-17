@@ -2,7 +2,7 @@
   color: white;
   background-color: #4B1218;
   min-height: 46px;
-  min-width: 110px;
+  // min-width: 110px;
   border-radius: 48px;
   display: flex;
   align-items: center;
@@ -43,7 +43,7 @@
         height: 200px;
       }
 
-      @media screen and (min-width: 375px) and (max-width: 600px) {
+      @media screen and (min-width: 320px) and (max-width: 600px) {
         width: calc(300px + 10vw);
         height: 180px;
       }
@@ -53,7 +53,7 @@
           font-size: 40px;
         }
 
-        @media screen and (min-width: 375px) and (max-width: 600px) {
+        @media screen and (min-width: 320px) and (max-width: 600px) {
           font-size: 32px;
         }
       }
@@ -63,7 +63,7 @@
           height: 50px;
         }
 
-        @media screen and (min-width: 375px) and (max-width: 600px) {
+        @media screen and (min-width: 320px) and (max-width: 600px) {
           height: 80px;
         }
       }
@@ -74,7 +74,7 @@
       align-items: center;
       justify-content: center;
 
-      @media screen and (min-width: 375px) and (max-width: 800px) {
+      @media screen and (min-width: 320px) and (max-width: 800px) {
         // width: 60vw;
         padding: 10px;
         // padding-left: 7vw;
@@ -96,7 +96,7 @@
       padding: 10px;
     }
 
-    @media screen and (min-width: 375px) and (max-width: 600px) {
+    @media screen and (min-width: 320px) and (max-width: 600px) {
       width: calc(350px + 10vw);
       padding: 10px;
     }
@@ -116,7 +116,7 @@
   }
 
 
-  @media screen and (min-width: 375px) and (max-width: 800px) {
+  @media screen and (min-width: 320px) and (max-width: 800px) {
     .swiper-button-prev{
       transform: translateX(2em);
     }
@@ -406,6 +406,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 40px;
 
   .navigation_account {
     color: white;
@@ -444,7 +445,7 @@
   }
 }
 
-@media (min-width: 375px) and (max-width:430px){
+@media (min-width: 320px) and (max-width:430px){
   .Account{
     align-items: center;
     width: 375px;
@@ -460,7 +461,7 @@
   }
 }
 
-@media (min-width: 375px) and (max-width:430px){
+@media (min-width: 320px) and (max-width:430px){
   .Members {
 
     max-width: 400px;

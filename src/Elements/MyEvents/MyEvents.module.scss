@@ -30,7 +30,110 @@
   }
 }
 
+/* New Modal Styles */
+.Modal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  font-family: "Calibri", sans-serif;
+  
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: #4B1218;
+    }
+    
+    .closeButton {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #4B1218;
+    }
+  }
+  
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+      color: #4B1218;
+    }
+  }
+  
+  .projectInput {
+    padding: 12px 15px;
+    border: 1px solid #4B1218;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: "Calibri", sans-serif;
+  }
+  
+  .checkboxSection, .participantsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  
+  .checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+    
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #4B1218;
+    }
+  }
+  
+  .divider {
+    border: none;
+    border-top: 2px dashed #4B1218;
+    margin: 15px 0;
+  }
+  
+  .mediaFiles {
+    h4 {
+      margin: 0 0 15px 0;
+      font-size: 18px;
+      font-weight: 500;
+      color: #4B1218;
+    }
+  }
+  
+  .fileList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .fileItem {
+    padding: 8px 16px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #4B1218;
+    border: 1px solid #4B1218;
+  }
+}
 
+/* Existing styles below */
 .card-container {
   display: flex;
   justify-content: center;
@@ -94,7 +197,6 @@
   background-color: #d1c7c7;
 }
 
-
 .paginationEvents {
   font-family: "Calibri", sans-serif;
   list-style-type: none;
@@ -153,13 +255,13 @@
   justify-content: center;
 }
 
-@media (min-width: 375px) and (max-width:430px){
+@media (min-width: 320px) and (max-width:430px){
   .MyEvents{
-  grid-template-columns: repeat(1, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  grid-column-gap: 2px;
-  grid-row-gap: 2px;
-  margin-bottom: 10px;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+    margin-bottom: 10px;
 
     .addedEvent{
       width: 305px;
@@ -208,5 +310,33 @@
   }
   .paginationEvents{
     display: none;
+  }
+
+  /* Mobile styles for modal */
+  .Modal {
+    gap: 15px;
+    padding: 15px;
+    
+    .modalHeader h2 {
+      font-size: 20px;
+    }
+    
+    .section h3 {
+      font-size: 16px;
+    }
+    
+    .projectInput {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    
+    .checkboxLabel {
+      font-size: 14px;
+    }
+    
+    .fileItem {
+      padding: 6px 12px;
+      font-size: 14px;
+    }
   }
 }
