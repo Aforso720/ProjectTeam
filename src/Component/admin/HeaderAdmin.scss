@@ -3,26 +3,37 @@
 @font-face {
   font-family: "Labil Grotesk";
 }
+
 header {
   display: flex;
   max-height: 265px;
   flex-direction: column;
   justify-content: center;
+  
   .back-container {
-
     min-height: 160px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     justify-items: center;
     align-items: center;
-    gap: 550px;
+    padding: 0 20px;
     border-bottom: 5px solid #4B1218;
+
+    a{
+      text-decoration: none;
+      color: white;
+    }
+    @media (max-width:800px) and (min-width:600px) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 300px;
+    }
 
     img {
       max-width: 503px;
       height: 87px;
     }
-
 
     button {
       width: 305px;
@@ -66,12 +77,9 @@ header {
         opacity: 1;
       }
     }
-
-
   }
 
   .active-container {
-
     width: 581px;
     height: 52px;
     background-color: rgba(75, 18, 24, 1);
@@ -88,9 +96,9 @@ header {
       display: flex;
       align-items: center;
       justify-content: space-evenly;
-
-      padding: 0;
+      padding: 15px 0;
       flex-grow: 1;
+
       li {
         padding: 16px;
         flex-grow: 1;
@@ -102,8 +110,7 @@ header {
         font-weight: 500;
         font-size: 20px;
 
-
-        a{
+        a {
           color: white;
           width: 100%;
           height: 100%;
@@ -112,18 +119,140 @@ header {
         }
       }
 
-      .active{
+      .active {
         background-color: #fff;
         min-width: 107px;
         max-height: 46px;
         border-radius: 48px;
 
-        a{
+        a {
           color: rgba(75, 18, 24, 1);
         }
       }
     }
+  }
+}
 
+/* Адаптация для 600px и меньше */
+@media (max-width: 600px) {
+  header {
+    max-height: none;
+    
+    .back-container {
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px 0;
+      min-height: auto;
+      
+      img {
+        max-width: 80%;
+        height: auto;
+        max-height: 60px;
+      }
+      
+      button {
+        width: 80%;
+        max-width: 250px;
+        height: 50px;
+        font-size: 18px;
+      }
+    }
+    
+    .active-container {
+      width: 90%;
+      height: auto;
+      border-radius: 20px;
+      margin: 10px auto;
+      padding: 5px;
+      
+      ul {
+        flex-direction: column;
+        gap: 5px;
+        padding: 5px;
+        
+        li {
+          padding: 8px;
+          font-size: 16px;
+          width: 100%;
+          
+          a {
+            white-space: normal;
+          }
+        }
+        
+        .active {
+          min-width: auto;
+          max-height: none;
+        }
+      }
+    }
+  }
+}
 
+/* Адаптация для 480px и меньше */
+@media (max-width: 480px) {
+  header {
+    .back-container {
+      button {
+        height: 45px;
+        font-size: 16px;
+      }
+    }
+    
+    .active-container {
+      ul {
+        li {
+          font-size: 14px;
+          padding: 6px;
+        }
+      }
+    }
+  }
+}
+
+/* Адаптация для 360px и меньше */
+@media (max-width: 360px) {
+  header {
+    .back-container {
+      img {
+        max-height: 50px;
+      }
+      
+      button {
+        height: 40px;
+        font-size: 14px;
+      }
+    }
+    
+    .active-container {
+      ul {
+        li {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+/* Адаптация для 320px */
+@media (max-width: 320px) {
+  header {
+    .back-container {
+      button {
+        height: 35px;
+        font-size: 13px;
+      }
+    }
+    
+    .active-container {
+      border-radius: 15px;
+      
+      ul {
+        li {
+          font-size: 11px;
+          padding: 4px;
+        }
+      }
+    }
   }
 }

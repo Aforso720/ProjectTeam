@@ -6,9 +6,15 @@ const Header = ({ setUserActive }) => {
     
     return (
         <header className='Header'>
-            <Link to={'/'}>
-                <img alt='Logo' src='img\Лого (2).png' className='Logotip'/>
-            </Link>
+            <div className="logo-admin-container">
+                <Link to={'/'}>
+                    <img alt='Logo' src='img\Лого (2).png' className='Logotip'/>
+                </Link>
+                
+                <Link to={'/admin/journal'} className='adminNav'>
+                    <span className="admin-text">Админка</span>
+                </Link>
+            </div>
 
             <input type="checkbox" id="menu-toggle" className="menu-toggle" />
             
@@ -36,13 +42,6 @@ const Header = ({ setUserActive }) => {
                     </Link>
                 </li>
             </ul>
-
-            <Link to={'/admin/journal'}>
-                <div className='adminNav'>
-                    Админ Панель
-                </div>
-            </Link>
-
         </header>
     )
 }

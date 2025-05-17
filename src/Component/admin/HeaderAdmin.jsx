@@ -14,9 +14,11 @@ const HeaderAdmin = () => {
 
     return (
         <header>
-            <section className={"back-container"}>
+            <section className="back-container">
                 <img src="/img/logoAdmin.png" alt="logo"/>
+                <Link to='/'>
                 <button>Вернуться на главную</button>
+                </Link>
             </section>
 
             <section className={"active-container"}>

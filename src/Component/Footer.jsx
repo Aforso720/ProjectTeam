@@ -6,7 +6,7 @@ const Footer = () => {
             <div className='LogoFoot'>
                 <picture>
                     <source 
-                        media="(min-width: 375px) and (max-width: 800px)" 
+                        media="(min-width: 320px) and (max-width: 800px)" 
                         srcSet='img\LogoFoot.png' 
                         className='mobilFootLogo'
                     />

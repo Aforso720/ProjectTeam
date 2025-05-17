@@ -53,7 +53,6 @@ body, html {
   text-decoration: none;
   position: relative;
 
-  // Скрываем чекбокс
   .menu-toggle {
     position: absolute;
     opacity: 0;
@@ -61,7 +60,6 @@ body, html {
     width: 0;
   }
 
-  // Стили для кнопки бургера
   .burger-button {
     display: none;
     cursor: pointer;
@@ -145,15 +143,15 @@ body, html {
     align-content: center;
     justify-content: space-between;
     margin: 0 auto;
-    padding: 0 5px;
+    padding: 5px 5px;
     font-size: 20px;
     font-weight: 500;
     color: black;
     min-width: 777px;
-    height: 56px;
     border: 3px black solid;
     border-radius: 80px;
     box-sizing: border-box;
+
 
     li {
       position: relative;
@@ -171,6 +169,7 @@ body, html {
         color: inherit;
       }
     }
+
   }
 
   .Logotip {
@@ -178,7 +177,7 @@ body, html {
     height: 125px;
     cursor: pointer;
 
-    @media screen and (min-width: 375px) and (max-width: 600px) {
+    @media screen and (min-width: 320px) and (max-width: 600px) {
       height: 70px;
       width: 250px;
     }
@@ -204,7 +203,7 @@ body, html {
 
       img{
 
-        @media screen and (min-width: 375px) and (max-width: 600px) {
+        @media screen and (min-width: 320px) and (max-width: 600px) {
           height: 40px;
           width: 40px;
         }
@@ -300,6 +299,93 @@ body, html {
       width: 160px;
     }
   }
+  /* Новый контейнер для лого и админки */
+.logo-admin-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  position: relative;
+}
+
+/* Стили для кнопки админки */
+.adminNav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #4B1218;
+  border-radius: 30px;
+  color: white;
+  text-decoration: none;
+  font-size: 26px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #6a1a22;
+    transform: scale(1.05);
+  }
+  
+  .admin-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .admin-text {
+    @media screen and (max-width: 600px) {
+      display: none;
+    }
+  }
+}
+
+/* Адаптивные стили */
+@media screen and (max-width: 800px) {
+  .logo-admin-container {
+    gap: 10px;
+  }
+  
+  .adminNav {
+    padding: 6px 12px;
+    font-size: 14px;
+    
+    .admin-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .adminNav {
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    
+    .admin-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .logo-admin-container {
+    gap: 5px;
+  }
+  
+  .adminNav {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    
+    .admin-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
 }
 
 .Footer {
@@ -324,8 +410,8 @@ body, html {
     left: 2em;
   
     img {
-      width: 161px;
-      height: 43px;
+      width: 261px;
+      height: 83px;
     }
   }
 
@@ -375,8 +461,8 @@ body, html {
       left: 1.5em;
 
       img {
-        width: calc(120px + (161 - 120) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение ширины логотипа
-        height: calc(32px + (43 - 32) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение высоты логотипа
+        width: calc(150px + (161 - 120) * ((100vw - 800px) / (1250 - 800)));
+        height: calc(62px + (43 - 32) * ((100vw - 800px) / (1250 - 800))); // Плавное изменение высоты логотипа
       }
     }
 

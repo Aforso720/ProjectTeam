@@ -15,6 +15,41 @@ const Journals = () => {
     attendees: [],
   });
 
+  React.useEffect(() => {
+    const defaultJournals = [
+      {
+        id: "1",
+        type: "meets",
+        title: "Организационное собрание",
+        date: new Date("2023-05-10").toISOString(),
+        attendees: [1, 2, 3, 4, 5],
+      },
+      {
+        id: "2",
+        type: "events",
+        title: "Технический семинар",
+        date: new Date("2023-05-15").toISOString(),
+        attendees: [1, 3, 5, 7, 9],
+      },
+      {
+        id: "3",
+        type: "meets",
+        title: "Планирование проекта",
+        date: new Date("2023-05-20").toISOString(),
+        attendees: [2, 4, 6, 8, 10],
+      },
+    ];
+
+    setJournals(defaultJournals.map(journal => ({
+      ...journal,
+      students: dummyPeople.map(p => ({
+        name: p.name,
+        group: p.group,
+        mark: journal.attendees.includes(p.id),
+      })),
+    })));
+  }, []);
+
   const navigate = useNavigate();
 
   const types = [
@@ -122,7 +157,7 @@ const Journals = () => {
         <span className="date">{new Date(j.date).toLocaleDateString("ru-RU")}</span>
         <div className="buttons">
           <button className="btn-outline" onClick={() => navigate(`/admin/journals/${j.id}`, { state: j })}>Посмотреть</button>
-          <button className="btn-solid">Редактировать</button>
+          {/* <button className="btn-solid">Редактировать</button> */}
         </div>
       </div>
     </div>
