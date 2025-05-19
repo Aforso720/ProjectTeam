@@ -1,9 +1,9 @@
 import React from 'react'
 import style from './Event.module.scss'
 
-const Event = ({id, image, description , contMyEvent }) => {
+const Event = ({id, image, description , contMyEvent, homeEvent }) => {
     return (
-        <div className={`${style.swiperSlide} ${contMyEvent}`} key={id}>
+        <div className={`${style.swiperSlide} ${contMyEvent} ${homeEvent}`} key={id}>
             <img
                 src={image}
                 alt="Slide 1"

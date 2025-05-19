@@ -51,7 +51,7 @@ const Slider = ({ eventCategory }) => {
                     ) : (
                         events.map(item => (
                             <SwiperSlide key={item.id}>
-                                <Event image={item.image} description={item.description} contMyEvent="contMyEventMob" />
+                                <Event image={item.image} description={item.description} homeEvent="homeEvents" contMyEvent="contMyEventMob" />
                             </SwiperSlide>
                         ))
                     )

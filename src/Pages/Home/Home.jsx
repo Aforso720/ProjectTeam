@@ -7,7 +7,7 @@ import {MyContext} from '../../App';
 import usePosts from '../../API/usePosts';
 import LoadingEvent from '../../Elements/Loading/loadingEvent'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -82,7 +82,7 @@ const Home = () => {
     return (
         <div className='Home'>
             <div className='Banner'>
-                {loadingBan ? <LoadingEvent width="1100px" height="700px"/> : <Banner news={events}/>}
+                {loadingBan ? <LoadingEvent width="1000px" height="40vh"/> : <Banner news={events}/>}
             </div>
            <div className='Events'>
                 <ul className='stateEvents'>
@@ -115,7 +115,7 @@ const Home = () => {
                 </ul>
                 
                 <div className='sliderHome'>
-                    <Slider eventCategory={eventCategory} />
+                    <Slider eventCategory={eventCategory}/>
                 </div>
             </div>
 

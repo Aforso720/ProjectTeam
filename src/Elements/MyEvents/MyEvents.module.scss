@@ -340,3 +340,100 @@
     }
   }
 }
+
+.addButton {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  margin: auto;
+  background-color: #4B1218;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fileUpload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #4B1218;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  color: #4B1218;
+  font-size: 14px;
+  min-width: 120px;
+}
+  
+.saveButton {
+  align-self: flex-end;
+  background-color: #4B1218;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+
+.participantsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.participantItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #4B1218;
+  font-weight: 500;
+}
+
+.removeButton {
+  background: transparent;
+  color: #4B1218;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.addParticipantRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.participantInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #4B1218;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #4B1218;
+}
+
+.addButton {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  background-color: #4B1218;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

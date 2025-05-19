@@ -1,0 +1,172 @@
+.auth-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+
+  &__content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(75, 18, 24, 0.2);
+    animation: fadeIn 0.3s ease-out;
+
+    @media (max-width: 480px) {
+      padding: 25px 20px;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #4B1218;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &__header {
+    margin-bottom: 25px;
+    text-align: center;
+  }
+
+  &__divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #4B1218, transparent);
+    margin: 10px 0;
+  }
+
+  h2 {
+    color: #4B1218;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4B1218;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+
+    &:focus {
+      outline: none;
+      border-color: #4B1218;
+      box-shadow: 0 0 0 2px rgba(75, 18, 24, 0.2);
+    }
+
+    &::placeholder {
+      color: #aaa;
+    }
+  }
+}
+
+.auth-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #4B1218;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 10px;
+
+  &:hover {
+    background-color: darken(#4B1218, 10%);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.error-message {
+  color: #d9534f;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: rgba(217, 83, 79, 0.1);
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 576px) {
+  .auth-modal {
+    padding: 10px;
+
+    &__content {
+      border-radius: 8px;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+
+    input {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+  }
+
+  .auth-button {
+    padding: 12px;
+    font-size: 15px;
+  }
+}

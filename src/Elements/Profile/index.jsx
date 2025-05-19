@@ -115,7 +115,7 @@ const Profile = () => {
                         <div className={style.inputGroup}>
                             <p>Телефон</p>
                             <input
-                                type='number'
+                                type='text'
                                 name='phone'
                                 value={formData.phone}
                                 readOnly={!isEditing}

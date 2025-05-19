@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.scss";
 import Header from "./Component/Header";
 import Footer from "./Component/Footer";
@@ -16,6 +16,7 @@ import Table from "./Pages/tables/Table";
 import Journals from "./Pages/journals/Journals";
 import PersonSetting from "./Pages/personSetting/PersonSetting.jsx";
 import EventAdmin from "./Pages/eventsAdmin/EventAdmin.jsx";
+import AuthModal from "./Pages/AuthModal/AuthModal.jsx";
 
 export const MyContext = React.createContext([]);
 
@@ -26,11 +27,20 @@ function App() {
     amount: 3,
   });
   const { manager, isloading: isloadingMng } = useManager();
-  const [userId, setUserId] = React.useState(1);
-  const [userActive, setUserActive] = React.useState(true);
+  const [userId, setUserId] = useState(1);
+  const [userActive, setUserActive] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const location = useLocation();
   const isAdminPage = location.pathname.includes("/admin");
+
+  React.useEffect(() => {
+  if (location.pathname === "/profile" && !userId) {
+    setShowAuthModal(true);
+  } else {
+    setShowAuthModal(false);
+  }
+}, [location.pathname, userId]);
 
   return (
     <MyContext.Provider
@@ -45,10 +55,11 @@ function App() {
         isloadingTop,
         isloadingMng,
         userActive,
+        setUserId,
+        setUserActive,
       }}
     >
       <div className="App">
-        {/* Показываем Header или HeaderAdmin в зависимости от пути */}
         {isAdminPage ? (
           <HeaderAdmin />
         ) : (
@@ -69,7 +80,11 @@ function App() {
             <Route
               path="/profile"
               element={
-                <Account setUserActive={setUserActive} setUserId={setUserId} />
+                userId ? (
+                  <Account setUserActive={setUserActive} setUserId={setUserId} />
+                ) : (
+                  <Home />
+                )
               }
             />
             <Route path="*" element={<div>Страница не найдена</div>} />
@@ -77,6 +92,13 @@ function App() {
         </div>
 
         <Footer />
+
+        {/* Модальное окно авторизации */}
+        {showAuthModal && (
+          <AuthModal
+            onClose={() => setShowAuthModal(false)}
+          />
+        )}
       </div>
     </MyContext.Provider>
   );
