@@ -21,7 +21,7 @@ const InfoModal = ({ modalIsOpen, closeModal, selectedItem }) => {
                     </div>
                     <div className={style.photoDocumModal}>
                         <div className={style.imgDocum}>
-                            <img src='img/3232.png' alt=''/>
+                            <img src={selectedItem.image} alt=''/>
                         </div>
                         <div className={style.buttonsDocum}>
                         <button>Посмотреть</button>

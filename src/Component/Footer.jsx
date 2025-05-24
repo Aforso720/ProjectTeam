@@ -17,14 +17,14 @@ const Footer = () => {
                 <div className='redLine'></div>
                 <ul>
                     <li className='UlH'>Сведения</li>
-                    <li>Сайт ГГНТУ</li>
-                    <li>Сайт ИЦЭиТп</li>
+                    <li><a href="https://gstou.ru/">Сайт ГГНТУ</a></li>
+                    <li><a href="https://icetp.gstou.ru/">Сайт ИЦЭиТп</a></li>
                 </ul>
                 <ul>
                     <li className='UlH'> Контакты</li>
                     <li>
                         <img alt={'phone'} src='/img/phone num.svg'/>
-                        Контакты
+                        +7 929 899 94 17
                     </li>
                     <li><img alt={'email'} src='/img/email.svg'/></li>
                     <li><img alt={'location'} src='/img/loc.svg'/>
@@ -33,8 +33,8 @@ const Footer = () => {
                 </ul>
                 <ul>
                     <li className='UlH'>Социальные сети</li>
-                    <li><img alt={'telegram'} src='/img/tg logo.svg'/> @projectteamiceitp</li>
-                    <li><img alt={'instagram'} src='/img/Instagram.svg'/> @project_team_iceitp</li>
+                    <li><img alt={'telegram'} src='/img/tg logo.svg'/> <a href="https://t.me/projectteamiceitp">@projectteamiceitp</a></li>
+                    <li><img alt={'instagram'} src='/img/Instagram.svg'/> <a href="https://www.instagram.com/project_team_iceitp">@project_team_iceitp</a></li>
                 </ul>
             </div>
             <div className='madeIn'>
