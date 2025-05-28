@@ -11,7 +11,6 @@ const usePerson = ({ amount } = {}) => {
                 setIsLoading(true)
                 const res = await axios.get("http://localhost:5555/api/users");
                 const response = res.data
-                console.log(response.data.filter((item)=> item.is_admin === true))
                 let sortedData = response.data.sort((a, b) => b.rating - a.rating); 
                                 
                 sortedData = sortedData.map((item, index) => ({

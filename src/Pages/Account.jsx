@@ -4,12 +4,13 @@ import MyEvents from '../Elements/MyEvents'
 import MyDocument from '../Elements/MyDocument';
 import { useNavigate } from 'react-router-dom';
 
-const Account = ({setUserActive}) => {
+const Account = ({handleLogoutAuth}) => {
+    
     const [activeTab, setActiveTab] = React.useState("personalData");
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        setUserActive(false); 
+        handleLogoutAuth(); 
         navigate('/'); 
     };
 

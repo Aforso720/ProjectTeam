@@ -9,6 +9,7 @@ import { Navigation } from "swiper/modules";
 import Event from '../../Elements/Event';
 import usePosts from '../../API/usePosts';
 import LoadingEvent from '../../Elements/Loading/loadingEvent';
+import { MyContext } from '../../App';
 
 
 
@@ -16,6 +17,7 @@ const Contests = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("Завершенные конкурсы");
   const { events, loading } = usePosts(selectedCategory);
   const { events: news, loading: loadingNews } = usePosts();
+  const {userActive} = React.useContext(MyContext)
 
 const [isMobileView, setIsMobileView] = React.useState(false);
 
@@ -71,12 +73,14 @@ React.useEffect(() => {
 
   return (
     <div className='Contests'>
-      <div className='MyEvents'>
+      {userActive ? (
+        <div className='MyEvents'>
         <h2>Мои конкурсы</h2>
         <div className="slider_cont">
           <Slider eventCategory={'Мои конкурсы'} />
         </div>
       </div>
+      ):''}
       <div className='BannerCont'>
         <div className='bannerSlider' style={{ width: "100%", overflow: "hidden" }}>
           <Swiper

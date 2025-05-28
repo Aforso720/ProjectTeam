@@ -32,7 +32,7 @@ const Members = () => {
     return <div>Загрузка!!!</div>;
   }
 
-  manager.push(1)
+  manager.push(1) 
 
   return (
 
@@ -72,16 +72,16 @@ const Members = () => {
                         ))
                         ) : (
                         manager.map((item, index) => (
-                            <SwiperSlide key={item.key || index}>
-                            <div className="card_manager">
-                                <img src="img/kot.jpg" alt="" />
-                                <h4>{item.first_name}</h4>
-                                {item.status === 'главный админ' ? (
-                                <p>Руководитель проектной команды</p>
-                                ) : (
-                                <p>Секретарь</p>
-                                )}
-                            </div>
+                        <SwiperSlide key={item.key || index}>
+                          <div className="card_manager">
+                            <img src="img/kot.jpg" alt={item.first_name} />
+                            <h4>{item.first_name}</h4>
+                            {item.status === 'главный админ' ? (
+                              <p>Руководитель проектной команды</p>
+                            ) : (
+                              <p>Секретарь</p>
+                            )}
+                              </div>
                             </SwiperSlide>
                         ))
           )}
@@ -124,9 +124,9 @@ const Members = () => {
                     <p className='textGroup'>ПИ-22-1</p>
                   </div>
                   <span className='numRating'>{item.rating}</span>
-                  {index >= 3 && (
+                  {/* {index >= 3 && (
                     <button className='detailsButton'>Подробнее</button>
-                  )}
+                  )} */}
                 </div>
               </li>
             ))

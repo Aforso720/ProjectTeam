@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import style from './Profile.module.scss';
+import { MyContext } from '../../App';
 
 const Profile = () => {
+    const { user } = React.useContext(MyContext);
     const [photoUrl, setPhotoUrl] = useState('/img/kot.jpg');
-    const [isEditing, setIsEditing] = useState(false); // Режим редактирования
+    const [isEditing, setIsEditing] = useState(false); 
     const [formData, setFormData] = useState({
-        lastName: 'Алаудинов',
-        firstName: 'Илисхан',
-        middleName: 'Самрудинович',
-        email: 'alaudinovis@mail.ru',
-        phone: '89380190528',
-        birthDate: '2003-05-14',
+    lastName: user?.last_name || '',
+    firstName: user?.first_name || '',
+    middleName: user?.middle_name || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    birthDate: user?.birth_date || '',
     });
 
-    // Обработчик загрузки фотографии
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {

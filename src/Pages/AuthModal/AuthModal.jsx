@@ -1,37 +1,39 @@
-import React, { useState, useContext } from "react";
-import { MyContext } from "../../App";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import "./AuthModal.scss";
 
-const AuthModal = ({ onClose }) => {
-  const [login, setLogin] = useState("");
+const AuthModal = ({ onClose, handleLogin, loading, error }) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const { setUserId, setUserActive } = useContext(MyContext);
-  const navigate = useNavigate();
+  const [localError, setLocalError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError("");
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!login || !password) {
-      setError("Пожалуйста, заполните все поля");
-      return;
-    }
+  if (!email.trim() || !password.trim()) {
+    setLocalError("Пожалуйста, заполните все поля");
+    return;
+  }
 
-    if (login === "admin" && password === "admin") {
-      setUserId(1);
-      setUserActive(true);
-      navigate("/profile");
-    } else {
-      setError("Неверный логин или пароль");
-    }
-  };
+  setLocalError("");
+  const success = await handleLogin(email, password);
+
+  if (success) {
+    onClose(); // 💥 Закрыть модалку при успешном входе
+  } else {
+    setPassword("");
+  }
+};
+
 
   return (
     <div className="auth-modal">
       <div className="auth-modal__content">
-        <button className="auth-modal__close" onClick={onClose} aria-label="Закрыть">
+        <button 
+          className="auth-modal__close" 
+          onClick={onClose} 
+          aria-label="Закрыть"
+          disabled={loading}
+        >
           &times;
         </button>
         <div className="auth-modal__header">
@@ -40,13 +42,14 @@ const AuthModal = ({ onClose }) => {
         </div>
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="login">Логин:</label>
+            <label htmlFor="email">Email:</label>
             <input
-              id="login"
-              type="text"
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
-              placeholder="Введите ваш логин"
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Введите ваш email"
+              disabled={loading}
             />
           </div>
           <div className="form-group">
@@ -57,11 +60,18 @@ const AuthModal = ({ onClose }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Введите ваш пароль"
+              disabled={loading}
             />
           </div>
-          {error && <div className="error-message">{error}</div>}
-          <button type="submit" className="auth-button">
-            Войти
+          {(error || localError) && (
+            <div className="error-message">{error || localError}</div>
+          )}
+          <button 
+            type="submit" 
+            className="auth-button" 
+            disabled={loading}
+          >
+            {loading ? 'Вход...' : 'Войти'}
           </button>
         </form>
       </div>
