@@ -1,9 +1,10 @@
-.container {
+.aboutPage {
   display: flex;
   flex-direction: column;
   justify-content: center;
   font-family: Calibri, sans-serif;
   font-weight: bold;
+  background-color: white;
 
   .leaflet-control-attribution {
     display: none !important;
@@ -20,6 +21,8 @@
     background-image: url("fon.png");
     background-size: auto;
     margin-top: 8px;
+    background-color: white;
+    width: 100%;
 
 
     .about {
@@ -212,6 +215,7 @@
     background-color: #4B1218;
     background-image: url("fon2.png");
     background-size: auto;
+    width: 100%;
 
     .about {
       display: flex;
@@ -461,10 +465,7 @@
     justify-content: center;
     background-image: url("fon.png");
     background-size: auto;
-
-    // @media (max-width: 800px) and (min-width:600px) {
-    //   // max-height: 558px;
-    // }
+    width: 100%;
 
     
 
@@ -487,10 +488,13 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
+        margin-right: 50px;
         @media (min-width:375px) and (max-width:800px) {
           width: 100%;
           padding-bottom: 120px;
           align-items: center;
+          margin-right: 0;
         }
 
         @media (max-width: 900px) and (min-width: 801px) {
@@ -536,18 +540,20 @@
         }
       }
 
-      .container {
+      .infoAbout {
         display: flex;
         flex-direction: column;
-        justify-content: start;
+        justify-content: center;
         align-items: center;
-        height: 100%;
+        height: 400px;
         margin-bottom: 20px;
+        // background-image: url("fon.png");
+        margin-left: 40px;
           
   
 
         @media (max-width: 1000px) and (min-width: 800px) {
-          transform: translateX(5em);
+          transform: translateX(10em);
         } 
 
         @media (max-width: 800px) and (min-width: 320px) {
@@ -645,7 +651,7 @@
         gap: 20px; 
       }
     
-      .container {
+      .infoAbout {
         width: 100%;
         margin: 0 auto;
         flex: 1;

@@ -6,7 +6,7 @@ import LoadDocum from '../Loading/loadingEvent';
 import InfoModal from './InfoModal';
 
 const MyDocument = () => {
-    const { myDocument, loading } = useDocument();
+    const { myDocument, loading, fetchData } = useDocument();
     const [currentPage, setCurrentPage] = React.useState(1);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [selectedItem, setSelectedItem] = React.useState(null); 
@@ -47,7 +47,7 @@ const MyDocument = () => {
     return (
         <div className={style.wrapper}>
             <div className={style.MyDocument}>
-                {currentPage === 1 && <AddDocModal />}
+                {currentPage === 1 && <AddDocModal onDocumentAdded={fetchData} />}
 
                 {loading ? (
                     Array.from({ length: itemsPerPage }).map((_, index) => (

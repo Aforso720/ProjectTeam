@@ -5,13 +5,28 @@ import style from './MyEvents.module.scss';
 const AddEventModal = () => {
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
-    const openModal = () => {
-        setModalIsOpen(true);
-    };
-    
-    const closeModal = () => {
-        setModalIsOpen(false);
-    };
+    const [participants, setParticipants] = React.useState([
+  'Эльдарханов Абдул–Малик',
+  'Алаудинов Илисхан'
+]);
+const [newParticipant, setNewParticipant] = React.useState('');
+
+const handleAddParticipant = () => {
+  if (newParticipant.trim()) {
+    setParticipants([...participants, newParticipant.trim()]);
+    setNewParticipant('');
+  }
+};
+
+const handleRemoveParticipant = (index) => {
+  const updated = [...participants];
+  updated.splice(index, 1);
+  setParticipants(updated);
+};
+
+
+    const openModal = () => setModalIsOpen(true);
+    const closeModal = () => setModalIsOpen(false);
 
     const customStyles = {
         content: {
@@ -19,17 +34,16 @@ const AddEventModal = () => {
             left: '50%',
             right: 'auto',
             bottom: 'auto',
-            marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
-            width: '600px',
-            maxWidth: '90%',
-            padding: '20px',
-            borderRadius: '10px',
+            width: '800px',
+            maxWidth: '95%',
+            padding: '30px',
+            borderRadius: '12px',
             backgroundColor: '#fff',
-            border: '1px solid #ccc',
+            border: '1px solid #4B1218',
         },
         overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)', 
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
         },
     };
 
@@ -39,6 +53,7 @@ const AddEventModal = () => {
                 <img src='/img/carbon_ibm-cloud-projects.png' alt='img' />
                 <button onClick={openModal}>Добавить проект</button>
             </div>
+
             <Modal 
                 isOpen={modalIsOpen} 
                 onRequestClose={closeModal}
@@ -50,46 +65,73 @@ const AddEventModal = () => {
                         <h2>Добавление проекта</h2>
                         <button className={style.closeButton} onClick={closeModal}>✕</button>
                     </div>
-                    
+
                     <div className={style.section}>
-                        <h3>Название проекта</h3>
-                        <input type="text" className={style.projectInput} placeholder="Введите название проекта" />
+                        <input type="text" className={style.projectInput} placeholder="Название проекта" />
+                        <input type="text" className={style.projectInput} placeholder="Дата создания" />
+                        <textarea className={style.projectInput} placeholder="Краткое описание" rows="3" />
                     </div>
-                    
-                    <div className={style.checkboxSection}>
-                        <label className={style.checkboxLabel}>
-                            <input type="checkbox" /> Дата создания
-                        </label>
-                        <label className={style.checkboxLabel}>
-                            <input type="checkbox" /> Краткое описание
-                        </label>
-                    </div>
-                    
+
                     <div className={style.section}>
-                        <h3>Добавить участников</h3>
-                        <div className={style.participantsList}>
-                            <label className={style.checkboxLabel}>
-                                <input type="checkbox" /> ✕ Эльдарханов Абдул-Малик
+  <h3>Добавить участников</h3>
+  <div className={style.participantsList}>
+    {participants.map((name, index) => (
+      <div key={index} className={style.participantItem}>
+        <span>{name}</span>
+        <button
+          type="button"
+          className={style.removeButton}
+          onClick={() => handleRemoveParticipant(index)}
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+    <div className={style.addParticipantRow}>
+      <input
+        type="text"
+        value={newParticipant}
+        onChange={(e) => setNewParticipant(e.target.value)}
+        className={style.participantInput}
+        placeholder="Введите имя участника"
+      />
+      <button
+        type="button"
+        className={style.addButton}
+        onClick={handleAddParticipant}
+      >
+        +
+      </button>
+    </div>
+  </div>
+</div>
+
+
+                    <div className={style.section}>
+                        <select className={style.projectInput}>
+                            <option value="">Выберите мероприятие</option>
+                            {/* Примеры:
+                            <option value="event1">Мероприятие 1</option>
+                            */}
+                        </select>
+                    </div>
+
+                    <div className={style.section}>
+                        <h3>Медиафайлы</h3>
+                        <div className={style.fileList}>
+                            <label className={style.fileUpload}>
+                                <input type="file" hidden multiple />
+                                <div>📁 Прикрепить медиафайл</div>
                             </label>
-                            <label className={style.checkboxLabel}>
-                                <input type="checkbox" /> ✕ Алаудинов Илисхан
-                            </label>
+                            <div className={style.fileItem}>PDF</div>
+                            <div className={style.fileItem}>PPTX</div>
+                            <div className={style.fileItem}>PDF</div>
+                            <div className={style.fileItem}>PPTX</div>
                         </div>
                     </div>
-                    
-                    <hr className={style.divider} />
-                    
+
                     <div className={style.section}>
-                        <h3>Выберите мероприятие</h3>
-                        <div className={style.mediaFiles}>
-                            <h4>Медиафайлы</h4>
-                            <div className={style.fileList}>
-                                <div className={style.fileItem}>PDF</div>
-                                <div className={style.fileItem}>PPTX</div>
-                                <div className={style.fileItem}>PDF</div>
-                                <div className={style.fileItem}>PPTX</div>
-                            </div>
-                        </div>
+                        <button className={style.saveButton}>Сохранить</button>
                     </div>
                 </div>
             </Modal>

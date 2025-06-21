@@ -7,7 +7,7 @@ import { Navigation } from "swiper/modules";
 
 const Banner = ({ news }) => {
     return (
-        <div style={{ width: "100%", overflow: "hidden" }}>
+        <div style={{ width: "1440px", overflow: "hidden" }}>
             <Swiper
                 modules={[Navigation]}
                 spaceBetween={20}

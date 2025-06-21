@@ -3,7 +3,7 @@ import "./AboutUs.scss";
 
 const AboutUs = () => {
     return (
-        <section className="container">
+        <section className="aboutPage">
             <div className="who-me">
                 <div className="about">
                     <div className="circle-wrapper">
@@ -37,7 +37,7 @@ const AboutUs = () => {
             </div>
             <div className="contacts">
                 <div className="about">
-                    <div className="container">
+                    <div className="infoAbout">
                         <h2>Контакты</h2>
                         <ul>
                             <li>Телефон:</li>

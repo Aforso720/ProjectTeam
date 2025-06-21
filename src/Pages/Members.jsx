@@ -1,7 +1,11 @@
 import React from 'react';
 import { MyContext } from '../App';
 import LoadPers from '../Elements/Loading/loadingPerson';
-import LoadMng from '../Elements/Loading/loadingEvent'
+import LoadMng from '../Elements/Loading/loadingEvent';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation} from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 const Members = () => {
   const { topPerson, isloadingTop, manager , isloadingMng} = React.useContext(MyContext);
@@ -28,10 +32,15 @@ const Members = () => {
     return <div>Загрузка!!!</div>;
   }
 
+  manager.push(1) 
+
   return (
+
     <div className='Members'>
       <div className='supervisor'>
         <h2>Руководители</h2>
+
+
         <ul className='cardSupervisor'>
         {isloadingMng ? (
           Array.from({ length: 3 }).map((_, index) => (
@@ -47,6 +56,37 @@ const Members = () => {
           ))
         )}
       </ul>
+ 
+      <Swiper
+      className='mobSlaidMemb'
+      modules={[Navigation]}
+      spaceBetween={10}
+      slidesPerView={1}
+      navigation={true}
+      >
+        {isloadingMng ? (
+                        Array.from({ length: 3 }).map((_, index) => (
+                            <SwiperSlide key={index}>
+                              Загрузка...
+                            </SwiperSlide>
+                        ))
+                        ) : (
+                        manager.map((item, index) => (
+                        <SwiperSlide key={item.key || index}>
+                          <div className="card_manager">
+                            <img src="img/kot.jpg" alt={item.first_name} />
+                            <h4>{item.first_name}</h4>
+                            {item.status === 'главный админ' ? (
+                              <p>Руководитель проектной команды</p>
+                            ) : (
+                              <p>Секретарь</p>
+                            )}
+                              </div>
+                            </SwiperSlide>
+                        ))
+          )}
+      </Swiper>
+      
       </div>
       <div className='rating'>
         <h2>Лидеры рейтинга</h2>
@@ -84,9 +124,9 @@ const Members = () => {
                     <p className='textGroup'>ПИ-22-1</p>
                   </div>
                   <span className='numRating'>{item.rating}</span>
-                  {index >= 3 && (
+                  {/* {index >= 3 && (
                     <button className='detailsButton'>Подробнее</button>
-                  )}
+                  )} */}
                 </div>
               </li>
             ))

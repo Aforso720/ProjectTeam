@@ -7,10 +7,9 @@ import {MyContext} from '../../App';
 import usePosts from '../../API/usePosts';
 import LoadingEvent from '../../Elements/Loading/loadingEvent'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 const Home = () => {
     const [isActive, setIsActive] = React.useState('Новости');
@@ -18,53 +17,9 @@ const Home = () => {
     const { events: eventCategory} = usePosts(category);
     const {userActive} = React.useContext(MyContext)
 
-    // const {homePerson , isloadingPersHome} = React.useContext(MyContext);
-
-    const isloadingPersHome = false;
-    const homePerson = [
-        {
-            position : 1,
-            first_name: 'Хлеб'
-
-
-        },
-        {
-            position : 2,
-            first_name: 'Масло'
-
-
-        },
-        {
-            position : 3,
-            first_name: 'Сок'
-
-
-        }
-    ]
-
-
+    const {homePerson , isloadingPersHome} = React.useContext(MyContext);
     const { events , loading : loadingBan } = usePosts();
-
-    // const {manager, isloadingMng} = React.useContext(MyContext);
-    const isloadingMng = false;
-    const manager =[
-        {
-            first_name : "Hello World",
-            status : "главный админ",
-            id: 1
-        },
-        {
-            first_name : "Hello World",
-            status : "админ",
-            id: 2
-        },
-        {
-            first_name : "Hello World",
-            status : "админ",
-            id: 3
-        }
-
-    ]
+    const {manager, isloadingMng} = React.useContext(MyContext);
 
 
     const handleClick = (category) => {
@@ -75,14 +30,14 @@ const Home = () => {
     function sortManager(managerList) {
         const admins = managerList.filter(m => m.status === "главный админ");
         const others = managerList.filter(m => m.status !== "главный админ");
-        return [...admins, ...others]; // директор будет первым
+        return [...admins, ...others]; 
       }
       
 
     return (
         <div className='Home'>
             <div className='Banner'>
-                {loadingBan ? <LoadingEvent width="1100px" height="700px"/> : <Banner news={events}/>}
+                {loadingBan ? <LoadingEvent width="1000px" height="40vh"/> : <Banner news={events}/>}
             </div>
            <div className='Events'>
                 <ul className='stateEvents'>
@@ -115,7 +70,7 @@ const Home = () => {
                 </ul>
                 
                 <div className='sliderHome'>
-                    <Slider eventCategory={eventCategory} />
+                    <Slider eventCategory={eventCategory}/>
                 </div>
             </div>
 
@@ -143,6 +98,7 @@ const Home = () => {
                 )}
                 </ul>
             </div>
+            
             <div className='aboutHome'>
                 <div className='contentAbout'>
                     <div className='textAbout'>
@@ -186,28 +142,36 @@ const Home = () => {
 
                 {/* Mobile version — Swiper */}
                 <div className="manager__slider">
-                <Swiper
-                    modules={[Navigation]}
-                    spaceBetween={10}
-                    slidesPerView={1}
-                    pagination={{ clickable: true }}
-                    navigation={true}
-                >
-                    {(isloadingMng ? Array.from({ length: 3 }) : sortManager(manager)).map((item, index) => (
-                    <SwiperSlide key={index}>
-                        <div className="card_manager">
-                        <img src="img/kot.jpg" alt="" />
-                        <h4>{item.first_name}</h4>
-                        {item.status === 'главный админ' ? (
-                            <p>Руководитель проектной команды</p>
+                    <Swiper
+                        modules={[Navigation]}
+                        spaceBetween={10}
+                        slidesPerView={1}
+                        pagination={{ clickable: true }}
+                        navigation={true}
+                    >
+                        {isloadingMng ? (
+                        Array.from({ length: 3 }).map((_, index) => (
+                            <SwiperSlide key={index}>
+                            <LoadingEvent width="350px" height="250px" />
+                            </SwiperSlide>
+                        ))
                         ) : (
-                            <p>Секретарь</p>
+                        sortManager(manager).map((item, index) => (
+                            <SwiperSlide key={item.key || index}>
+                            <div className="card_manager">
+                                <img src="img/kot.jpg" alt="" />
+                                <h4>{item.first_name}</h4>
+                                {item.status === 'главный админ' ? (
+                                <p>Руководитель проектной команды</p>
+                                ) : (
+                                <p>Секретарь</p>
+                                )}
+                            </div>
+                            </SwiperSlide>
+                        ))
                         )}
-                        </div>
-                    </SwiperSlide>
-                    ))}
-                </Swiper>
-                </div>
+                    </Swiper>
+                    </div>
                 </div>
         </div>
     );

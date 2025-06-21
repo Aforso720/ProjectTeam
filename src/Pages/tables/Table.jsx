@@ -20,7 +20,7 @@ const JournalView = () => {
   return (
     <div className="container">
       <div className="nav-container">
-        <Link to="/journals" className="arrow">← Назад</Link>
+        <Link to="/admin/journal" className="arrow"></Link>
         <p>{state.title}</p>
         <p>{formatDate(state.date)}</p>
       </div>

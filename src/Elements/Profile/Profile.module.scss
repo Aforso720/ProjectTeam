@@ -140,9 +140,10 @@
 }
 
 /* .............................Адаптивка..................................*/
-@media (min-width: 320px) and (max-width:430px){
+@media (min-width: 320px) and (max-width:800px){
   .profile{
-      width: 345px;
+      width: 80%;
+      min-width: 345px;
       height: 660px;
       flex-direction: column;
       margin: 0;
