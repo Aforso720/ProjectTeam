@@ -32,8 +32,6 @@ const Members = () => {
     return <div>Загрузка!!!</div>;
   }
 
-  manager.push(1) 
-
   return (
 
     <div className='Members'>

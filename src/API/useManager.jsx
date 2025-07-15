@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const useManager = () => {
+const useManager = ({authToken}) => {
     const [manager, setManager] = React.useState([]);
     const [isloading, setIsLoading] = React.useState(true);
 
@@ -9,13 +9,15 @@ const useManager = () => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                const res = await axios.get("http://localhost:5555/api/users");
+                const res = await axios.get("http://localhost:5555/api/users", {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
+                });
                 const response = res.data;
 
-                // Фильтруем админов
                 const admins = response.data.filter(item => item.is_admin === true);
 
-                // Находим главного админа с id = 11
                 const mainAdmin = admins.find(item => item.id === 11);
 
                 // Если главный админ есть, добавляем его в начало списка

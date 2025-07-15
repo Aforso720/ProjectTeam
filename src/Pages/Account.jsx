@@ -22,19 +22,19 @@ const Account = ({handleLogoutAuth}) => {
                     className={activeTab === "personalData" ? 'activeAcc' : ""}
                     onClick={() => setActiveTab("personalData")}
                 >
-                    Личные данные
+                    Профиль
                 </li>
                 <li
                     className={activeTab === "MyEvents" ? 'activeAcc' : ""}
                     onClick={() => setActiveTab("MyEvents")}
                 >
-                    Мои проекты
+                    Проекты
                 </li>
                 <li
                     className={activeTab === "MyDocument" ? 'activeAcc' : ""}
                     onClick={() => setActiveTab("MyDocument")}
                 >
-                    Мои сертификаты
+                    Сертификаты
                 </li>
                 <li
                     className={activeTab === "LogOut" ? 'activeAcc' : ""}

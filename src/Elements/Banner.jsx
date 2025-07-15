@@ -1,13 +1,20 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-flip";
 import { Navigation } from "swiper/modules";
 
 const Banner = ({ news }) => {
+    const navigate = useNavigate();
+
+    const handleSlideClick = (eventId) => {
+        navigate(`/events/${eventId}`);
+    };
+
     return (
-        <div style={{ width: "1440px", overflow: "hidden" }}>
+        <div style={{ width: "1440px", overflow: "hidden" , height:'100%' }}>
             <Swiper
                 modules={[Navigation]}
                 spaceBetween={20}
@@ -40,9 +47,13 @@ const Banner = ({ news }) => {
                 }}
             >
                 {news.map((item) => (
-                    <SwiperSlide key={item.key}>
+                    <SwiperSlide 
+                        key={item.id} 
+                        onClick={() => handleSlideClick(item.id)}
+                        style={{ cursor: "pointer"  }}
+                    >
                         <img
-                            src={item.image}
+                            src={ item.image ? 'item.image' : '/img/image2.png'}
                             alt="Slide 1"
                             style={{ width: "100%", borderRadius: "10px" }}
                             className="BannerImg"

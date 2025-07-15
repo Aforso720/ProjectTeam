@@ -5,7 +5,7 @@ const Event = ({id, image, description , contMyEvent, homeEvent }) => {
     return (
         <div className={`${style.swiperSlide} ${contMyEvent} ${homeEvent}`} key={id}>
             <img
-                src={image}
+                src={image ? image : '/img/image2.png'}
                 alt="Slide 1"
                 className={style.SliderImg}
             />
