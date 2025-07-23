@@ -48,7 +48,7 @@ const useManager = ({authToken}) => {
             }
         };
         fetchData();
-    }, []);
+    }, [authToken]);
 
     return { manager, isloading };
 };

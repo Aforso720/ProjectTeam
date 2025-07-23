@@ -13,7 +13,7 @@ const Header = ({ userActive, user }) => {
 
         {user?.is_admin && (
           <Link to={'/admin/journal'} className='adminNav'>
-            <span className="admin-text">Админка</span>
+            <img src="/img/AdminIcon.svg" alt="AdminPanel" style={{width:30}}/>
           </Link>
         )}
       </div>

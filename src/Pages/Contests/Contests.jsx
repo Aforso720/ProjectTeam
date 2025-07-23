@@ -11,6 +11,7 @@ import usePosts from '../../API/usePosts';
 import LoadingEvent from '../../Elements/Loading/loadingEvent';
 import { MyContext } from '../../App';
 import useEvent from '../../API/useEvent';
+import { useNavigate } from 'react-router';
 
 const Contests = () => {
   const [status, setSelectedStatus] = React.useState("active");
@@ -24,7 +25,7 @@ const Contests = () => {
 
   React.useEffect(() => {
     const handleResize = () => {
-      setIsMobileView(window.innerWidth >= 375 && window.innerWidth <= 800);
+      setIsMobileView(window.innerWidth >= 375 && window.innerWidth <= 900);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -49,6 +50,12 @@ const Contests = () => {
   React.useEffect(() => {
     swiperRef.current?.swiper?.update();
   }, [news]);
+
+  const navigate = useNavigate();
+
+  const handleSlideClick = (eventId) => {
+    navigate(`/events/${eventId}`);
+  };
 
   return (
     <div className='Contests'>
@@ -82,7 +89,8 @@ const Contests = () => {
               news.map((item) => (
                 <SwiperSlide key={item.id}>
                   <img
-                    src={item.image}
+                    onClick={() => handleSlideClick(item.id)}
+                    src={ item.image ? 'item.image' : '/img/image2.png'}
                     alt={item.title}
                     className="BannerImg"
                   />

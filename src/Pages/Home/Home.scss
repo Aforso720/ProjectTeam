@@ -3,7 +3,7 @@
     height: 100%;
     font-family: "Labil Grotesk", sans-serif;
   
-    .Banner {
+    .Banner{
         width: 100%;
         margin-top: 1em;
         height: 487px; 
@@ -17,13 +17,12 @@
         }
     
         .BannerImg {
-            // width: 400px;
             height: 487px; 
             object-fit: cover; 
         }
 
     
-        @media screen and (min-width: 800px) and (max-width: 1400px) {
+        @media (max-width: 1400px) {
             height: 350px; 
     
             .BannerImg {
@@ -31,7 +30,7 @@
             }
         }
 
-        @media screen and (max-width: 800px) {
+        @media (max-width: 800px) {
             height: 250px; 
     
             .BannerImg {
@@ -40,30 +39,39 @@
         }
     }
   
-    .Events {
+    .Events{
         display: flex;
         flex-direction: column;
         align-content: center;
         align-items: center;  
+        margin-bottom: 40px;
 
         .myContestsMobile {
-        display: none; 
-        margin-top: 40px;
+          display: none; 
+          margin-top: 20px;
 
-        .mobileHeader {
-            font-size: 20px;
-            font-weight: bold;
-            // margin-bottom: 10px;
-            text-align: center;
-            color: #4B1218;
+          .mobileHeader {
+              font-size: 20px;
+              font-weight: bold;
+              text-align: center;
+              color: #4B1218;
+          }
+
+          .sliderMyContests {
+              margin-bottom: 20px;
+          }
+
+          @media (max-width:900px) {
+            gap: 20px;
+            display: flex;
+            justify-content: flex-end;
+          }
+
+          @media (max-width:600px) {
+            gap: 0px;
+          }
         }
 
-        .sliderMyContests {
-            margin-bottom: 20px;
-        }
-        }
-
-    
         .stateEvents {
             list-style-type: none;
             display: flex;
@@ -92,129 +100,80 @@
             justify-content: center;
             align-content: center;
             flex-direction: row;
-            margin: 2em;
             max-width: 1300px;
-          
-            @media (max-width:800px) and (min-width:375px) {
-              margin: 10px;
-            }
+            margin: 2rem;
 
-        }
-
-         @media (max-width: 950px) {
-        .myContestsMobile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            padding: 10px;
-            height: 240px;
-        }
-
-        .stateEvents {
-
-            .myContestsDesktop {
-                display: none !important;
-            }
-        }
-        }
-
-       
-
-
-
-        @media screen and (min-width: 950px) and (max-width: 1400px) {
-            .stateEvents {
-                font-size: 16px;
-                height: 46px; 
-                gap: 15px; 
-                padding: 0 5px; 
-    
-                li {
-                    height: 36px; 
-                    padding: 0 8px; 
-                }
-    
-                .active {
-                    min-height: 36px; 
-                    min-width: 90px; 
-                    font-size: 16px;
-                }
+            @media (max-width: 1200px){
+              margin:0;
             }
         }
 
-
-        @media (min-width: 600px) and (max-width: 850px) {
-          .stateEvents {
-              font-size: 12px;
-              height: 46px; 
-              gap: 5px; 
-              padding: 0 5px; 
-              transform: translateX(0em); 
-              margin-bottom: 0;
-              margin-top: 20px;
-
-              li {
-                  height: 36px; 
-                  padding: 0 8px; 
-              }
-  
-              .active {
-                  min-height: 36px; 
-                  min-width: 90px; 
-                  font-size: 12px;
+          @media (max-width: 1400px){
+              .stateEvents {
+                  font-size: 16px;
+                  height: 46px; 
+                  gap: 15px; 
+                  padding: 0 5px; 
+      
+                  li {
+                      height: 36px; 
+                      padding: 0 8px; 
+                  }
+      
+                  .active {
+                      min-height: 36px; 
+                      min-width: 90px; 
+                      font-size: 16px;
+                  }
               }
           }
-      }
 
-
-      @media (min-width: 320px) and (max-width: 600px) {
-        .stateEvents {
-            font-size: 7px;
-            height: 36px; 
-            gap: 5px; 
-            padding: 0 5px; 
-            transform: translateX(0em); 
-            margin-bottom: 0;
-            margin-top: 20px;
-
-            
-            li {
-                height: 26px; 
-                padding: 0 8px; 
+          @media (max-width: 950px){
+            .myContestsMobile {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                height: 240px;
+                gap: 10px;
             }
 
-            .active {
-                min-height: 26px; 
-                min-width: 90px; 
-                font-size: 8px;
-            }
-        }
-    }
-    
-        @media (min-width: 850px) and (max-width: 950px) {
             .stateEvents {
-                font-size: 14px; 
-                height: 40px; 
-                gap: 10px; 
-                padding: 0 5px; 
-                // transform: translateX(-8em); 
-    
-                li {
-                    height: 30px; 
-                    padding: 0 6px; 
-                }
-    
-                .active {
-                    min-height: 30px; 
-                    min-width: 80px; 
-                    font-size: 14px; 
+              margin:  30px 0 20px 0;
+                .myContestsDesktop {
+                    display: none !important;
                 }
             }
-        }
+          }
+
+          @media (max-width: 600px){
+            .myContestsMobile {
+                padding: 0px;
+            }
+
+            .stateEvents {
+                font-size: 12px;
+                height: 36px; 
+                gap: 5px; 
+                padding: 0 5px; 
+                margin-top: 0px;
+                margin-bottom: 20px;
+                
+                li {
+                    height: 26px; 
+                    padding: 0 8px; 
+                }
+
+                .active {
+                    min-height: 26px; 
+                    min-width: 90px; 
+                    font-size: 12px;
+                }
+            }
+          }
     }
 
-    .TopT {
+    .TopT{
         text-align: center;
         position: relative;
         border-top: 5px solid #4B1218;
@@ -240,7 +199,8 @@
       
           li:nth-child(3) {
             transform: translateX(-5em);
-          }          
+          }    
+
           .KingTop {
             transform: translateX(-8em) translateY(-25em);
           }
@@ -251,126 +211,103 @@
           }
         }
 
-      @media screen and (max-width: 1050px) {
-            h2 {
-              font-size: 44px;
-              margin-bottom: 1.5em;
+        .WinnerCard{
+          .CardInfo{
+            padding-right: 80px;
+          }
+        }
+
+        @media (max-width: 1050px) {
+              h2 {
+                font-size: 44px;
+                margin-bottom: 1.5em;
+              }
+          
+              .CardTop {
+                .KingTop {
+                  transform: translateX(-5.5em) translateY(-20em);
+                  width: 150px;
+                }
+              }
+        }
+
+        @media (max-width:900px) {
+
+          h2{
+            margin-bottom: 20px;
+          }
+          
+          .CardTop{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            grid-column-gap: 10px;
+            grid-row-gap: 10px; 
+            align-items: flex-start;
+            padding: 0 30px;
+            margin-bottom: 40px;
+            width: 550px;
+            margin: 20px auto;
+
+            li{
+              width: auto;
+              height: 100px;
             }
-        
-            .CardTop {
-              .KingTop {
-                transform: translateX(-5.5em) translateY(-20em);
-                width: 150px;
+
+            li:nth-child(1){
+              grid-area: 1 / 1 / 2 / 3;
+              transform: translateX(0) translateY(0);
+
+              .KingTop{
+                transform: translateX(-14.5em) translateY(-8.5em);
+                position: relative;
+                width: 80px;
               }
             }
-      }
 
-      @media (max-width:800px) and (min-width:600px) {
+            li:nth-child(2){
+              grid-area: 2 / 1 / 3 / 2;
+              // width: 250px;
+              transform: translateX(0) translateY(0);
+            }
 
-        h2{
-          margin-bottom: 20px;
-        }
-        
-        .CardTop{
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          grid-template-rows: repeat(2, 1fr);
-          grid-column-gap: 10px;
-          grid-row-gap: 10px; 
-          align-items: flex-start;
-          padding: 0 30px;
-          margin-bottom: 40px;
-          width: 550px;
-          margin: 20px auto;
-
-          li{
-            width: auto;
-            height: 100px;
-          }
-
-          li:nth-child(1){
-             grid-area: 1 / 1 / 2 / 3;
-             transform: translateX(0) translateY(0);
-
-             .KingTop{
-              transform: translateX(-14.5em) translateY(-8.5em);
+            li:nth-child(3) {
+              transform: translateX(0) translateY(0);
               position: relative;
-              width: 80px;
-             }
-          }
+              grid-area: 2 / 2 / 3 / 3; 
+              // width: 250px;
+            }
 
-          li:nth-child(2){
-             grid-area: 2 / 1 / 3 / 2;
-            // width: 250px;
-             transform: translateX(0) translateY(0);
           }
-
-          li:nth-child(3) {
-            transform: translateX(0) translateY(0);
-            position: relative;
-            grid-area: 2 / 2 / 3 / 3; 
-            // width: 250px;
-          }
-
         }
-      }
 
-      @media (max-width:600px) {
-        margin-bottom: 40px;
-
-        h2{
-          margin-top: 0;
-          margin-bottom: 20px;
-        }
-        
-        .CardTop{
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          grid-template-rows: repeat(2, 1fr);
-          grid-column-gap: 10px;
-          grid-row-gap: 10px; 
-          align-items: flex-start;
-          padding: 0 30px;
+        @media (max-width:600px) {
           margin-bottom: 40px;
-          width: 300px;
-          margin: 20px auto;
-          gap: 30px;
 
-          li{
-            width: auto;
-            height: 100px;
+          h2{
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
           }
+          
+          .CardTop{
+            margin-bottom: 40px;
+            width: 300px;
+            margin: 20px auto;
+            gap: 30px;
 
-          li:nth-child(1){
-             grid-area: 1 / 1 / 2 / 3;
-             transform: translateX(0) translateY(0);
-
-             .KingTop{
-              transform: translateX(-10.5em) translateY(-8.5em);
-              position: relative;
-              width: 80px;
-             }
+            li:nth-child(1){
+              .KingTop{
+                transform: translateX(-9.5em) translateY(-7.5em);
+                position: relative;
+                width: 50px;
+              }
+            }
           }
-
-          li:nth-child(2){
-             grid-area: 2 / 1 / 3 / 2;
-            // width: 250px;
-             transform: translateX(0) translateY(0);
-          }
-
-          li:nth-child(3) {
-            transform: translateX(0) translateY(0);
-            position: relative;
-            grid-area: 2 / 2 / 3 / 3; 
-            // width: 250px;
-          }
-
         }
-      }
-
     }
 
-    .aboutHome {
+    .aboutHome{
       max-height: 619px;
       padding: 40px;
       border: 1px solid #4B1218;
@@ -564,7 +501,7 @@
         }
     }
   
-    .manager {
+    .manager{
       font-family: "Calibri", sans-serif;
       display: flex;
       flex-direction: column;

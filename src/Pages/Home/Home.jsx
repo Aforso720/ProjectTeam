@@ -12,7 +12,6 @@ import "swiper/css/navigation";
 
 const Home = () => {
   const [isActive, setIsActive] = React.useState("Активные конкурсы");
-  let activeCategory = "active";
   const {
     userActive,
     news,
@@ -22,17 +21,14 @@ const Home = () => {
     manager,
     isloadingMng,
   } = React.useContext(MyContext);
-
   const handleClick = (category) => {
     setIsActive(category);
-    activeCategory(category)
   };
-
   function sortManager(managerList) {
     const admins = managerList?.filter((m) => m.status === "главный админ");
     const others = managerList?.filter((m) => m.status !== "главный админ");
     return [...admins, ...others];
-  };
+  }
 
   return (
     <div className="Home">
@@ -81,22 +77,21 @@ const Home = () => {
             <span>Завершенные конкурсы</span>
           </li>
         </ul>
-
         <div className="sliderHome">
-          <Slider eventCategory={activeCategory} />
+          <Slider eventCategory={isActive} />
         </div>
       </div>
-      <div className="TopT">  
+      <div className="TopT">
         <h2>Лидеры рейтинга</h2>
         <ul className="CardTop">
           {isloadingPersHome
             ? Array.from({ length: 3 }).map((_, index) => (
                 <li key={index}>
-                  <LoadingEvent width="450px" height="550px" />
+                  <LoadingEvent width="300px" height="250px" />
                 </li>
               ))
-            : homePerson.map((person, index) => (
-                <li key={index}>
+            : homePerson.map((person) => (
+                <li key={person.position}>
                   <Card
                     {...person}
                     extraClass={person.position === 1 ? "WinnerCard" : ""}

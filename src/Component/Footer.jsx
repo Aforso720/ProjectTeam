@@ -7,7 +7,7 @@ const Footer = () => {
                 <picture>
                     <source 
                         media="(min-width: 320px) and (max-width: 800px)" 
-                        srcSet='img\LogoFoot.png' 
+                        srcSet='/img/LogoFoot.png' 
                         className='mobilFootLogo'
                     />
                     <img alt={'logo'} src='/img/logoFoot.svg'/>

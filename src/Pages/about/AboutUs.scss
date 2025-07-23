@@ -638,7 +638,7 @@
       }
     }
 
-    @media screen and (max-width: 800px) and (min-width:375px) {
+    @media screen and (max-width: 900px){
       // .contacts {
       //   display: flex; 
       //   flex-direction: column;
@@ -655,6 +655,7 @@
         width: 100%;
         margin: 0 auto;
         flex: 1;
+        margin: 0;
       }
     
       .contacts.container h2 {

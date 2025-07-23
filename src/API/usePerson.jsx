@@ -11,7 +11,7 @@ const usePerson = ({ amount, authToken } = {}) => {
                 setIsLoading(true)
                 const res = await axios.get("http://localhost:5555/api/users", {
                     headers: {
-                        Authorization: `Bearer ${authToken}`
+                        Authorization: `Bearer ${authToken}`    
                     }
                 });
                 const response = res.data

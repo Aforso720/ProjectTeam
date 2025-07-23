@@ -42,7 +42,7 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAdminPage = location.pathname.includes("/admin");
-  const {event , loading : loadingEvent } = useEvent(authToken);
+  const { events } = useEvent({ authToken });
   
   useEffect(() => {
     const isProtectedRoute =
@@ -151,7 +151,7 @@ function App() {
             />
 
             <Route path="/events/:id" element={<EventDetail events={news} />} />
-            <Route path="/events/:id" element={<EventDetail events={news} />} />
+            <Route path="/events/:id" element={<EventDetail events={events} />} />
 
             <Route path="*" element={<div>Страница не найдена</div>} />
           </Routes>

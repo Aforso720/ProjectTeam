@@ -255,7 +255,7 @@
   justify-content: center;
 }
 
-@media (min-width: 320px) and (max-width:430px){
+@media (max-width:430px){
   .MyEvents{
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(1, 1fr);
@@ -267,6 +267,7 @@
       width: 305px;
       height: 64px;
       background-color: #4b12187a;
+      margin: 0;
       margin-bottom: 10px;
 
       img {

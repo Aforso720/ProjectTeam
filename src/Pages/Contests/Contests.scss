@@ -195,7 +195,7 @@
       }
 
       .statesCont {
-        width: 918px;
+        width: auto;
         height: 96px;
         list-style-type: none;
         font-size: 34px;
@@ -207,7 +207,6 @@
         align-items: center;
         align-content: center;
         padding: 0;
-        // transform: translateX(-5em);
       
         .activeCont {
           background-color: #4B1218;
@@ -217,27 +216,28 @@
       
         li {
           margin: 5px;
-          width: 291.86px;
+          // width: 291.86px;
+          width: auto;
           height: 78.86px;
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 500;
           font-family: "Labil Grotesk", sans-serif;
-      
+          padding: 0 10px;
           b {
             cursor: pointer;
           }
         }
 
         @media (max-width: 1400px) {
-          width: 100%;
-          max-width: 918px;
+          // width: 100%;
+          // max-width: 918px;
           // transform: translateX(-2em);
           border-radius: 100px;
       
           li {
-            width: 33%;
+            // width: 33%;
             font-size: 28px;
           }
       
@@ -251,13 +251,13 @@
           font-size: 22px;
           border-width: 4px;
           border-radius: 90px;
-          width: 750px;
+          // width: 750px;
           // transform: translateX(-0.5em);
 
           li {
             height: 66px;
             margin: 4px;
-            width: 32%; 
+            // width: 32%; 
           }
       
           .activeCont {
@@ -269,13 +269,13 @@
           height: 60px;
           border-width: 4px;
           border-radius: 90px;
-          width: 500px;
+          // width: 500px;
           transform: translateX(0em);
 
           li {
             height: 45px;
             margin: 4px;
-            width: 32%; 
+            // width: 32%; 
             font-size: 16px;
 
           }
@@ -289,13 +289,13 @@
           height: 40px;
           border-width: 3px;
           border-radius: 90px;
-          width: 350px;
+          // width: 350px;
           transform: translateX(0em);
 
           li {
             height: 30px;
             margin: 4px 2px;
-            width: 32%; 
+            // width: 32%; 
             font-size: 12px;
           }
       
