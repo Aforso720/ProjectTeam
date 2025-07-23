@@ -7,6 +7,7 @@
   border-radius: 30px;
   display: flex;
   align-items: center;
+  position: relative;
 
   .photoProf {
     height: 362px; 
@@ -78,7 +79,6 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    position: relative;
 
     .buttonEdit {
       width: 217px;
@@ -139,22 +139,21 @@
   }
 }
 
-/* .............................Адаптивка..................................*/
-@media (min-width: 320px) and (max-width:800px){
+@media (max-width:900px){
   .profile{
       width: 80%;
-      min-width: 345px;
+      max-width: 545px;
       height: 660px;
+      justify-content: center;
+      align-items: center;
       flex-direction: column;
-      margin: 0;
-
-
-
+      margin: 0 auto;
 
       .InfoProfile{
-        position: absolute;
-        width: 345px;
+        width: 80%;
         height: 800px;
+        justify-content: space-between;
+        padding: 120px 0 20px 0;
         .infoPerson{
           justify-content: flex-start;
           flex-direction: column;
@@ -162,10 +161,9 @@
         }
         .buttonEdit{
           transform:  translateX(0em);
-          width: 282px;
+          width: 80%;
           height: 37px;
           font-size: 22px;
-          margin-top: 10px;
         }
         span{
           font-size: 48px ;
@@ -174,6 +172,7 @@
           font-size: 11px;
         }
         .inputGroup input{
+          width: auto;
           font-size: 20px;
           margin: 0;
         }
@@ -184,26 +183,109 @@
       }
 
       .photoProf{
-
+        padding-top: 10px;
         margin-left: 0;
         height: 100px;
         img{
           padding: 5px;
-          width: 116px;
-          height: 116px;
+          width: 150px;
+          height: 150px;
           transform: none;
 
         }
         .deletePhotos{
-          width: 52px;
-          height: 17px;
-          font-size: 5px;
+          width: auto;
+          height: auto;
+          padding: 8px 16px;
+          font-size: 12px;
           border: 1px solid white;
         }
         .addPhotos{
-          width: 74px;
-          height: 17px;
-          font-size: 8px;
+          width: auto;
+          height: auto;
+          padding: 8px 16px;
+          font-size: 12px;
+        }
+        .butPhotos {
+          justify-content: center;
+          align-items: center;
+          margin: 0;
+          bottom: 0; 
+          left: 0; 
+          transform: translateX(0em);
+          position: relative;
+        }
+    }
+  }
+
+}
+
+@media (max-width:600px){
+  .profile{
+      width: 80%;
+      max-width: 345px;
+      height: 660px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 0 auto;
+
+      .InfoProfile{
+        width: 80%;
+        height: 800px;
+        justify-content: space-between;
+        padding: 120px 0 20px 0;
+        .infoPerson{
+          justify-content: flex-start;
+          flex-direction: column;
+          align-items: center;
+        }
+        .buttonEdit{
+          transform:  translateX(0em);
+          width: 80%;
+          height: 37px;
+          font-size: 22px;
+        }
+        span{
+          font-size: 48px ;
+        }
+        .inputGroup p{
+          font-size: 11px;
+        }
+        .inputGroup input{
+          width: auto;
+          font-size: 20px;
+          margin: 0;
+        }
+        .inputGroup{
+          margin: 0;
+        }
+
+      }
+
+      .photoProf{
+        padding-top: 10px;
+        margin-left: 0;
+        height: 100px;
+        img{
+          padding: 5px;
+          width: 150px;
+          height: 150px;
+          transform: none;
+
+        }
+        .deletePhotos{
+          width: auto;
+          height: auto;
+          padding: 8px 16px;
+          font-size: 12px;
+          border: 1px solid white;
+        }
+        .addPhotos{
+          width: auto;
+          height: auto;
+          padding: 8px 16px;
+          font-size: 12px;
         }
         .butPhotos {
           justify-content: center;

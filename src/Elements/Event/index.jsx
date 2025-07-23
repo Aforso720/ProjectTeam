@@ -1,19 +1,30 @@
-import React from 'react'
-import style from './Event.module.scss'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import style from './Event.module.scss';
 
-const Event = ({id, image, description , contMyEvent, homeEvent }) => {
-    return (
-        <div className={`${style.swiperSlide} ${contMyEvent} ${homeEvent}`} key={id}>
-            <img
-                src={image}
-                alt="Slide 1"
-                className={style.SliderImg}
-            />
-            <div className={style.textOverlay}>
-                <p>{description}</p>
-            </div>
-        </div>
-    )
-}
+const Event = ({ id, image, title, contMyEvent, homeEvent }) => {
+  const navigate = useNavigate();
 
-export default Event
+  const handleClick = () => {
+    navigate(`/events/${id}`);
+  };
+
+  return (
+    <div 
+      className={`${style.swiperSlide} ${contMyEvent} ${homeEvent}`} 
+      onClick={handleClick}
+      style={{ cursor: 'pointer' }}
+    >
+      <img
+        src={image ? image : '/img/image2.png'}
+        alt="Slide 1"
+        className={style.SliderImg}
+      />
+      <div className={style.textOverlay}>
+        <p>{title}</p>
+      </div>
+    </div>
+  );
+};
+
+export default Event;

@@ -18,7 +18,7 @@ const AuthModal = ({ onClose, handleLogin, loading, error }) => {
   const success = await handleLogin(email, password);
 
   if (success) {
-    onClose(); // 💥 Закрыть модалку при успешном входе
+    onClose(); 
   } else {
     setPassword("");
   }

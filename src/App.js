@@ -18,15 +18,13 @@ import PersonSetting from "./Pages/personSetting/PersonSetting.jsx";
 import EventAdmin from "./Pages/eventsAdmin/EventAdmin.jsx";
 import AuthModal from "./Pages/AuthModal/AuthModal.jsx";
 import {useAuth} from "./API/auth.jsx";
+import usePeople from "./API/usePeople.jsx";
+import EventDetail from "./Component/EventDetail/EventDetail.jsx";
+import useEvent from "./API/useEvent.jsx";
 
 export const MyContext = React.createContext();
 
 function App() {
-  const { events, loading: loadingMyEvent } = usePosts();
-  const { person: topPerson, isloading: isloadingTop } = usePerson();
-  const { person: homePerson, isloading: isloadingPersHome } = usePerson({ amount: 3 });
-  const { manager, isloading: isloadingMng } = useManager();
-
   const {
     token: authToken,
     user,
@@ -36,11 +34,15 @@ function App() {
     error: authError,
     isAuthenticated,
   } = useAuth();
-
+  const { person: topPerson, isLoadingTop } = usePeople({ authToken });
+  const { news, loading: loadingMyNews } = usePosts();
+  const { person: homePerson, isloading: isloadingPersHome } = usePerson({ amount: 3 , authToken });
+  const { manager, isloading: isloadingMng } = useManager({ authToken });
   const [showAuthModal, setShowAuthModal] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isAdminPage = location.pathname.includes("/admin");
+  const { events } = useEvent({ authToken });
   
   useEffect(() => {
     const isProtectedRoute =
@@ -62,7 +64,6 @@ function App() {
     }
   }, [location.pathname, navigate]);
 
-  // ProtectedRoute компонент
   const ProtectedRoute = useCallback(({ children, adminOnly = false }) => {
     if (!authToken) {
       return <Navigate to="/" replace />;
@@ -76,14 +77,14 @@ function App() {
   return (
     <MyContext.Provider
       value={{
-        events,
+        news,
         user,
         topPerson,
         manager,
         homePerson,
-        loadingMyEvent,
+        loadingMyNews,
         isloadingPersHome,
-        isloadingTop,
+        isLoadingTop,
         isloadingMng,
         userActive: isAuthenticated,
         authToken,
@@ -102,7 +103,6 @@ function App() {
 
         <div className="Content">
           <Routes>
-            {/* Админские маршруты */}
             <Route
               path="/admin/journal"
               element={
@@ -136,7 +136,6 @@ function App() {
               }
             />
 
-            {/* Публичные маршруты */}
             <Route path="/" element={<Home />} />
             <Route path="/contests" element={<Contests />} />
             <Route path="/about-us" element={<About />} />
@@ -150,6 +149,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route path="/events/:id" element={<EventDetail events={news} />} />
+            <Route path="/events/:id" element={<EventDetail events={events} />} />
 
             <Route path="*" element={<div>Страница не найдена</div>} />
           </Routes>

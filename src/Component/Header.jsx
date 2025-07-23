@@ -8,13 +8,12 @@ const Header = ({ userActive, user }) => {
     <header className='Header'>
       <div className="logo-admin-container">
         <Link to={'/'}>
-          <img alt='Logo' src='img/Лого (2).png' className='Logotip' />
+          <img alt='Logo' src='/img/Лого (2).png' className='Logotip' />
         </Link>
 
-        {/* Показываем "Админка" только если пользователь — админ */}
         {user?.is_admin && (
           <Link to={'/admin/journal'} className='adminNav'>
-            <span className="admin-text">Админка</span>
+            <img src="/img/AdminIcon.svg" alt="AdminPanel" style={{width:30}}/>
           </Link>
         )}
       </div>
@@ -40,7 +39,7 @@ const Header = ({ userActive, user }) => {
         </li>
         <li className={`profile-item ${pathname === '/profile' ? "expanded" : ""}`}>
           <Link to={'/profile'}>
-            <img src={pathname === '/profile' ? "img/Group 78.png" : "img/profile-circle.svg"} alt="Profile" />
+            <img src={pathname === '/profile' ? "/img/Group 78.png" : "/img/profile-circle.svg"} alt="Profile" />
             {pathname === '/profile' && <span>Личный кабинет</span>}
           </Link>
         </li>

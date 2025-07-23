@@ -67,7 +67,6 @@ body, html {
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1001;
 
     img {
       width: 40px;
@@ -299,21 +298,26 @@ body, html {
       width: 160px;
     }
   }
-  /* Новый контейнер для лого и админки */
+
 .logo-admin-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 50px;
+  gap: 2vw;
   position: relative;
+
+  @media (max-width:900px) {
+    .logo-admin-container {
+      gap: 10px;
+    }
+  }
 }
 
-/* Стили для кнопки админки */
 .adminNav {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px;
   background: #4B1218;
   border-radius: 30px;
   color: white;
@@ -324,66 +328,6 @@ body, html {
   &:hover {
     background: #6a1a22;
     transform: scale(1.05);
-  }
-  
-  .admin-icon {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .admin-text {
-    @media screen and (max-width: 600px) {
-      display: none;
-    }
-  }
-}
-
-/* Адаптивные стили */
-@media screen and (max-width: 800px) {
-  .logo-admin-container {
-    gap: 10px;
-  }
-  
-  .adminNav {
-    padding: 6px 12px;
-    font-size: 14px;
-    
-    .admin-icon {
-      width: 18px;
-      height: 18px;
-    }
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .adminNav {
-    padding: 8px;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    justify-content: center;
-    
-    .admin-icon {
-      width: 20px;
-      height: 20px;
-    }
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .logo-admin-container {
-    gap: 5px;
-  }
-  
-  .adminNav {
-    width: 32px;
-    height: 32px;
-    padding: 6px;
-    
-    .admin-icon {
-      width: 18px;
-      height: 18px;
-    }
   }
 }
 }
