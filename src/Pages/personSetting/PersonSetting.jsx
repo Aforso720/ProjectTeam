@@ -130,8 +130,8 @@ const PersonSetting = () => {
   };
 
   return (
-    <div className='person-setting'>
-      <div className="header">
+    <section className='person-setting'>
+      <header className="header">
         <h2>Управление участниками</h2>
         <div className="header-controls">
           <div className="search-container">
@@ -146,7 +146,7 @@ const PersonSetting = () => {
           </div>
           <button className="add-btn" onClick={() => setIsModalOpen(true)}>Добавить</button>
         </div>
-      </div>
+      </header>
 
       {error && <div className="error-message">{error}</div>}
 
@@ -202,67 +202,91 @@ const PersonSetting = () => {
       </ul>
 
       {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Добавить участника</h2>
+        <article className="modal-overlay">
+  <section className="modal">
+    <h2>Добавить участника</h2>
 
-            <label>ФИО</label>
-            <input
-              type="text"
-              value={newUser.name}
-              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-              placeholder="Введите ФИО"
-            />
-
-            <div className="input-row">
-              <div>
-                <label>Группа</label>
-                <input
-                  type="text"
-                  value={newUser.group}
-                  onChange={(e) => setNewUser({ ...newUser, group: e.target.value })}
-                  placeholder="ПИ-22-1"
-                />
-              </div>
-              <div>
-                <label>Номер телефона</label>
-                <input
-                  type="text"
-                  value={newUser.phone}
-                  onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
-                  placeholder="8(999) 999-99-99"
-                />
-              </div>
-            </div>
-
-            <div className="input-row">
-              <div>
-                <label>Статус</label>
-                <select
-                  value={newUser.role}
-                  onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-                >
-                  <option value="Админ">Админ</option>
-                  <option value="Стандарт">Стандарт</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="modal-actions">
-              <button onClick={() => setIsModalOpen(false)}>Закрыть</button>
-              <button
-                onClick={() => {
-                  console.log('Добавлен пользователь:', newUser);
-                  setIsModalOpen(false); 
-                }}
-              >
-                Добавить
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+    <div className="input-row">
+      <div>
+        <label>Фамилия</label>
+        <input
+          type="text"
+          value={newUser.lastName || ''}
+          onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })}
+          placeholder="Введите фамилию"
+        />
+      </div>
+      <div>
+        <label>Имя</label>
+        <input
+          type="text"
+          value={newUser.firstName || ''}
+          onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })}
+          placeholder="Введите имя"
+        />
+      </div>
+      <div>
+        <label>Отчество</label>
+        <input
+          type="text"
+          value={newUser.middleName || ''}
+          onChange={(e) => setNewUser({ ...newUser, middleName: e.target.value })}
+          placeholder="Введите отчество"
+        />
+      </div>
     </div>
+
+    <div className="input-row">
+      <div>
+        <label>Группа</label>
+        <input
+          type="text"
+          value={newUser.group}
+          onChange={(e) => setNewUser({ ...newUser, group: e.target.value })}
+          placeholder="ПИ-22-1"
+        />
+      </div>
+      <div>
+        <label>Номер телефона</label>
+        <input
+          type="text"
+          value={newUser.phone}
+          onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
+          placeholder="8(999) 999-99-99"
+        />
+      </div>
+    </div>
+
+    <div className="input-row">
+      <div>
+        <label>Статус</label>
+        <select
+          value={newUser.role}
+          onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+          className="status-select"
+        >
+          <option value="Админ">Админ</option>
+          <option value="Стандарт">Участник</option>
+        </select>
+      </div>
+    </div>
+
+    <div className="modal-actions">
+      <button className="cancel-btn" onClick={() => setIsModalOpen(false)}>Закрыть</button>
+      <button
+        className="confirm-btn"
+        onClick={() => {
+          console.log('Добавлен пользователь:', newUser);
+          setIsModalOpen(false); 
+        }}
+      >
+        Добавить
+      </button>
+    </div>
+  </section>
+        </article>
+      )}
+    </section>
   );
 };
 

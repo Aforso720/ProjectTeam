@@ -1,15 +1,18 @@
 import React from "react";
 import Modal from "react-modal";
 import style from "./MyEvents.module.scss";
+import { MyContext } from "../../App";
 
 const AddEventModal = () => {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
-
+  const { authToken, user } = React.useContext(MyContext);
   const [participants, setParticipants] = React.useState([
-    "Эльдарханов Абдул–Малик",
-    "Алаудинов Илисхан",
   ]);
   const [newParticipant, setNewParticipant] = React.useState("");
+  const [projectName, setProjectName] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
 
   const handleAddParticipant = () => {
     if (newParticipant.trim()) {
@@ -25,7 +28,53 @@ const AddEventModal = () => {
   };
 
   const openModal = () => setModalIsOpen(true);
-  const closeModal = () => setModalIsOpen(false);
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setError(null);
+    setProjectName("");
+    setDescription("");
+    setParticipants([]);
+  };
+
+  const handleSubmit = async () => {
+    if (!projectName.trim()) {
+      setError("Название проекта обязательно");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("http://localhost:5555/api/projects/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          name: projectName,
+          description: description,
+          user_id: user?.id,
+          participants: participants,
+          status: "active",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Ошибка при создании проекта");
+      }
+
+      const data = await response.json();
+      console.log("Проект успешно создан:", data);
+      closeModal();
+    } catch (err) {
+      console.error("Ошибка:", err);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const customStyles = {
     content: {
@@ -69,21 +118,22 @@ const AddEventModal = () => {
             </button>
           </div>
 
+          {error && <div className={style.errorMessage}>{error}</div>}
+
           <div className={style.section}>
             <input
               type="text"
               className={style.projectInput}
               placeholder="Название проекта"
-            />
-            <input
-              type="text"
-              className={style.projectInput}
-              placeholder="Дата создания"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
             />
             <textarea
               className={style.projectInput}
               placeholder="Краткое описание"
               rows="3"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
@@ -122,30 +172,23 @@ const AddEventModal = () => {
           </div>
 
           <div className={style.section}>
-            <select className={style.projectInput}>
-              <option value="">Выберите мероприятие</option>
-              {/* Примеры:
-                            <option value="event1">Мероприятие 1</option>
-                            */}
-            </select>
-          </div>
-
-          <div className={style.section}>
             <h3>Медиафайлы</h3>
             <div className={style.fileList}>
               <label className={style.fileUpload}>
                 <input type="file" hidden multiple />
                 <div>📁 Прикрепить медиафайл</div>
               </label>
-              <div className={style.fileItem}>PDF</div>
-              <div className={style.fileItem}>PPTX</div>
-              <div className={style.fileItem}>PDF</div>
-              <div className={style.fileItem}>PPTX</div>
             </div>
           </div>
 
           <div className={style.section}>
-            <button className={style.saveButton}>Сохранить</button>
+            <button 
+              className={style.saveButton} 
+              onClick={handleSubmit}
+              disabled={isLoading}
+            >
+              {isLoading ? "Сохранение..." : "Сохранить"}
+            </button>
           </div>
         </div>
       </Modal>

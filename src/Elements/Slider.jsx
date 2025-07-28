@@ -6,6 +6,7 @@ import "swiper/css/effect-flip";
 import { Navigation } from "swiper/modules";
 import Event from "./Event";
 import LoadEvent from "./Loading/loadingEvent";
+import useMyEvents from "../API/useMyEvents";
 import useEvent from "../API/useEvent";
 import { MyContext } from "../App";
 
@@ -19,14 +20,14 @@ const Slider = ({ eventCategory }) => {
       case "Завершенные конкурсы":
         return "completed";
       case "Мои конкурсы":
-        return "myProject"; 
+        return "myProject";
       default:
         return null;
     }
   };
-
   const eventStatus = getEventStatus(eventCategory);
   const { events, loading } = useEvent({ eventStatus, authToken });
+  const { myEvents: myEventsData, loading: myEventsLoading } = useMyEvents({authToken});
 
   return (
     <div className="sliderContainer">

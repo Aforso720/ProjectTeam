@@ -3,99 +3,125 @@
 @font-face {
   font-family: "Labil Grotesk";
 }
-.container{
+
+.journal-container {
   background-color: rgba(75, 18, 24, 1);
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  padding: 0 10px;
 
-  .nav-container{
+  .journal-header {
     width: 100%;
-    height: 86px;
-    border-bottom: 2px solid rgba(255, 255, 255, 1);
+    height: 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 1);
     display: flex;
     align-items: center;
-    flex-direction: row;
     justify-content: center;
-    gap: 31px;
+    gap: 8px;
+    position: relative;
+    padding: 0 30px;
+    box-sizing: border-box;
 
-    .arrow {
+    .journal-back-arrow {
       position: absolute;
-      top: 293px;
-      left: 32px;
-      content: '';
-      width: 20px;
-      height: 20px;
-      border-left: 4px solid white;
-      border-bottom: 4px solid white;
+      left: 10px;
+      width: 12px;
+      height: 12px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
       transform: rotate(45deg);
       cursor: pointer;
     }
-    p {
+
+    .journal-title {
       font-family: Muller, sans-serif;
       color: white;
       font-weight: 500;
-      font-size: 32px;
+      font-size: 16px;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
 
+      &:first-of-type {
+        text-align: right;
+      }
+      &:last-of-type {
+        text-align: left;
+      }
+
+      @media (max-width: 400px) {
+        font-size: 14px;
+      }
     }
+  }
 
-
-    }
-  .table-container{
+  .journal-table-wrapper {
     background-color: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 1240px;
-    margin-top: 38px;
-    margin-bottom: 100px;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 15px 0 40px;
+    overflow-x: auto;
 
     table {
       width: 100%;
       border-collapse: collapse;
-      border-style: hidden;
-      text-align: left;
+      min-width: 350px;
+
       th, td {
-        padding: 16px;
+        padding: 6px 4px;
         font-family: "Labil Grotesk", sans-serif;
         font-weight: 550;
-        font-size: 32px;
+        font-size: 14px;
         color: rgba(75, 18, 24, 1);
-        border: 2px solid rgba(75, 18, 24, 1);
+        border: 1px solid rgba(75, 18, 24, 1);
+        line-height: 1.2;
+
+        @media (max-width: 400px) {
+          font-size: 12px;
+          padding: 4px 3px;
+        }
       }
+
       th {
         background-color: white;
-        height: 60px;
-        color: rgba(75, 18, 24, 1);
-        border-bottom: 2px solid rgba(75, 18, 24, 1);
-
+        height: 36px;
         text-align: center;
+        white-space: nowrap;
       }
-      tbody tr{
-        max-height: 100px;
-        &:hover {
-          background-color: #f8fafc;
+
+      .student-name {
+        min-width: 150px;
+        @media (max-width: 400px) {
+          min-width: 120px;
         }
       }
-      .table-name{
-        max-width: 744px;
-      }
-      .table-group{
+
+      .student-group {
         text-align: center;
-        max-width: 306px;
+        min-width: 80px;
+        @media (max-width: 400px) {
+          min-width: 60px;
+        }
       }
-      .mark {
-        max-width: 190px;
+
+      .attendance-mark {
         text-align: center;
+        min-width: 60px;
         cursor: pointer;
+
         img {
-          width: 75px;
-          height: 70px;
+          width: 26px;
+          height: 24px;
+          @media (max-width: 400px) {
+            width: 22px;
+            height: 20px;
+          }
         }
       }
-
     }
-
   }
 }
-

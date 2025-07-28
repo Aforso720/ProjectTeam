@@ -80,13 +80,28 @@
 
       
     }
-
+    
     .swiper-button-prev{
-        transform: translateX(3em);
+        transform: translateX(1em);
     }
 
     .swiper-button-next{
-        transform: translateX(-3em);
+        transform: translateX(-1em);
+    }
+
+    @media (max-width:900px) {
+      
+    .swiper-button-prev{
+        transform: translateX(0em);
+        width: 30px;
+        height: 30px;
+    }
+
+    .swiper-button-next{
+        transform: translateX(0em);
+        width: 30px;
+        height: 30px;
+    }
     }
 
     @media (max-width: 1400px) {

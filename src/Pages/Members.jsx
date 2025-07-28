@@ -9,7 +9,6 @@ import 'swiper/css/navigation';
 
 const Members = () => {
   const { topPerson, isloadingTop, manager , isloadingMng} = React.useContext(MyContext);
-
   const formatName = (fullName) => {
     const maxLength = 12;
     if (fullName.length <= maxLength) {
@@ -27,15 +26,12 @@ const Members = () => {
 
     return `${lastName} ${firstName} ${middleName}`.trim();
   };
-
   if (!topPerson) {
-    return <div>Загрузка!!!</div>;
+    return <article>Загрузка!!!</article>;
   }
-
   return (
-
-    <div className='Members'>
-      <div className='supervisor'>
+    <section className='Members'>
+      <section className='supervisor'>
         <h2>Руководители</h2>
 
 
@@ -85,8 +81,8 @@ const Members = () => {
           )}
       </Swiper>
       
-      </div>
-      <div className='rating'>
+      </section>
+      <section className='rating'>
         <h2>Лидеры рейтинга</h2>
         <ul>
           {isloadingTop ? (
@@ -130,8 +126,8 @@ const Members = () => {
             ))
           )}
         </ul>
-      </div>
-    </div>
+      </section>
+    </section>
   );
 };
 

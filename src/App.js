@@ -17,10 +17,10 @@ import Journals from "./Pages/journals/Journals";
 import PersonSetting from "./Pages/personSetting/PersonSetting.jsx";
 import EventAdmin from "./Pages/eventsAdmin/EventAdmin.jsx";
 import AuthModal from "./Pages/AuthModal/AuthModal.jsx";
-import {useAuth} from "./API/auth.jsx";
-import usePeople from "./API/usePeople.jsx";
+import {useAuth} from "./API/auth.js";
+import usePeople from "./API/usePeople.js";
 import EventDetail from "./Component/EventDetail/EventDetail.jsx";
-import useEvent from "./API/useEvent.jsx";
+import useEvent from "./API/useEvent.js";
 
 export const MyContext = React.createContext();
 
@@ -101,7 +101,7 @@ function App() {
           />
         )}
 
-        <div className="Content">
+        <main className="Content">
           <Routes>
             <Route
               path="/admin/journal"
@@ -155,7 +155,7 @@ function App() {
 
             <Route path="*" element={<div>Страница не найдена</div>} />
           </Routes>
-        </div>
+        </main>
 
         <Footer />
 

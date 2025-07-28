@@ -58,7 +58,7 @@ const Contests = () => {
   };
 
   return (
-    <div className='Contests'>
+    <section className='Contests'>
       {userActive && (
         <div className='MyEvents'>
           <h2>Мои конкурсы</h2>
@@ -68,7 +68,7 @@ const Contests = () => {
         </div>
       )}
 
-      <div className='BannerCont'>
+      <article className='BannerCont'>
         <div className='bannerSlider'>
           <Swiper
             ref={swiperRef}
@@ -99,9 +99,9 @@ const Contests = () => {
             )}
           </Swiper>
         </div>
-      </div>
+      </article>
 
-      <div className='EventsCont'>
+      <section className='EventsCont'>
         <ul className='statesCont'>
           {["active", "completed"].map((cat) => (
             <li
@@ -182,8 +182,8 @@ const Contests = () => {
             </li>
           </ul>
         )}
-      </div>
-    </div>
+      </section>
+    </section>
   );
 };
 

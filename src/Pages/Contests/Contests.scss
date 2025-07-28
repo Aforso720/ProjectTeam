@@ -187,10 +187,14 @@
         }
 
         .swiper-button-prev{
-          transform: translateX(1em);
+          transform: translateX(-0.5em);
+          width: 30px;
+          height: 30px;
         }
         .swiper-button-next{
-          transform: translateX(-1em);
+          transform: translateX(0.5em);
+          width: 30px;
+          height: 30px;
         }
       }
 

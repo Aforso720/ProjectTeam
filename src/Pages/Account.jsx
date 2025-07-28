@@ -5,18 +5,14 @@ import MyDocument from '../Elements/MyDocument';
 import { useNavigate } from 'react-router-dom';
 
 const Account = ({handleLogoutAuth}) => {
-    
     const [activeTab, setActiveTab] = React.useState("personalData");
     const navigate = useNavigate();
-
     const handleLogout = () => {
         handleLogoutAuth(); 
         navigate('/'); 
     };
-
     return (
-
-        <div className='Account'>
+        <section className='Account'>
             <ul className='navigation_account'>
                 <li
                     className={activeTab === "personalData" ? 'activeAcc' : ""}
@@ -43,7 +39,6 @@ const Account = ({handleLogoutAuth}) => {
                     Выход
                 </li>
             </ul>
-
             {activeTab === "personalData" ? (
                 <Profile/>
             ) : null}
@@ -59,9 +54,7 @@ const Account = ({handleLogoutAuth}) => {
             {activeTab === "LogOut" ? (
                 handleLogout()
             ) : null}
-
-
-        </div>
+        </section>
     )
 }
 

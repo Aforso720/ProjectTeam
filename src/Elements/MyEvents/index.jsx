@@ -3,9 +3,11 @@ import style from './MyEvents.module.scss';
 import useMyEvents from '../../API/useMyEvents';
 import LoadEvent from '../Loading/loadingEvent'; 
 import AddEventModal from './AddEventModal'
+import { MyContext } from '../../App';
 
 const MyEvents = () => {
-  const { myEvents, loading } = useMyEvents();
+  const { authToken } = React.useContext(MyContext);
+  const { myEvents, loading } = useMyEvents({authToken});
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 8;
 
@@ -46,9 +48,9 @@ const MyEvents = () => {
         ) : (
           currentItems.map((item) => (
             <div className={style.card} key={item.id}>
-              <img src={item.image} alt='Проект' className={style.cardImage} />
+              <img src={item.preview_image} alt='Проект' className={style.cardImage} />
               <div className={style.cardContent}>
-                <h3 className={style.cardTitle}>{item.description}</h3>
+                <h3 className={style.cardTitle}>{item.name}</h3>
                 <p className={style.cardDescription}>Краткое описание</p>
                 <button className={style.cardButton}>Подробнее</button>
               </div>

@@ -9,7 +9,7 @@ const useEvent = ({ eventStatus, authToken }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5555/api/events", {
+        const response = await axios.get("http://localhost:5555/api/events?per_page=100", {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -22,10 +22,8 @@ const useEvent = ({ eventStatus, authToken }) => {
         }
 
         const filteredEvents = eventStatus
-          ? eventStatus === "myProject"
             ? eventsData 
-            : eventsData.filter((event) => event.status === eventStatus)
-          : eventsData;
+            : eventsData.filter((event) => event.status === eventStatus);
 
         setEvents(filteredEvents);
       } catch (error) {

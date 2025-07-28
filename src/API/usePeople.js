@@ -9,7 +9,7 @@ const usePeople = ({ authToken } = {}) => {
         const fetchData = async () => {
             try {
                 setIsLoadingTop(true);
-                const res = await axios.get("http://localhost:5555/api/users", {
+                const res = await axios.get("http://localhost:5555/api/users?per_page=100", {
                     headers: {
                         Authorization: `Bearer ${authToken}`
                     }

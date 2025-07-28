@@ -18,38 +18,38 @@ const JournalView = () => {
   if (!state) return <div>Журнал не найден</div>;
 
   return (
-    <div className="container">
-      <div className="nav-container">
-        <Link to="/admin/journal" className="arrow"></Link>
-        <p>{state.title}</p>
-        <p>{formatDate(state.date)}</p>
-      </div>
-      <div className="table-container">
+    <section className="journal-container">
+      <header className="journal-header">
+        <Link to="/admin/journal" className="journal-back-arrow"></Link>
+        <p className="journal-title">{state.title}</p>
+        <p className="journal-title">{formatDate(state.date)}</p>
+      </header>
+      <div className="journal-table-wrapper">
         <table>
           <thead>
             <tr>
-              <th>ФИО</th>
-              <th>Группа</th>
-              <th className="mark">Отметка</th>
+              <th className="student-name">ФИО</th>
+              <th className="student-group">Группа</th>
+              <th className="attendance-mark">Отметка</th>
             </tr>
           </thead>
-            <tbody>
-              {state.students.map((student, index) => (
-                <tr key={index}>
-                  <td>{student.name}</td>
-                  <td>{student.group}</td>
-                  <td className="mark">
-                    {student.mark
-                      ? <img src="/img/was.png" alt="Присутствовал" />
-                      : <img src="/img/wasNot.png" alt="Отсутствовал" />
-                    }
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+          <tbody>
+            {state.students.map((student, index) => (
+              <tr key={index}>
+                <td>{student.name}</td>
+                <td>{student.group}</td>
+                <td className="attendance-mark">
+                  {student.mark
+                    ? <img src="/img/was.png" alt="Присутствовал" />
+                    : <img src="/img/wasNot.png" alt="Отсутствовал" />
+                  }
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
-    </div>
+    </section>
   );
 };
 

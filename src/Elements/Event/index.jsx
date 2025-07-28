@@ -1,12 +1,17 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './Event.module.scss';
 
-const Event = ({ id, image, title, contMyEvent, homeEvent }) => {
+const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(`/events/${id}`);
+  };
+
+  const truncateDescription = (text, wordLimit = 8) => {
+    const words = text.trim().split(/\s+/);
+    if (words.length <= wordLimit) return text;
+    return words.slice(0, wordLimit).join(' ') + '...';
   };
 
   return (
@@ -21,7 +26,7 @@ const Event = ({ id, image, title, contMyEvent, homeEvent }) => {
         className={style.SliderImg}
       />
       <div className={style.textOverlay}>
-        <p>{title}</p>
+        <p>{truncateDescription(description)}</p>
       </div>
     </div>
   );

@@ -19,7 +19,6 @@ body, html {
   padding: 0;
   height: 100%;
   overflow-x: hidden;
-  // overflow-y: hidden;
 }
 
 #root {
@@ -494,7 +493,7 @@ body, html {
   }
 
 
-  @media (min-width:375px ) and (max-width:600px) {
+  @media (min-width:320px ) and (max-width:600px) {
     font-size: 8px;
     min-height: 144px;
 

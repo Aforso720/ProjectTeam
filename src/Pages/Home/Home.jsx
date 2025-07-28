@@ -112,13 +112,7 @@ const Home = () => {
           <div className="textAbout">
             <h3>О нас</h3>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
+             Project Team — это команда активных и амбициозных студентов ГГНТУ, которые специализируются на подаче заявок на гранты, конкурсы и стартапы. Мы помогаем превращать идеи в реальные проекты, открывая новые возможности для студентов и университета.
             </p>
           </div>
           <img src="img/image 6.png" className="imgAbout" alt="" />
