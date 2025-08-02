@@ -1,86 +1,100 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
+import axios from "axios";
 import "./Journals.scss";
+import { MyContext } from "../../App";
+import Loader from "../../Component/Loader";
+import Table from "../tables/Table";
 
 Modal.setAppElement("#root");
 
+const api = axios.create({
+  baseURL: "http://localhost:5555/api",
+});
+
 const Journals = () => {
+  const { authToken } = React.useContext(MyContext);
   const [active, setActive] = useState("all");
   const [journals, setJournals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [newJournal, setNewJournal] = useState({
-    type: "meets",
+    type: "meeting",
     title: "",
     attendees: [],
   });
+  const [availableParticipants, setAvailableParticipants] = useState([]);
 
-  React.useEffect(() => {
-    const defaultJournals = [
-      {
-        id: "1",
-        type: "meets",
-        title: "Организационное собрание",
-        date: new Date("2023-05-10").toISOString(),
-        attendees: [1, 2, 3, 4, 5],
-      },
-      {
-        id: "2",
-        type: "events",
-        title: "Технический семинар",
-        date: new Date("2023-05-15").toISOString(),
-        attendees: [1, 3, 5, 7, 9],
-      },
-      {
-        id: "3",
-        type: "meets",
-        title: "Планирование проекта",
-        date: new Date("2023-05-20").toISOString(),
-        attendees: [2, 4, 6, 8, 10],
-      },
-    ];
+  const loadJournals = async (filterType = "all", page = 1) => {
+    if (!authToken) {
+      setError("Требуется авторизация");
+      setLoading(false);
+      return;
+    }
 
-    setJournals(defaultJournals.map(journal => ({
-      ...journal,
-      students: dummyPeople.map(p => ({
-        name: p.name,
-        group: p.group,
-        mark: journal.attendees.includes(p.id),
-      })),
-    })));
-  }, []);
+    try {
+      setLoading(true);
+      setError(null);
+
+      api.defaults.headers.common["Authorization"] = `Bearer ${authToken}`;
+
+      const endpoint =
+        filterType === "all"
+          ? `/journals?per_page=8&page=${page}`
+          : `/journals?per_page=8&page=${page}&type=${filterType}`;
+
+      const response = await api.get(endpoint);
+
+      const formattedJournals = response.data.data.map((journal) => ({
+        id: journal.id.toString(),
+        type: journal.type,
+        title: journal.title,
+        date: journal.date,
+        participants: journal.participants,
+        user_created: journal.user_created,
+      }));
+
+      setJournals(formattedJournals);
+      setCurrentPage(response.data.meta.current_page);
+      setTotalPages(response.data.meta.last_page);
+
+      if (formattedJournals.length > 0) {
+        const participants = formattedJournals[0].participants.map((p) => ({
+          id: p.id,
+          name: p.full_name,
+          group: "Группа",
+          status: p.status,
+        }));
+        setAvailableParticipants(participants);
+      } else {
+        setAvailableParticipants([]);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+      console.error("Ошибка при загрузке данных:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadJournals("all");
+    return () => {
+      delete api.defaults.headers.common["Authorization"];
+    };
+  }, [authToken]);
 
   const navigate = useNavigate();
 
   const types = [
     ["all", "Все"],
-    ["meets", "Журнал собраний"],
-    ["events", "Журнал мероприятий"]
+    ["meeting", "Журнал собраний"],
+    ["event", "Журнал мероприятий"],
   ];
-
-  const dummyPeople = [
-  { id: 1, name: "Иван Иванов", group: "Группа A" },
-  { id: 2, name: "Анна Смирнова", group: "Группа A" },
-  { id: 3, name: "Петр Петров", group: "Группа A" },
-  { id: 4, name: "Елена Кузнецова", group: "Группа B" },
-  { id: 5, name: "Сергей Лебедев", group: "Группа B" },
-  { id: 6, name: "Мария Воронцова", group: "Группа B" },
-  { id: 7, name: "Алексей Мельников", group: "Группа C" },
-  { id: 8, name: "Ольга Павлова", group: "Группа C" },
-  { id: 9, name: "Дмитрий Егоров", group: "Группа C" },
-  { id: 10, name: "Юлия Соколова", group: "Группа C" },
-  { id: 11, name: "Никита Савельев", group: "Группа D" },
-  { id: 12, name: "Татьяна Романова", group: "Группа D" },
-  { id: 13, name: "Артем Белов", group: "Группа D" },
-  { id: 14, name: "Ирина Федорова", group: "Группа D" },
-  { id: 15, name: "Максим Зайцев", group: "Группа E" },
-  { id: 16, name: "Наталья Григорьева", group: "Группа E" },
-  { id: 17, name: "Олег Сидоров", group: "Группа E" },
-  { id: 18, name: "Екатерина Морозова", group: "Группа E" },
-  { id: 19, name: "Владимир Шестаков", group: "Группа F" },
-  { id: 20, name: "Алёна Крылова", group: "Группа F" },
-];
-
 
   const toggleAttendance = (id) => {
     setNewJournal((prev) => {
@@ -94,29 +108,111 @@ const Journals = () => {
     });
   };
 
-  const handleCreateJournal = () => {
+  const handleCreateJournal = async () => {
     if (!newJournal.title) return alert("Введите название журнала");
 
-    const newEntry = {
-      id: Date.now().toString(),
-      ...newJournal,
-      date: new Date().toISOString(),
-      students: dummyPeople.map(p => ({
-        name: p.name,
-        group: p.group,
-        mark: newJournal.attendees.includes(p.id),
-      })),
-    };
+    try {
+      const journalData = {
+        title: newJournal.title,
+        type: newJournal.type,
+        date: new Date().toISOString().split("T")[0],
+        participants: availableParticipants
+          .filter((p) => newJournal.attendees.includes(p.id))
+          .map((p) => ({
+            user_id: p.id,
+            status: "present",
+          })),
+      };
 
-    setJournals([...journals, newEntry]);
-    setNewJournal({ type: "meets", title: "", attendees: [] });
-    setModalOpen(false);
-    navigate("/admin/journal");
+      const response = await api.post("/journals/", journalData);
+
+      console.log("Ответ от сервера:", response.data);
+
+      const created = response.data?.id ? response.data : response.data?.data;
+
+      if (!created?.id) {
+        console.error("Некорректный ответ от сервера:", response.data);
+        alert("Сервер не вернул ID журнала");
+        return;
+      }
+
+      const newJournalEntry = {
+        id: created.id.toString(),
+        ...journalData,
+        participants: created.participants || [],
+        user_created: { id: 1, full_name: "Вы" },
+      };
+
+      setJournals([...journals, newJournalEntry]);
+      setNewJournal({ type: "meets", title: "", attendees: [] });
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Ошибка при создании журнала:", error);
+      alert("Не удалось создать журнал");
+    }
   };
 
-  const filteredJournals = active === "all"
-    ? journals
-    : journals.filter(j => j.type === active);
+  const filteredJournals =
+    active === "all" ? journals : journals.filter((j) => j.type === active);
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+    loadJournals(active, page);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      handlePageClick(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      handlePageClick(currentPage + 1);
+    }
+  };
+
+  // const handleModalSubmit = async ({ title, date, type }) => {
+  //   try {
+  //     const presentParticipants = availableParticipants.filter((p) =>
+  //       newJournal.attendees.includes(p.id)
+  //     );
+
+  //     const participants = presentParticipants.map((p) => ({
+  //       user_id: p.id,
+  //       status: "present",
+  //     }));
+
+  //     const journalData = {
+  //       title,
+  //       type: type === "meets" ? "meeting" : "event",
+  //       date,
+  //       participants,
+  //     };
+
+  //     const response = await api.post("/journals/", journalData);
+
+  //     const newJournalEntry = {
+  //       id: response.data.id.toString(),
+  //       ...journalData,
+  //       user_created: { id: 1, full_name: "Вы" },
+  //     };
+
+  //     setJournals((prev) => [...prev, newJournalEntry]);
+  //   } catch (error) {
+  //     console.error("Ошибка при создании журнала:", error);
+  //     alert("Не удалось создать журнал");
+  //   }
+  // };
+
+  const handleFilterClick = (type) => {
+    setActive(type);
+    setCurrentPage(1);
+    loadJournals(type, 1);
+  };
+
+  if (loading) return <Loader />;
+  if (error) return <div className="container">Ошибка: {error}</div>;
 
   return (
     <div className="container">
@@ -126,7 +222,7 @@ const Journals = () => {
             <li
               key={type}
               className={active === type ? "active" : ""}
-              onClick={() => setActive(type)}
+              onClick={() => handleFilterClick(type)}
             >
               {name}
             </li>
@@ -134,98 +230,152 @@ const Journals = () => {
         </ul>
       </div>
 
-
-   <div className="journals-container">
-  <div className="addJournal" onClick={() => setModalOpen(!modalOpen)}>
-    <img src="/img/adminAddJournal.png" alt="" />
-    <div>Добавить</div>
-  </div>
-
-  {filteredJournals.map((j) => (
-    <div key={j.id} className="journal-card-modern">
-      <div className="journal-header">
-        <h4>
-          {new Date(j.date).toLocaleString("ru-RU", {
-            month: "long",
-            year: "numeric"
-          }).replace(/^./, (char) => char.toUpperCase())}
-        </h4>
-        <p className="subtitle">{j.title}</p>
-      </div>
-      
-      <div className="journal-footer">
-        <span className="date">{new Date(j.date).toLocaleDateString("ru-RU")}</span>
-        <div className="buttons">
-          <button className="btn-outline" onClick={() => navigate(`/admin/journals/${j.id}`, { state: j })}>Посмотреть</button>
-          {/* <button className="btn-solid">Редактировать</button> */}
+      <div className="journals-container">
+        <div className="addJournal" onClick={() => setModalOpen(!modalOpen)}>
+          <img src="/img/adminAddJournal.png" alt="" />
+          <div>Добавить</div>
         </div>
+
+        {filteredJournals.map((j) => (
+          <div key={j.id} className="journal-card-modern">
+            <div className="journal-header">
+              <h4>
+                {new Date(j.date)
+                  .toLocaleString("ru-RU", {
+                    month: "long",
+                    year: "numeric",
+                  })
+                  .replace(/^./, (char) => char.toUpperCase())}
+              </h4>
+              <p className="subtitle">{j.title}</p>
+            </div>
+
+            <div className="journal-footer">
+              <span className="date">
+                {new Date(j.date).toLocaleDateString("ru-RU")}
+              </span>
+              <div className="buttons">
+                <button
+                  className="btn-outline"
+                  onClick={() =>
+                    navigate(`/admin/journals/${j.id}`, {
+                      state: {
+                        title: j.title,
+                        date: j.date,
+                        type: j.type,
+                        students: j.participants.map((p) => ({
+                          name: p.full_name,
+                          group: "—",
+                          mark: p.status === "present",
+                        })),
+                      },
+                    })
+                  }
+                >
+                  Посмотреть
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
-  ))}
-</div>
 
+      <Modal
+        isOpen={modalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        className="modal-journal"
+        overlayClassName="modal-overlay"
+      >
+        <h2>Создание журнала</h2>
 
-     <Modal
-  isOpen={modalOpen}
-  onRequestClose={() => setModalOpen(false)}
-  className="modal-journal"
-  overlayClassName="modal-overlay"
->
-  <h2>Создание журнала</h2>
+        <input
+          type="text"
+          placeholder="Название журнала"
+          value={newJournal.title}
+          onChange={(e) =>
+            setNewJournal({ ...newJournal, title: e.target.value })
+          }
+        />
 
-  <input
-    type="text"
-    placeholder="Название журнала"
-    value={newJournal.title}
-    onChange={(e) => setNewJournal({ ...newJournal, title: e.target.value })}
-  />
+        <select
+          value={newJournal.type}
+          onChange={(e) =>
+            setNewJournal({ ...newJournal, type: e.target.value })
+          }
+        >
+          <option value="meeting">Собрание</option>
+          <option value="event">Мероприятие</option>
+        </select>
 
-  <select
-    value={newJournal.type}
-    onChange={(e) => setNewJournal({ ...newJournal, type: e.target.value })}
-  >
-    <option value="meets">Собрание</option>
-    <option value="events">Мероприятие</option>
-  </select>
+        <div className="attendees">
+          <p>Отметьте присутствующих:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Имя</th>
+                <th>Присутствует</th>
+              </tr>
+            </thead>
+            <tbody>
+              {availableParticipants.map((person) => {
+                const isPresent = newJournal.attendees.includes(person.id);
+                return (
+                  <tr key={person.id}>
+                    <td>{person.name}</td>
+                    <td
+                      className="icon-cell"
+                      onClick={() => toggleAttendance(person.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <img
+                        src={isPresent ? "/img/was.png" : "/img/wasNot.png"}
+                        alt={isPresent ? "Присутствовал" : "Отсутствовал"}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
-  <div className="attendees">
-    <p>Отметьте присутствующих:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Имя</th>
-          <th>Присутствует</th>
-        </tr>
-      </thead>
-     <tbody>
-        {dummyPeople.map((person) => {
-          const isPresent = newJournal.attendees.includes(person.id);
-          return (
-            <tr key={person.id}>
-              <td>{person.name}</td>
-              <td
-                className="icon-cell"
-                onClick={() => toggleAttendance(person.id)}
-                style={{ cursor: 'pointer' }}
-              >
-                <img
-                  src={isPresent ? "/img/was.png" : "/img/wasNot.png"}
-                  alt={isPresent ? "Присутствовал" : "Отсутствовал"}
-                />
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  </div>
+        <div className="actions">
+          <button className="save" onClick={handleCreateJournal}>
+            Сохранить
+          </button>
+          <button className="cancel" onClick={() => setModalOpen(false)}>
+            Отмена
+          </button>
+        </div>
+      </Modal>
 
-  <div className="actions">
-    <button className="save" onClick={handleCreateJournal}>Сохранить</button>
-    <button className="cancel" onClick={() => setModalOpen(false)}>Отмена</button>
-  </div>
-    </Modal>
+      <ul className="pagination">
+        <li onClick={handlePrevPage}>
+          <img src="/img/arrow-circle-left.png" alt="prev" />
+        </li>
 
+        {loading ? (
+          <li className="active_page">Загрузка...</li>
+        ) : (
+          Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <li
+              key={page}
+              onClick={() => handlePageClick(page)}
+              className={currentPage === page ? "active_page" : ""}
+            >
+              {page}
+            </li>
+          ))
+        )}
+
+        <li onClick={handleNextPage}>
+          <img
+            src="/img/arrow-circle-left.png"
+            alt="next"
+            style={{ transform: "rotate(180deg)" }}
+          />
+        </li>
+      </ul>
     </div>
   );
 };

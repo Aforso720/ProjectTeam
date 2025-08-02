@@ -1,15 +1,16 @@
 import React from 'react'
 import axios from 'axios'
 
-const useMyEvents = ({authToken}) => {
+const useMyEvents = ({authToken , user }) => {
   const [myEvents , setMyEvents] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  console.log(user)
 
   React.useEffect(()=>{
     const fetchData = async () =>{
         try{
           setLoading(true); 
-           const response = await axios.get("http://localhost:5555/api/projects/by-user?user_id=11", {
+           const response = await axios.get(`http://localhost:5555/api/projects/by-user?user_id=${user.id}`, {
                     headers: {
                         Authorization: `Bearer ${authToken}`
                     }
@@ -23,7 +24,6 @@ const useMyEvents = ({authToken}) => {
     }
     fetchData()
   },[])
-          console.log(myEvents)
 
 
   return {myEvents,loading}

@@ -1,29 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import './PersonSetting.scss';
-import { MyContext } from '../../App';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import "./PersonSetting.scss";
+import { MyContext } from "../../App";
+import axios from "axios";
 
 const PersonSetting = () => {
-  const { topPerson: initialPeople, isloadingTop: initialPeopleLoad } = React.useContext(MyContext);
+  const {
+    topPerson: initialPeople,
+    isloadingTop: initialPeopleLoad,
+    authToken,
+  } = React.useContext(MyContext);
   const [people, setPeople] = useState([]);
   const [filteredPeople, setFilteredPeople] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [editStates, setEditStates] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newUser, setNewUser] = useState({
-    name: '',
-    group: '',
-    phone: '',
-    role: 'Стандарт',
+    name: "",
+    group: "",
+    phone: "",
+    role: "Стандарт",
   });
   const [error, setError] = useState(null);
 
+  const handleAddUser = async () => {
+    try {
+      const payload = {
+        first_name: newUser.firstName,
+        last_name: newUser.lastName,
+        password: "password123",
+        password_confirmation: "password123",
+        is_admin: newUser.role === "Админ",
+        group: newUser.group || null,
+        avatar: null,
+      };
+
+      const response = await axios.post(
+        "http://localhost:5555/register",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      console.log("✅ Пользователь создан:", response.data);
+
+      setPeople((prev) => [
+        ...prev,
+        {
+          ...response.data.user,
+          role: payload.is_admin ? "Админ" : "Стандарт",
+          rating: 0,
+        },
+      ]);
+
+      setIsModalOpen(false);
+      setNewUser({
+        name: "",
+        group: "",
+        phone: "",
+        role: "Стандарт",
+        firstName: "",
+        lastName: "",
+        middleName: "",
+      });
+      setError(null);
+    } catch (error) {
+      console.error(
+        "❌ Ошибка при создании пользователя:",
+        error.response?.data || error.message
+      );
+      setError(
+        "Не удалось добавить пользователя. Проверьте данные и попробуйте снова."
+      );
+    }
+  };
+
   useEffect(() => {
     if (initialPeople) {
-      const mappedPeople = initialPeople.map(person => ({
+      const mappedPeople = initialPeople.map((person) => ({
         ...person,
-        role: person.is_admin ? 'Админ' : 'Стандарт',
-        rating: person.rating || 0
+        role: person.is_admin ? "Админ" : "Стандарт",
+        rating: person.rating || 0,
       }));
       setPeople(mappedPeople);
       setFilteredPeople(mappedPeople);
@@ -31,11 +90,11 @@ const PersonSetting = () => {
   }, [initialPeople]);
 
   useEffect(() => {
-    if (searchTerm === '') {
+    if (searchTerm === "") {
       setFilteredPeople(people);
     } else {
-      const filtered = people.filter(person => 
-        `${person.first_name} ${person.last_name} ${person.middle_name || ''}`
+      const filtered = people.filter((person) =>
+        `${person.first_name} ${person.last_name} ${person.middle_name || ""}`
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
       );
@@ -61,24 +120,37 @@ const PersonSetting = () => {
   const handleSaveRating = async (id) => {
     try {
       const person = people.find((p) => p.id === id);
-      const response = await axios.put(`http://localhost:5555/api/users/${id}`, {
-        rating: person.rating
-      });
-      
+      const response = await axios.put(
+        `http://localhost:5555/api/users/${id}`,
+        {
+          rating: person.rating,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
       console.log(`Рейтинг пользователя ${id} обновлен`, response.data);
-      
+
       setEditStates((prev) => ({
         ...prev,
         [id]: false,
       }));
-      
+
       setError(null);
     } catch (error) {
-      console.log('Ошибка при обновлении рейтинга:', error);
-      setError('Не удалось обновить рейтинг. Пожалуйста, попробуйте снова.');
-      setPeople(prev => 
-        prev.map(p => 
-          p.id === id ? { ...p, rating: initialPeople.find(ip => ip.id === id)?.rating || 0 } : p
+      console.log("Ошибка при обновлении рейтинга:", error);
+      setError("Не удалось обновить рейтинг. Пожалуйста, попробуйте снова.");
+      setPeople((prev) =>
+        prev.map((p) =>
+          p.id === id
+            ? {
+                ...p,
+                rating: initialPeople.find((ip) => ip.id === id)?.rating || 0,
+              }
+            : p
         )
       );
     }
@@ -95,42 +167,60 @@ const PersonSetting = () => {
 
   const handleRoleChange = async (id, newRole) => {
     try {
-      const isAdmin = newRole === 'Админ';
-      await axios.put(`http://localhost:5555/api/users/${id}`, {
-        is_admin: isAdmin
-      });
-      setPeople(prev => 
-        prev.map(person => 
-          person.id === id 
-            ? { ...person, role: newRole, is_admin: isAdmin } 
+      const isAdmin = newRole === "Админ";
+      await axios.put(
+        `http://localhost:5555/api/users/${id}`,
+        {
+          is_admin: isAdmin,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      setPeople((prev) =>
+        prev.map((person) =>
+          person.id === id
+            ? { ...person, role: newRole, is_admin: isAdmin }
             : person
         )
       );
       console.log(`Роль пользователя ${id} изменена на ${newRole}`);
     } catch (error) {
-      console.error('Ошибка при изменении роли:', error);
-      setError('Не удалось изменить роль. Пожалуйста, попробуйте снова.');
+      console.error("Ошибка при изменении роли:", error);
+      setError("Не удалось изменить роль. Пожалуйста, попробуйте снова.");
     }
   };
 
   const handleDeleteUser = async (id) => {
-    const confirmation = prompt('Вы уверены, что хотите удалить этого пользователя? Введите "да" для подтверждения:');
-    if (confirmation?.toLowerCase() === 'да') {
+    const confirmation = prompt(
+      'Вы уверены, что хотите удалить этого пользователя? Введите "да" для подтверждения:'
+    );
+    if (confirmation?.toLowerCase() === "да") {
       try {
-        await axios.delete(`http://localhost:5555/api/users/${id}`);
-        setPeople(prev => prev.filter(person => person.id !== id));
+        await axios.delete(`http://localhost:5555/api/users/${id}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+
+        setPeople((prev) => prev.filter((person) => person.id !== id));
         console.log(`Пользователь ${id} удален`);
       } catch (error) {
-        console.error('Ошибка при удалении пользователя:', error);
-        setError('Не удалось удалить пользователя. Пожалуйста, попробуйте снова.');
+        console.error("Ошибка при удалении пользователя:", error);
+        setError(
+          "Не удалось удалить пользователя. Пожалуйста, попробуйте снова."
+        );
       }
     } else {
-      console.log('Удаление отменено');
+      console.log("Удаление отменено");
     }
   };
 
   return (
-    <section className='person-setting'>
+    <section className="person-setting">
       <header className="header">
         <h2>Управление участниками</h2>
         <div className="header-controls">
@@ -144,20 +234,24 @@ const PersonSetting = () => {
             />
             <span className="search-icon">🔍</span>
           </div>
-          <button className="add-btn" onClick={() => setIsModalOpen(true)}>Добавить</button>
+          <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+            Добавить
+          </button>
         </div>
       </header>
 
       {error && <div className="error-message">{error}</div>}
 
       <ul className="people-list">
-        {filteredPeople.map(person => (
+        {filteredPeople.map((person) => (
           <li className="person-card" key={person.id}>
             <div className="person-info">
-              <img src={person.image || '/img/kot.jpg'} alt='Ava' />
+              <img src={person.image || "/img/kot.jpg"} alt="Ava" />
               <div>
-                <h3>{person.first_name} {person.last_name}</h3>
-                <p>{person.middle_name || ''}</p>
+                <h3>
+                  {person.first_name} {person.last_name}
+                </h3>
+                <p>{person.middle_name || ""}</p>
               </div>
             </div>
 
@@ -166,13 +260,15 @@ const PersonSetting = () => {
                 <input
                   type="number"
                   value={person.rating}
-                  onChange={(e) => handleRatingChange(person.id, e.target.value)}
+                  onChange={(e) =>
+                    handleRatingChange(person.id, e.target.value)
+                  }
                   onFocus={() => handleEditClick(person.id)}
                   onBlur={() => handleBlur(person.id)}
                 />
                 {editStates[person.id] && (
-                  <button 
-                    className="save-btn" 
+                  <button
+                    className="save-btn"
                     onClick={() => handleSaveRating(person.id)}
                     onMouseDown={(e) => e.preventDefault()}
                   >
@@ -182,14 +278,14 @@ const PersonSetting = () => {
               </div>
 
               <div className="buttons">
-                <select 
+                <select
                   value={person.role}
                   onChange={(e) => handleRoleChange(person.id, e.target.value)}
                 >
                   <option value="Админ">Админ</option>
                   <option value="Стандарт">Стандарт</option>
                 </select>
-                <button 
+                <button
                   className="delete-btn"
                   onClick={() => handleDeleteUser(person.id)}
                 >
@@ -203,87 +299,98 @@ const PersonSetting = () => {
 
       {isModalOpen && (
         <article className="modal-overlay">
-  <section className="modal">
-    <h2>Добавить участника</h2>
+          <section className="modal">
+            <h2>Добавить участника</h2>
 
-    <div className="input-row">
-      <div>
-        <label>Фамилия</label>
-        <input
-          type="text"
-          value={newUser.lastName || ''}
-          onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })}
-          placeholder="Введите фамилию"
-        />
-      </div>
-      <div>
-        <label>Имя</label>
-        <input
-          type="text"
-          value={newUser.firstName || ''}
-          onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })}
-          placeholder="Введите имя"
-        />
-      </div>
-      <div>
-        <label>Отчество</label>
-        <input
-          type="text"
-          value={newUser.middleName || ''}
-          onChange={(e) => setNewUser({ ...newUser, middleName: e.target.value })}
-          placeholder="Введите отчество"
-        />
-      </div>
-    </div>
+            <div className="input-row">
+              <div>
+                <label>Фамилия</label>
+                <input
+                  type="text"
+                  value={newUser.lastName || ""}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, lastName: e.target.value })
+                  }
+                  placeholder="Введите фамилию"
+                />
+              </div>
+              <div>
+                <label>Имя</label>
+                <input
+                  type="text"
+                  value={newUser.firstName || ""}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, firstName: e.target.value })
+                  }
+                  placeholder="Введите имя"
+                />
+              </div>
+              <div>
+                <label>Отчество</label>
+                <input
+                  type="text"
+                  value={newUser.middleName || ""}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, middleName: e.target.value })
+                  }
+                  placeholder="Введите отчество"
+                />
+              </div>
+            </div>
 
-    <div className="input-row">
-      <div>
-        <label>Группа</label>
-        <input
-          type="text"
-          value={newUser.group}
-          onChange={(e) => setNewUser({ ...newUser, group: e.target.value })}
-          placeholder="ПИ-22-1"
-        />
-      </div>
-      <div>
-        <label>Номер телефона</label>
-        <input
-          type="text"
-          value={newUser.phone}
-          onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
-          placeholder="8(999) 999-99-99"
-        />
-      </div>
-    </div>
+            <div className="input-row">
+              <div>
+                <label>Группа</label>
+                <input
+                  type="text"
+                  value={newUser.group}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, group: e.target.value })
+                  }
+                  placeholder="ПИ-22-1"
+                />
+              </div>
+              <div>
+                <label>Номер телефона</label>
+                <input
+                  type="text"
+                  value={newUser.phone}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, phone: e.target.value })
+                  }
+                  placeholder="8(999) 999-99-99"
+                />
+              </div>
+            </div>
 
-    <div className="input-row">
-      <div>
-        <label>Статус</label>
-        <select
-          value={newUser.role}
-          onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-          className="status-select"
-        >
-          <option value="Админ">Админ</option>
-          <option value="Стандарт">Участник</option>
-        </select>
-      </div>
-    </div>
+            <div className="input-row">
+              <div>
+                <label>Статус</label>
+                <select
+                  value={newUser.role}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, role: e.target.value })
+                  }
+                  className="status-select"
+                >
+                  <option value="Админ">Админ</option>
+                  <option value="Стандарт">Участник</option>
+                </select>
+              </div>
+            </div>
 
-    <div className="modal-actions">
-      <button className="cancel-btn" onClick={() => setIsModalOpen(false)}>Закрыть</button>
-      <button
-        className="confirm-btn"
-        onClick={() => {
-          console.log('Добавлен пользователь:', newUser);
-          setIsModalOpen(false); 
-        }}
-      >
-        Добавить
-      </button>
-    </div>
-  </section>
+            <div className="modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Закрыть
+              </button>
+              <button className="confirm-btn" onClick={handleAddUser}>
+                Добавить
+              </button>
+            </div>
+          </section>
         </article>
       )}
     </section>

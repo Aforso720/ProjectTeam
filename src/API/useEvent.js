@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-const useEvent = ({ eventStatus, authToken }) => {
+const useEvent = ({ status, authToken }) => {
   const [events, setEvents] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -21,9 +21,9 @@ const useEvent = ({ eventStatus, authToken }) => {
           throw new Error("Данные не являются массивом");
         }
 
-        const filteredEvents = eventStatus
-            ? eventsData 
-            : eventsData.filter((event) => event.status === eventStatus);
+        const filteredEvents = status === 'active'
+            ? eventsData.filter((event) => event.status === 'active') 
+            : eventsData.filter((event) => event.status === 'completed');
 
         setEvents(filteredEvents);
       } catch (error) {
@@ -35,7 +35,7 @@ const useEvent = ({ eventStatus, authToken }) => {
     };
 
     fetchData();
-  }, [eventStatus, authToken]);
+  }, [status, authToken]);
 
   return { events, loading };
 };

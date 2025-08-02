@@ -53,7 +53,7 @@ const Banner = ({ news }) => {
                         style={{ cursor: "pointer"  }}
                     >
                         <img
-                            src={ item.image ? 'item.image' : '/img/image2.png'}
+                            src={ item.image === null  ? item.image : '/img/image2.png'}
                             alt="Slide 1"
                             style={{ width: "100%", borderRadius: "10px" }}
                             className="BannerImg"

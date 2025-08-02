@@ -21,7 +21,7 @@ const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
       style={{ cursor: 'pointer' }}
     >
       <img
-        src={image ? image : '/img/image2.png'}
+        src={image === null ? image : '/img/DefaultImage.png'}
         alt="Slide 1"
         className={style.SliderImg}
       />

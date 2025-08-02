@@ -2,30 +2,18 @@ import React from "react";
 import Modal from "react-modal";
 import style from "./MyEvents.module.scss";
 import { MyContext } from "../../App";
+import axios from "axios";
+import usePeople from "../../API/usePeople";
 
 const AddEventModal = () => {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
   const { authToken, user } = React.useContext(MyContext);
-  const [participants, setParticipants] = React.useState([
-  ]);
-  const [newParticipant, setNewParticipant] = React.useState("");
+  const { person } = usePeople({ authToken });
   const [projectName, setProjectName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-
-  const handleAddParticipant = () => {
-    if (newParticipant.trim()) {
-      setParticipants([...participants, newParticipant.trim()]);
-      setNewParticipant("");
-    }
-  };
-
-  const handleRemoveParticipant = (index) => {
-    const updated = [...participants];
-    updated.splice(index, 1);
-    setParticipants(updated);
-  };
+  const [selectedParticipants, setSelectedParticipants] = React.useState([]);
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => {
@@ -33,7 +21,6 @@ const AddEventModal = () => {
     setError(null);
     setProjectName("");
     setDescription("");
-    setParticipants([]);
   };
 
   const handleSubmit = async () => {
@@ -46,31 +33,56 @@ const AddEventModal = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:5555/api/projects/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "http://localhost:5555/api/projects",
+        {
           name: projectName,
           description: description,
           user_id: user?.id,
-          participants: participants,
           status: "active",
-        }),
-      });
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error("Ошибка при создании проекта");
+      const projectId = response.data?.id;
+
+      if (projectId) {
+        await axios.post(
+          `http://localhost:5555/api/projects/${projectId}/join`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        await Promise.all(
+          selectedParticipants.map(async (participantId) => {
+            return axios.post(
+              `http://localhost:5555/api/projects/${projectId}/join`,
+              { user_id: participantId },
+              {
+                headers: {
+                  Authorization: `Bearer ${authToken}`,
+                },
+              }
+            );
+          })
+        );
       }
 
-      const data = await response.json();
-      console.log("Проект успешно создан:", data);
+      console.log("Проект создан и участники добавлены:", response.data);
       closeModal();
+      setSelectedParticipants([]);
     } catch (err) {
       console.error("Ошибка:", err);
-      setError(err.message);
+      setError(err?.response?.data?.message || err.message);
     } finally {
       setIsLoading(false);
     }
@@ -139,35 +151,53 @@ const AddEventModal = () => {
 
           <div className={style.section}>
             <h3>Добавить участников</h3>
-            <div className={style.participantsList}>
-              {participants.map((name, index) => (
-                <div key={index} className={style.participantItem}>
-                  <span>{name}</span>
-                  <button
-                    type="button"
-                    className={style.removeButton}
-                    onClick={() => handleRemoveParticipant(index)}
-                  >
-                    ✕
-                  </button>
-                </div>
+            <select
+              className={style.projectInput}
+              onChange={(e) => {
+                const userId = parseInt(e.target.value);
+                if (!selectedParticipants.includes(userId)) {
+                  setSelectedParticipants([...selectedParticipants, userId]);
+                }
+              }}
+            >
+              <option value="">Выберите участника</option>
+              {person.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.last_name} {p.first_name}
+                </option>
               ))}
-              <div className={style.addParticipantRow}>
-                <input
-                  type="text"
-                  value={newParticipant}
-                  onChange={(e) => setNewParticipant(e.target.value)}
-                  className={style.participantInput}
-                  placeholder="Введите имя участника"
-                />
-                <button
-                  type="button"
-                  className={style.addButton}
-                  onClick={handleAddParticipant}
-                >
+            </select>
+
+            <div className={style.participantsList}>
+              {selectedParticipants.map((id) => {
+                const userObj = person.find((p) => p.id === id);
+                const displayName = userObj
+                  ? `${userObj.first_name} ${userObj.last_name}`
+                  : `ID ${id}`;
+
+                return (
+                  <div key={id} className={style.participantItem}>
+                    <span>{displayName}</span>
+                    <button
+                      type="button"
+                      className={style.removeButton}
+                      onClick={() =>
+                        setSelectedParticipants(
+                          selectedParticipants.filter((uid) => uid !== id)
+                        )
+                      }
+                    >
+                      ✕
+                    </button>
+                  </div>
+                );
+              })}
+
+              {/* <div className={style.addParticipantRow}>
+                <button type="button" className={style.addButton}>
                   +
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -182,8 +212,8 @@ const AddEventModal = () => {
           </div>
 
           <div className={style.section}>
-            <button 
-              className={style.saveButton} 
+            <button
+              className={style.saveButton}
               onClick={handleSubmit}
               disabled={isLoading}
             >

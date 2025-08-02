@@ -6,8 +6,8 @@ import AddEventModal from './AddEventModal'
 import { MyContext } from '../../App';
 
 const MyEvents = () => {
-  const { authToken } = React.useContext(MyContext);
-  const { myEvents, loading } = useMyEvents({authToken});
+  const { authToken , user } = React.useContext(MyContext);
+  const { myEvents, loading } = useMyEvents({authToken , user});
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 8;
 
@@ -48,7 +48,7 @@ const MyEvents = () => {
         ) : (
           currentItems.map((item) => (
             <div className={style.card} key={item.id}>
-              <img src={item.preview_image} alt='Проект' className={style.cardImage} />
+              <img src={item.preview_image === null ? '/img/DefaultImage.png'  : item.preview_image  } alt='Проект' className={style.cardImage} />
               <div className={style.cardContent}>
                 <h3 className={style.cardTitle}>{item.name}</h3>
                 <p className={style.cardDescription}>Краткое описание</p>

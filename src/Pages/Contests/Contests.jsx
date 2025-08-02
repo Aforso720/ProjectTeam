@@ -12,13 +12,13 @@ import LoadingEvent from '../../Elements/Loading/loadingEvent';
 import { MyContext } from '../../App';
 import useEvent from '../../API/useEvent';
 import { useNavigate } from 'react-router';
+import Loader from '../../Component/Loader';
 
 const Contests = () => {
-  const [status, setSelectedStatus] = React.useState("active");
+  const [status, setSelectedStatus] = React.useState('active');
   const { userActive , authToken } = React.useContext(MyContext);
   const { events, loading } = useEvent({ status, authToken });
   const { news, loadingNewsloadingMyNews } = usePosts();
-
   const [isMobileView, setIsMobileView] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 9;
@@ -158,9 +158,7 @@ const Contests = () => {
             </div>
           )
         ) : (
-          <div className='no-events-message'>
-            <p>Нет мероприятий этой категории</p>
-          </div>
+          <Loader/>
         )}
 
         {currentEvents.length > 0 && (

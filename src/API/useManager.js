@@ -21,7 +21,7 @@ const useManager = ({authToken}) => {
                 const mainAdmin = admins.find(item => item.id === 11);
 
                 // Если главный админ есть, добавляем его в начало списка
-                const adminsWithMain = mainAdmin ? [mainAdmin, ...admins.filter(admin => admin.id !== 11)] : admins;
+                const adminsWithMain = mainAdmin ? [mainAdmin, ...admins.filter(admin => admin.id !== 1)] : admins;
 
                 // Берем первые три админа (включая главного, если он есть)
                 const firstThreeAdmins = adminsWithMain.slice(0, 3);
