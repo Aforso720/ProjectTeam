@@ -4,7 +4,7 @@ import axios from 'axios'
 const useMyEvents = ({authToken , user }) => {
   const [myEvents , setMyEvents] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  console.log(user)
+  // console.log(user)
 
   React.useEffect(()=>{
     const fetchData = async () =>{
@@ -17,7 +17,7 @@ const useMyEvents = ({authToken , user }) => {
                 });
           setMyEvents(response.data.data)
         }catch(error){
-            console.log("Произошла ошибка:" + error);
+            // console.log("Произошла ошибка:" + error);
         }finally{
           setLoading(false)
         }

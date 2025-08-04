@@ -45,7 +45,7 @@ const MyDocument = () => {
     };
 
     return (
-        <div className={style.wrapper}>
+        <section className={style.wrapper}>
             <div className={style.MyDocument}>
                 {currentPage === 1 && <AddDocModal onDocumentAdded={fetchData} />}
 
@@ -101,7 +101,7 @@ const MyDocument = () => {
                 closeModal={closeModal}
                 selectedItem={selectedItem} 
             />
-        </div>
+        </section>
     );
 };
 

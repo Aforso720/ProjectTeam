@@ -26,7 +26,7 @@ const AuthModal = ({ onClose, handleLogin, loading, error }) => {
 
 
   return (
-    <div className="auth-modal">
+    <article className="auth-modal">
       <div className="auth-modal__content">
         <button 
           className="auth-modal__close" 
@@ -75,7 +75,7 @@ const AuthModal = ({ onClose, handleLogin, loading, error }) => {
           </button>
         </form>
       </div>
-    </div>
+    </article>
   );
 };
 

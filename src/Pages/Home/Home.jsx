@@ -31,15 +31,15 @@ const Home = () => {
   }
 
   return (
-    <div className="Home">
-      <div className="Banner">
+    <section className="Home">
+      <section className="Banner">
         {loadingMyNews ? (
           <LoadingEvent width="1000px" height="40vh" />
         ) : (
           <Banner news={news} />
         )}
-      </div>
-      <div className="Events">
+      </section>
+      <section className="Events">
         {userActive && (
           <div className="myContestsMobile">
             <div className="mobileHeader">Мои конкурсы</div>
@@ -80,8 +80,8 @@ const Home = () => {
         <div className="sliderHome">
           <Slider eventCategory={isActive} />
         </div>
-      </div>
-      <div className="TopT">
+      </section>
+      <section className="TopT">
         <h2>Лидеры рейтинга</h2>
         <ul className="CardTop">
           {isloadingPersHome
@@ -106,8 +106,8 @@ const Home = () => {
                 </li>
               ))}
         </ul>
-      </div>
-      <div className="aboutHome">
+      </section>
+      <section className="aboutHome">
         <div className="contentAbout">
           <div className="textAbout">
             <h3>О нас</h3>
@@ -117,19 +117,19 @@ const Home = () => {
           </div>
           <img src="img/image 6.png" className="imgAbout" alt="" />
         </div>
-      </div>
-      <div className="manager">
+      </section>
+      <section className="manager">
         <h2>Руководители</h2>
 
         <ul className="manager__list">
           {isloadingMng
             ? Array.from({ length: 3 }).map((_, index) => (
-                <li key={index}>
+                <li key = {index}>
                   <LoadingEvent width="350px" height="250px" />
                 </li>
               ))
-            : manager.map((item) => (
-                <li key={item.key}>
+            : manager.map((item,index) => (
+                <li key={index}>
                   <div className="card_manager">
                     <img src="img/kot.jpg" alt="" />
                     <h4>{item.first_name}</h4>
@@ -172,8 +172,8 @@ const Home = () => {
                 ))}
           </Swiper>
         </div>
-      </div>
-    </div>
+      </section>
+    </section>
   );
 };
 

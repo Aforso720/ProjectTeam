@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import Modal from "react-modal";
 import axios from "axios";
 import "./Journals.scss";
@@ -215,7 +215,7 @@ const Journals = () => {
   if (error) return <div className="container">Ошибка: {error}</div>;
 
   return (
-    <div className="container">
+    <section className="container">
       <div className="nav-container">
         <ul>
           {types.map(([type, name]) => (
@@ -376,7 +376,7 @@ const Journals = () => {
           />
         </li>
       </ul>
-    </div>
+    </section>
   );
 };
 

@@ -3,20 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fontsource/inter": "^5.1.1",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "react": "^19.0.0",
     "react-content-loader": "^7.0.2",
     "react-dom": "^19.0.0",
-    "react-leaflet": "^5.0.0",
     "react-loading-skeleton": "^3.5.0",
     "react-modal": "^3.16.3",
     "react-router": "^7.1.1",
-    "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
     "swiper": "^11.2.1",
-    "typeface-inter": "^3.18.1",
     "web-vitals": "^4.2.4"
   },
   "scripts": {
@@ -48,6 +44,7 @@
     "postcss-loader": "^8.1.1",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.83.1",
-    "sass-loader": "^16.0.4"
+    "sass-loader": "^16.0.4",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

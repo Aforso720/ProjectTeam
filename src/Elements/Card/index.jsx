@@ -3,7 +3,7 @@ import style from "./Card.module.scss";
 
 const Card = ({ first_name, image, position, extraClass, group }) => {
   return (
-    <div className={`${style.Card} ${extraClass}`}>
+    <article className={`${style.Card} ${extraClass}`}>
       <img src="img/kot.jpg" alt="Card" />
       <span>
         <b>{position}</b>st
@@ -12,7 +12,7 @@ const Card = ({ first_name, image, position, extraClass, group }) => {
         <p className={style.CardName}>{first_name}</p>
         <p className={style.CardGroup}>{group}</p>
       </div>
-    </div>
+    </article>
   );
 };
 

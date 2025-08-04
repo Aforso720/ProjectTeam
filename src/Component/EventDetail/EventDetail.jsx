@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams,useNavigate } from "react-router";
 import "./EventDetail.scss";
 
 const EventDetail = ({ events }) => {
@@ -12,7 +12,7 @@ const EventDetail = ({ events }) => {
   }
 
   return (
-    <div className="event-detail">
+    <section className="event-detail">
       <img src={event.img} alt={event.title} />
       <h1>{event.title}</h1>
 
@@ -36,7 +36,7 @@ const EventDetail = ({ events }) => {
 
       <p className="event-meta">Статус: {event.status}</p>
       <button onClick={() => navigate(-1)}>Назад</button>
-    </div>
+    </section>
   );
 };
 

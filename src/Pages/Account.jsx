@@ -2,7 +2,7 @@ import React from 'react'
 import Profile from '../Elements/Profile';
 import MyEvents from '../Elements/MyEvents'
 import MyDocument from '../Elements/MyDocument';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const Account = ({handleLogoutAuth}) => {
     const [activeTab, setActiveTab] = React.useState("personalData");
@@ -13,7 +13,8 @@ const Account = ({handleLogoutAuth}) => {
     };
     return (
         <section className='Account'>
-            <ul className='navigation_account'>
+            <nav>
+                <ul className='navigation_account'>
                 <li
                     className={activeTab === "personalData" ? 'activeAcc' : ""}
                     onClick={() => setActiveTab("personalData")}
@@ -39,6 +40,7 @@ const Account = ({handleLogoutAuth}) => {
                     Выход
                 </li>
             </ul>
+            </nav>
             {activeTab === "personalData" ? (
                 <Profile/>
             ) : null}

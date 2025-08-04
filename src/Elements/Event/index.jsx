@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import style from './Event.module.scss';
 
 const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
@@ -15,7 +15,7 @@ const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
   };
 
   return (
-    <div 
+    <article 
       className={`${style.swiperSlide} ${contMyEvent} ${homeEvent}`} 
       onClick={handleClick}
       style={{ cursor: 'pointer' }}
@@ -28,7 +28,7 @@ const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
       <div className={style.textOverlay}>
         <p>{truncateDescription(description)}</p>
       </div>
-    </div>
+    </article>
   );
 };
 

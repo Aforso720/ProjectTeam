@@ -1,4 +1,4 @@
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router";
 import "./Table.scss";
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);

@@ -237,7 +237,7 @@ const EventAdmin = () => {
   };
 
   return (
-    <div className="event-admin">
+    <section className="event-admin">
       {/* <div className="event-filters">
         {filters.map((filter) => (
           <button
@@ -710,7 +710,7 @@ const EventAdmin = () => {
           </div>
         )}
       </Modal>
-    </div>
+    </section>
   );
 };
 

@@ -4,6 +4,7 @@ import axios from 'axios';
 const useManager = ({authToken}) => {
     const [manager, setManager] = React.useState([]);
     const [isloading, setIsLoading] = React.useState(true);
+    console.log(authToken)
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -15,7 +16,6 @@ const useManager = ({authToken}) => {
                     }
                 });
                 const response = res.data;
-
                 const admins = response.data.filter(item => item.is_admin === true);
 
                 const mainAdmin = admins.find(item => item.id === 11);

@@ -49,7 +49,7 @@ const Profile = () => {
     };
 
     return (
-        <div className={style.profile}>
+        <article className={style.profile}>
             <div className={style.photoProf}>
                 <img src={photoUrl} alt='Фото профиля' />
                 <div className={style.butPhotos}>
@@ -140,7 +140,7 @@ const Profile = () => {
                     {isEditing ? 'Сохранить' : 'Редактировать'}
                 </button>
             </div>
-        </div>
+        </article>
     );
 };
 

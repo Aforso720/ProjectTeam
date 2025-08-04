@@ -3,7 +3,7 @@ import "./App.scss";
 import Header from "./Component/Header";
 import Footer from "./Component/Footer";
 import Home from "./Pages/Home/Home.jsx";
-import { Route, Routes, useLocation, Navigate, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate, useNavigate } from "react-router";
 import Contests from "./Pages/Contests/Contests.jsx";
 import Account from "./Pages/Account";
 import About from "./Pages/about/AboutUs";
