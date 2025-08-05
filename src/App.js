@@ -23,6 +23,7 @@ import EventDetail from "./Component/EventDetail/EventDetail.jsx";
 import useEvent from "./API/useEvent.js";
 
 export const MyContext = React.createContext();
+export const UserContext = React.createContext();
 
 function App() {
   const {
