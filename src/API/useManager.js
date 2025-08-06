@@ -1,20 +1,15 @@
 import React from 'react';
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
-const useManager = ({authToken}) => {
+const useManager = () => {
     const [manager, setManager] = React.useState([]);
     const [isloading, setIsLoading] = React.useState(true);
-    console.log(authToken)
-
+    
     React.useEffect(() => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                const res = await axios.get("http://localhost:5555/api/users?per_page=500", {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                });
+                const res = await axiosInstance.get("/users?per_page=500");
                 const response = res.data;
                 const admins = response.data.filter(item => item.is_admin === true);
 
@@ -48,7 +43,7 @@ const useManager = ({authToken}) => {
             }
         };
         fetchData();
-    }, [authToken]);
+    }, []);
 
     return { manager, isloading };
 };

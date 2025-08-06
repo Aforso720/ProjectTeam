@@ -15,7 +15,7 @@ export const useAuth = () => {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:5555/api/login", {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
         email,
         password,
       });

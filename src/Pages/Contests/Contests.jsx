@@ -8,16 +8,15 @@ import "swiper/css/effect-flip";
 import { Navigation } from "swiper/modules";
 import Event from '../../Elements/Event';
 import usePosts from '../../API/usePosts';
-import LoadingEvent from '../../Elements/Loading/loadingEvent';
-import { MyContext } from '../../App';
+import { AuthContext } from '../../context/AuthContext';
 import useEvent from '../../API/useEvent';
 import { useNavigate } from 'react-router';
 import Loader from '../../Component/Loader';
 
 const Contests = () => {
   const [status, setSelectedStatus] = React.useState('active');
-  const { userActive , authToken } = React.useContext(MyContext);
-  const { events, loading } = useEvent({ status, authToken });
+  const { isAuthenticated } = React.useContext(AuthContext);
+  const { events, loading } = useEvent({ status});
   const { news, loadingNewsloadingMyNews } = usePosts();
   const [isMobileView, setIsMobileView] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -59,7 +58,7 @@ const Contests = () => {
 
   return (
     <section className='Contests'>
-      {userActive && (
+      {isAuthenticated && (
         <div className='MyEvents'>
           <h2>Мои конкурсы</h2>
           <div className="slider_cont">
@@ -81,11 +80,7 @@ const Contests = () => {
             effect="flip"
             loop
           >
-            {loadingNewsloadingMyNews ? (
-              <SwiperSlide>
-                <LoadingEvent width="1300px" height="600px" />
-              </SwiperSlide>
-            ) : (
+            {loadingNewsloadingMyNews ? <Loader/> : (
               news.map((item) => (
                 <SwiperSlide key={item.id}>
                   <img
@@ -122,17 +117,11 @@ const Contests = () => {
               effect="flip"
               pagination={{ clickable: true }}
             >
-              {Array(9).fill().map((_, i) => (
-                <SwiperSlide key={i}>
-                  <LoadingEvent width="40vw" height="250px" />
-                </SwiperSlide>
-              ))}
+              <Loader/>
             </Swiper>
           ) : (
             <div className='arrEvents'>
-              {Array(9).fill().map((_, i) => (
-                <LoadingEvent key={i} width="400px" height="250px" />
-              ))}
+              <Loader/>
             </div>
           )
         ) : currentEvents.length > 0 ? (

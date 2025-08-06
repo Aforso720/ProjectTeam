@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 import React from 'react';
 
 const usePosts = () => {
@@ -9,7 +9,7 @@ const usePosts = () => {
         const fetchData = async () => {
             try {
                 setLoading(true); 
-                const res = await axios.get('http://localhost:5555/api/news?per_page=100');
+                const res = await axiosInstance.get('/news?per_page=100');
 
                 setNews(res.data.data);
             } catch (error) {

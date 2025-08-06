@@ -1,14 +1,13 @@
 import React from 'react';
-import { MyContext } from '../App';
-import LoadPers from '../Elements/Loading/loadingPerson';
-import LoadMng from '../Elements/Loading/loadingEvent';
+import { PersonContext } from '../context/PersonContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import Loader from '../Component/Loader';
 
 const Members = () => {
-  const { topPerson, isloadingTop, manager , isloadingMng} = React.useContext(MyContext);
+  const { topPerson, isloadingTop, manager , isloadingMng} = React.useContext(PersonContext);
   const formatName = (fullName) => {
     const maxLength = 12;
     if (fullName.length <= maxLength) {
@@ -33,14 +32,8 @@ const Members = () => {
     <section className='Members'>
       <section className='supervisor'>
         <h2>Руководители</h2>
-
-
         <ul className='cardSupervisor'>
-        {isloadingMng ? (
-          Array.from({ length: 3 }).map((_, index) => (
-            <LoadMng key={index} width='400px' height='350px' />
-          ))
-        ) : (
+        {isloadingMng ? <Loader/> : (
           manager.map(item => (
             <li key={item.key}>
               <img src='img/kot.jpg' alt='top' />
@@ -85,19 +78,7 @@ const Members = () => {
       <section className='rating'>
         <h2>Лидеры рейтинга</h2>
         <ul>
-          {isloadingTop ? (
-            Array.from({ length: 10 }).map((_, index) => (
-              <li
-                className={`cardRating ${index >= 3 ? 'cardWithButton' : ''}`}
-                key={index}
-              >
-                <LoadPers
-                  width={index < 3 ? '300px' : '400px'} 
-                  height='150px' 
-                />
-              </li>
-            ))
-          ) : (
+          {isloadingTop ? <Loader/> : (
             topPerson.map((item, index) => (
               <li
                 className={`cardRating ${index >= 3 ? 'cardWithButton' : ''}`}

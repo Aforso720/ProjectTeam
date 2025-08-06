@@ -1,11 +1,13 @@
 import React from "react";
 import { useParams,useNavigate } from "react-router";
 import "./EventDetail.scss";
+import { ContentContext } from "../../context/ContentContext";
 
-const EventDetail = ({ events }) => {
+const EventDetail = () => {
+  const {news:events} = React.useContext(ContentContext)
   const navigate = useNavigate();
   const { id } = useParams();
-  const event = events.find(event => event.id.toString() === id);
+  const event = events?.find(event => event.id.toString() === id);
 
   if (!event) {
     return <div>Событие не найдено</div>;

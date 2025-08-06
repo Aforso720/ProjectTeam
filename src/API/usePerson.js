@@ -1,7 +1,7 @@
 import React from 'react';
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
-const usePerson = ({ amount, authToken } = {}) => {
+const usePerson = ({ amount} = {}) => {
     const [person, setPerson] = React.useState([]);
     const [isloading, setIsLoading] = React.useState(true);
 
@@ -9,11 +9,7 @@ const usePerson = ({ amount, authToken } = {}) => {
         const fetchData = async () => {
             try {
                 setIsLoading(true)
-                const res = await axios.get("http://localhost:5555/api/users?per_page=500", {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`    
-                    }
-                });
+                const res = await axiosInstance.get("/users?per_page=500");
                 const response = res.data
                 let sortedData = response.data.sort((a, b) => b.rating - a.rating); 
                                 
@@ -31,7 +27,7 @@ const usePerson = ({ amount, authToken } = {}) => {
             }
         };
         fetchData();
-    }, [amount, authToken]);
+    }, [amount]);
     return {person, isloading};
 };
 

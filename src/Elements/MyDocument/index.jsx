@@ -2,8 +2,8 @@ import React from 'react';
 import style from './MyDocument.module.scss';
 import useDocument from '../../API/useDocument';
 import AddDocModal from './AddDocModal';
-import LoadDocum from '../Loading/loadingEvent';
 import InfoModal from './InfoModal';
+import Loader from '../../Component/Loader';
 
 const MyDocument = () => {
     const { myDocument, loading, fetchData } = useDocument();
@@ -49,11 +49,7 @@ const MyDocument = () => {
             <div className={style.MyDocument}>
                 {currentPage === 1 && <AddDocModal onDocumentAdded={fetchData} />}
 
-                {loading ? (
-                    Array.from({ length: itemsPerPage }).map((_, index) => (
-                        <LoadDocum width="400px" height="250px" key={index} />
-                    ))
-                ) : (
+                {loading ?  <Loader/> : (
                     currentItems.map((item) => (
                         <div
                             className={style.card}

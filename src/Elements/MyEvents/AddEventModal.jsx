@@ -1,14 +1,15 @@
 import React from "react";
 import Modal from "react-modal";
 import style from "./MyEvents.module.scss";
-import { MyContext } from "../../App";
-import axios from "axios";
+import axiosInstance from "../../API/axiosInstance";
 import usePeople from "../../API/usePeople";
+import { AuthContext } from "../../context/AuthContext";
+
 
 const AddEventModal = () => {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
-  const { authToken, user } = React.useContext(MyContext);
-  const { person } = usePeople({ authToken });
+  const { user } = React.useContext(AuthContext);
+  const { person } = usePeople({});
   const [projectName, setProjectName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -33,8 +34,8 @@ const AddEventModal = () => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5555/api/projects",
+      const response = await axiosInstance.post(
+        "/projects",
         {
           name: projectName,
           description: description,
@@ -43,7 +44,6 @@ const AddEventModal = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -52,26 +52,16 @@ const AddEventModal = () => {
       const projectId = response.data?.id;
 
       if (projectId) {
-        await axios.post(
-          `http://localhost:5555/api/projects/${projectId}/join`,
+        await axiosInstance.post(
+          `/projects/${projectId}/join`,
           {},
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
         );
 
         await Promise.all(
           selectedParticipants.map(async (participantId) => {
-            return axios.post(
-              `http://localhost:5555/api/projects/${projectId}/join`,
+            return axiosInstance.post(
+              `/projects/${projectId}/join`,
               { user_id: participantId },
-              {
-                headers: {
-                  Authorization: `Bearer ${authToken}`,
-                },
-              }
             );
           })
         );

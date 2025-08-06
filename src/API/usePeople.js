@@ -1,7 +1,7 @@
 import React from 'react';
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
-const usePeople = ({ authToken } = {}) => {
+const usePeople = () => {
     const [person, setPerson] = React.useState([]);
     const [isLoadingTop, setIsLoadingTop] = React.useState(true);
 
@@ -9,11 +9,7 @@ const usePeople = ({ authToken } = {}) => {
         const fetchData = async () => {
             try {
                 setIsLoadingTop(true);
-                const res = await axios.get("http://localhost:5555/api/users?per_page=100", {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                });
+                const res = await axiosInstance.get("/users?per_page=100");
                 
                 const response = res.data;
                 const sortedData = response.data
@@ -30,11 +26,8 @@ const usePeople = ({ authToken } = {}) => {
                 setIsLoadingTop(false);
             }
         };
-        
-        if (authToken) {
-            fetchData();
-        }
-    }, [authToken]);
+        fetchData()
+    }, []);
     
     return { person, isLoadingTop };
 };

@@ -5,14 +5,13 @@ import "swiper/css/navigation";
 import "swiper/css/effect-flip";
 import { Navigation } from "swiper/modules";
 import Event from "./Event";
-import LoadEvent from "./Loading/loadingEvent";
 import useMyEvents from "../API/useMyEvents";
 import useEvent from "../API/useEvent";
-import { MyContext } from "../App";
+import { AuthContext } from "../context/AuthContext";
+import Loader from "../Component/Loader";
 
 const Slider = ({ eventCategory }) => {
-  const { authToken } = useContext(MyContext);
-
+  const {user} = useContext(AuthContext)
   const getEventStatus = (category) => {
     switch (category) {
       case "Активные конкурсы":
@@ -26,8 +25,8 @@ const Slider = ({ eventCategory }) => {
     }
   };
   const eventStatus = getEventStatus(eventCategory);
-  const { events, loading } = useEvent({ eventStatus, authToken });
-  const { myEvents: myEventsData, loading: myEventsLoading } = useMyEvents({authToken});
+  const { events, loading } = useEvent({ eventStatus});
+  const { myEvents: myEventsData, loading: myEventsLoading } = useMyEvents({user});
 
   return (
     <div className="sliderContainer">
@@ -54,11 +53,7 @@ const Slider = ({ eventCategory }) => {
         }}
       >
         {loading
-          ? Array.from({ length: 4 }).map((_, index) => (
-              <SwiperSlide key={index}>
-                <LoadEvent width="400px" height="200px" />
-              </SwiperSlide>
-            ))
+          ? <Loader/>
           : events.map((item) => (
               <SwiperSlide key={item.id}>
                 <Event

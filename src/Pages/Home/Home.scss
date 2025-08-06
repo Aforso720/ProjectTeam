@@ -17,25 +17,26 @@
         }
     
         .BannerImg {
-            height: 487px; 
-            object-fit: cover; 
+          height: 487px;
+          object-fit: cover;
+          width: 100%;
+          border-radius: 10px;
+
+          @media (max-width: 1400px) {
+            height: 350px;
+          }
+
+          @media (max-width: 800px) {
+            height: 250px;
+          }
         }
 
-    
         @media (max-width: 1400px) {
             height: 350px; 
-    
-            .BannerImg {
-                height: 350px; 
-            }
         }
 
         @media (max-width: 800px) {
             height: 250px; 
-    
-            .BannerImg {
-                height: 250px; 
-            }
         }
     }
   

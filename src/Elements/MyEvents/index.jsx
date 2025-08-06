@@ -1,20 +1,18 @@
 import React from 'react';
 import style from './MyEvents.module.scss';
 import useMyEvents from '../../API/useMyEvents';
-import LoadEvent from '../Loading/loadingEvent'; 
 import AddEventModal from './AddEventModal'
-import { MyContext } from '../../App';
+import { AuthContext } from '../../context/AuthContext';
+import Loader from '../../Component/Loader';
 
 const MyEvents = () => {
-  const { authToken , user } = React.useContext(MyContext);
-  const { myEvents, loading } = useMyEvents({authToken , user});
+  const { user } = React.useContext(AuthContext);
+  const { myEvents, loading } = useMyEvents({user});
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 8;
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = myEvents.slice(indexOfFirstItem, indexOfLastItem);
-
   const totalPages = Math.ceil(myEvents.length / itemsPerPage);
 
   const handleNextPage = () => {
@@ -41,11 +39,7 @@ const MyEvents = () => {
           <AddEventModal/>
         )}
 
-        {loading ? (
-          Array.from({ length: itemsPerPage }).map((_, index) => (
-            <LoadEvent width="400px" height="350px" key={index} />
-          ))
-        ) : (
+        {loading ? <Loader/> : (
           currentItems.map((item) => (
             <div className={style.card} key={item.id}>
               <img src={item.preview_image === null ? '/img/DefaultImage.png'  : item.preview_image  } alt='Проект' className={style.cardImage} />

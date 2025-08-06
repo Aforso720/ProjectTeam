@@ -1,7 +1,7 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 import React from "react";
 
-const useEvent = ({ status, authToken }) => {
+const useEvent = ({ status }) => {
   const [events, setEvents] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -9,11 +9,7 @@ const useEvent = ({ status, authToken }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:5555/api/events?per_page=100", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        const response = await axiosInstance.get("/events?per_page=100");
 
         const eventsData = response.data?.data || response.data;
 
@@ -35,7 +31,7 @@ const useEvent = ({ status, authToken }) => {
     };
 
     fetchData();
-  }, [status, authToken]);
+  }, [status]);
 
   return { events, loading };
 };

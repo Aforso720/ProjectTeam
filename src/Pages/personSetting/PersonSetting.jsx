@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./PersonSetting.scss";
-import { MyContext } from "../../App";
-import axios from "axios";
+import { PersonContext } from "../../context/PersonContext";
+import axiosInstance from "../../API/axiosInstance";
 
 const PersonSetting = () => {
   const {
     topPerson: initialPeople,
-    isloadingTop: initialPeopleLoad,
-    authToken,
-  } = React.useContext(MyContext);
+    isloadingTop: initialPeopleLoad
+  } = React.useContext(PersonContext);
   const [people, setPeople] = useState([]);
   const [filteredPeople, setFilteredPeople] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,14 +33,9 @@ const PersonSetting = () => {
         avatar: null,
       };
 
-      const response = await axios.post(
-        "http://localhost:5555/register",
+      const response = await axiosInstance.post(
+        "/register",
         payload,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
       );
 
       console.log("✅ Пользователь создан:", response.data);
@@ -120,15 +114,10 @@ const PersonSetting = () => {
   const handleSaveRating = async (id) => {
     try {
       const person = people.find((p) => p.id === id);
-      const response = await axios.put(
-        `http://localhost:5555/api/users/${id}`,
+      const response = await axiosInstance.put(
+        `/users/${id}`,
         {
           rating: person.rating,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
         }
       );
 
@@ -168,15 +157,10 @@ const PersonSetting = () => {
   const handleRoleChange = async (id, newRole) => {
     try {
       const isAdmin = newRole === "Админ";
-      await axios.put(
-        `http://localhost:5555/api/users/${id}`,
+      await axiosInstance.put(
+        `/users/${id}`,
         {
           is_admin: isAdmin,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
         }
       );
 
@@ -200,11 +184,7 @@ const PersonSetting = () => {
     );
     if (confirmation?.toLowerCase() === "да") {
       try {
-        await axios.delete(`http://localhost:5555/api/users/${id}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        await axiosInstance.delete(`/users/${id}`);
 
         setPeople((prev) => prev.filter((person) => person.id !== id));
         console.log(`Пользователь ${id} удален`);

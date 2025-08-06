@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import style from './Profile.module.scss';
-import { MyContext } from '../../App';
+import { AuthContext } from '../../context/AuthContext';
 
 const Profile = () => {
-    const { user } = React.useContext(MyContext);
+    const { user } = React.useContext(AuthContext);
     const [photoUrl, setPhotoUrl] = useState('/img/kot.jpg');
     const [isEditing, setIsEditing] = useState(false); 
     const [formData, setFormData] = useState({

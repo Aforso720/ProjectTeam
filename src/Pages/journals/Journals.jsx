@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,  } from "react";
 import { useNavigate } from "react-router";
 import Modal from "react-modal";
-import axios from "axios";
 import "./Journals.scss";
-import { MyContext } from "../../App";
 import Loader from "../../Component/Loader";
-import Table from "../tables/Table";
+import { AuthContext } from "../../context/AuthContext";
+import axiosInstance from "../../API/axiosInstance";
+// import Table from "../tables/Table";
 
 Modal.setAppElement("#root");
 
-const api = axios.create({
-  baseURL: "http://localhost:5555/api",
-});
-
 const Journals = () => {
-  const { authToken } = React.useContext(MyContext);
+  const { authToken } = React.useContext(AuthContext);
   const [active, setActive] = useState("all");
   const [journals, setJournals] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +25,8 @@ const Journals = () => {
   });
   const [availableParticipants, setAvailableParticipants] = useState([]);
 
-  const loadJournals = async (filterType = "all", page = 1) => {
+  React.useEffect(() => {
+  const fetchJournals = async () => {
     if (!authToken) {
       setError("Требуется авторизация");
       setLoading(false);
@@ -40,14 +37,12 @@ const Journals = () => {
       setLoading(true);
       setError(null);
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${authToken}`;
-
       const endpoint =
-        filterType === "all"
-          ? `/journals?per_page=8&page=${page}`
-          : `/journals?per_page=8&page=${page}&type=${filterType}`;
+        active === "all"
+          ? `/journals?per_page=8&page=${currentPage}`
+          : `/journals?per_page=8&page=${currentPage}&type=${active}`;
 
-      const response = await api.get(endpoint);
+      const response = await axiosInstance.get(endpoint);
 
       const formattedJournals = response.data.data.map((journal) => ({
         id: journal.id.toString(),
@@ -81,12 +76,9 @@ const Journals = () => {
     }
   };
 
-  useEffect(() => {
-    loadJournals("all");
-    return () => {
-      delete api.defaults.headers.common["Authorization"];
-    };
-  }, [authToken]);
+  fetchJournals();
+}, [authToken, active, currentPage]);
+
 
   const navigate = useNavigate();
 
@@ -124,9 +116,7 @@ const Journals = () => {
           })),
       };
 
-      const response = await api.post("/journals/", journalData);
-
-      console.log("Ответ от сервера:", response.data);
+      const response = await axiosInstance.post("/journals/", journalData);
 
       const created = response.data?.id ? response.data : response.data?.data;
 
@@ -144,7 +134,7 @@ const Journals = () => {
       };
 
       setJournals([...journals, newJournalEntry]);
-      setNewJournal({ type: "meets", title: "", attendees: [] });
+      setNewJournal({ type: "meeting", title: "", attendees: [] });
       setModalOpen(false);
     } catch (error) {
       console.error("Ошибка при создании журнала:", error);
@@ -157,7 +147,6 @@ const Journals = () => {
 
   const handlePageClick = (page) => {
     setCurrentPage(page);
-    loadJournals(active, page);
   };
 
   const handlePrevPage = () => {
@@ -190,7 +179,7 @@ const Journals = () => {
   //       participants,
   //     };
 
-  //     const response = await api.post("/journals/", journalData);
+  //     const response = await axiosInstance.post("/journals/", journalData);
 
   //     const newJournalEntry = {
   //       id: response.data.id.toString(),
@@ -208,7 +197,6 @@ const Journals = () => {
   const handleFilterClick = (type) => {
     setActive(type);
     setCurrentPage(1);
-    loadJournals(type, 1);
   };
 
   if (loading) return <Loader />;

@@ -1,20 +1,15 @@
 import React from 'react'
-import axios from 'axios'
+import axiosInstance from './axiosInstance';
 
-const useMyEvents = ({authToken , user }) => {
+const useMyEvents = ({ user }) => {
   const [myEvents , setMyEvents] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  // console.log(user)
 
   React.useEffect(()=>{
     const fetchData = async () =>{
         try{
           setLoading(true); 
-           const response = await axios.get(`http://localhost:5555/api/projects/by-user?user_id=${user.id}`, {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`
-                    }
-                });
+           const response = await axiosInstance.get(`/projects/by-user?user_id=${user.id}`);
           setMyEvents(response.data.data)
         }catch(error){
             // console.log("Произошла ошибка:" + error);

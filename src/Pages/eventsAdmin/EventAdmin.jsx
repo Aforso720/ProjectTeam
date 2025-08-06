@@ -1,14 +1,12 @@
 import React, { useContext, useState } from "react";
 import Modal from "react-modal";
 import "./EventAdmin.scss";
-import { MyContext } from "../../App";
-import axios from "axios";
+import axiosInstance from "../../API/axiosInstance";
 import Loader from "../../Component/Loader";
 
 Modal.setAppElement("#root");
 
 const EventAdmin = () => {
-  const { authToken } = useContext(MyContext);
   const [activeFilter, setActiveFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isParticipantModalOpen, setIsParticipantModalOpen] = useState(false);
@@ -35,13 +33,8 @@ const EventAdmin = () => {
   const fetchEvents = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `http://localhost:5555/api/events?page=${page}&per_page=5`,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        `/events?page=${page}&per_page=5`,
       );
 
       const result = response.data;
@@ -169,8 +162,8 @@ const EventAdmin = () => {
   if (!currentEvent) return;
 
   try {
-    const response = await axios.put(
-      `http://localhost:5555/api/events/${currentEvent.id}`,
+    const response = await axiosInstance.put(
+      `/events/${currentEvent.id}`,
       {
         title: eventData.title,
         description: eventData.description,
@@ -178,11 +171,6 @@ const EventAdmin = () => {
         status: currentEvent.status || "active",
         project_id: currentEvent.project_id || "4",
       },
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
     );
 
     const updatedEvent = response.data.data;
@@ -212,8 +200,8 @@ const EventAdmin = () => {
 
   const createEvent = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5555/api/events",
+      const response = await axiosInstance.post(
+        "/events",
         {
           title: eventData.title,
           description: eventData.description,
@@ -221,11 +209,6 @@ const EventAdmin = () => {
           status: "active", // или "finished"
           project_id: "4", // как в примере
         },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
       );
 
       const createdEvent = response.data.data;
