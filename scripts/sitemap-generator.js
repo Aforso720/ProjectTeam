@@ -61,82 +61,116 @@ async function fetchAllNews() {
   }
 }
 
-// Статические маршруты из вашего приложения
-const staticRoutes = [
-  { path: '/', priority: '1.0', changefreq: 'daily' },
-  { path: '/contests', priority: '0.8', changefreq: 'weekly' },
-  { path: '/about-us', priority: '0.7', changefreq: 'monthly' },
-  { path: '/members', priority: '0.6', changefreq: 'weekly' }
-];
+// Генерация sitemap для статических страниц
+function generateStaticSitemap(hostname) {
+  const staticRoutes = [
+    { path: '/', priority: '1.0', changefreq: 'daily' },
+    { path: '/contests', priority: '0.8', changefreq: 'weekly' },
+    { path: '/about-us', priority: '0.7', changefreq: 'monthly' },
+    { path: '/members', priority: '0.6', changefreq: 'weekly' }
+  ];
 
-// Генерация динамических маршрутов
-async function generateDynamicRoutes() {
-  console.log('🔄 Начинаем получение динамических данных...');
+  let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  sitemap += '<?xml-stylesheet type="text/xsl" href="' + hostname + '/sitemaps_xsl.xsl"?>\n';
+  sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   
-  try {
-    // Получаем события
-    const events = await fetchAllEvents();
-    const eventRoutes = events
-      .filter(event => event.id) // Фильтруем события с ID
-      .map(event => ({
-        path: `/events/${event.id}`,
-        priority: '0.8',
-        changefreq: 'weekly'
-      }));
-
-    // Получаем новости
-    const news = await fetchAllNews();
-    const newsRoutes = news
-      .filter(article => article.id) // Фильтруем новости с ID
-      .map(article => ({
-        path: `/news/${article.id}`,
-        priority: '0.7',
-        changefreq: 'weekly'
-      }));
-
-    console.log(`📊 Сформировано маршрутов для событий: ${eventRoutes.length}`);
-    console.log(`📊 Сформировано маршрутов для новостей: ${newsRoutes.length}`);
-
-    return [...eventRoutes, ...newsRoutes];
-  } catch (error) {
-    console.error('❌ Ошибка при формировании динамических маршрутов:', error);
-    return [];
-  }
+  staticRoutes.forEach(route => {
+    const urlPath = route.path === '/' ? '' : route.path;
+    sitemap += `  <url>\n`;
+    sitemap += `    <loc>${hostname}${urlPath}</loc>\n`;
+    sitemap += `    <changefreq>${route.changefreq}</changefreq>\n`;
+    sitemap += `    <priority>${route.priority}</priority>\n`;
+    sitemap += `  </url>\n`;
+  });
+  
+  sitemap += '</urlset>';
+  
+  return sitemap;
 }
 
-// Генерация sitemap
-async function generateSitemap() {
-  const hostname = 'http://gstouteam.dpdns.org';
+// Генерация sitemap для событий
+function generateEventsSitemap(events, hostname) {
+  let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  sitemap += '<?xml-stylesheet type="text/xsl" href="' + hostname + '/sitemaps_xsl.xsl"?>\n';
+  sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   
-  console.log('🚀 Начинаем генерацию sitemap...');
+  events.forEach(event => {
+    if (event.id) {
+      sitemap += `  <url>\n`;
+      sitemap += `    <loc>${hostname}/events/${event.id}</loc>\n`;
+      sitemap += `    <changefreq>weekly</changefreq>\n`;
+      sitemap += `    <priority>0.8</priority>\n`;
+      sitemap += `  </url>\n`;
+    }
+  });
+  
+  sitemap += '</urlset>';
+  
+  return sitemap;
+}
+
+// Генерация sitemap для новостей
+function generateNewsSitemap(news, hostname) {
+  let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  sitemap += '<?xml-stylesheet type="text/xsl" href="' + hostname + '/sitemaps_xsl.xsl"?>\n';
+  sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  
+  news.forEach(article => {
+    if (article.id) {
+      sitemap += `  <url>\n`;
+      sitemap += `    <loc>${hostname}/news/${article.id}</loc>\n`;
+      sitemap += `    <changefreq>weekly</changefreq>\n`;
+      sitemap += `    <priority>0.7</priority>\n`;
+      sitemap += `  </url>\n`;
+    }
+  });
+  
+  sitemap += '</urlset>';
+  
+  return sitemap;
+}
+
+// Генерация sitemap index
+function generateSitemapIndex(hostname) {
+  const now = new Date().toISOString();
+  
+  let sitemapIndex = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  sitemapIndex += '<?xml-stylesheet type="text/xsl" href="' + hostname + '/sitemaps_xsl.xsl"?>\n';
+  sitemapIndex += '<sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ';
+  sitemapIndex += 'xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" ';
+  sitemapIndex += 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  
+  sitemapIndex += `<sitemap>\n`;
+  sitemapIndex += `  <loc>${hostname}/page-sitemap.xml</loc>\n`;
+  sitemapIndex += `  <lastmod>${now}</lastmod>\n`;
+  sitemapIndex += `</sitemap>\n`;
+  
+  sitemapIndex += `<sitemap>\n`;
+  sitemapIndex += `  <loc>${hostname}/events-sitemap.xml</loc>\n`;
+  sitemapIndex += `  <lastmod>${now}</lastmod>\n`;
+  sitemapIndex += `</sitemap>\n`;
+  
+  sitemapIndex += `<sitemap>\n`;
+  sitemapIndex += `  <loc>${hostname}/news-sitemap.xml</loc>\n`;
+  sitemapIndex += `  <lastmod>${now}</lastmod>\n`;
+  sitemapIndex += `</sitemap>\n`;
+  
+  sitemapIndex += '</sitemapindex>';
+  
+  return sitemapIndex;
+}
+
+// Основная функция генерации
+async function generateSitemap() {
+  const hostname = 'http://gstouteam.dpdns.org'; // ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ ДОМЕН
+  
+  console.log('🚀 Начинаем генерацию sitemap в формате Victorious...');
   console.log(`🌐 Домен: ${hostname}`);
   
   try {
-    // Получаем динамические маршруты
-    const dynamicRoutes = await generateDynamicRoutes();
-    
-    // Объединяем все маршруты
-    const allRoutes = [...staticRoutes, ...dynamicRoutes];
-    
-    // Создаем XML
-    let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
-    sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-    
-    allRoutes.forEach((route, index) => {
-      const urlPath = route.path === '/' ? '' : route.path;
-      sitemap += `  <url>\n`;
-      sitemap += `    <loc>${hostname}${urlPath}</loc>\n`;
-      sitemap += `    <changefreq>${route.changefreq}</changefreq>\n`;
-      sitemap += `    <priority>${route.priority}</priority>\n`;
-      sitemap += `  </url>\n`;
-      
-      // Прогресс каждые 20 элементов
-      if ((index + 1) % 20 === 0 || index === allRoutes.length - 1) {
-        console.log(`📈 Обработано: ${index + 1}/${allRoutes.length} страниц`);
-      }
-    });
-    
-    sitemap += '</urlset>';
+    // Получаем данные
+    const events = await fetchAllEvents();
+    const news = await fetchAllNews();
     
     // Создаем директорию если её нет
     const publicDir = path.join(__dirname, '../public');
@@ -144,22 +178,36 @@ async function generateSitemap() {
       fs.mkdirSync(publicDir, { recursive: true });
     }
     
-    // Сохраняем файл
-    const outputPath = path.join(publicDir, 'sitemap.xml');
-    fs.writeFileSync(outputPath, sitemap);
+    // Генерируем отдельные sitemap файлы
+    const staticSitemap = generateStaticSitemap(hostname);
+    const eventsSitemap = generateEventsSitemap(events, hostname);
+    const newsSitemap = generateNewsSitemap(news, hostname);
+    const sitemapIndex = generateSitemapIndex(hostname);
     
-    console.log('\n✅ Sitemap успешно сгенерирован!');
-    console.log(`📁 Путь: ${outputPath}`);
-    console.log(`🔗 URL: ${hostname}/sitemap.xml`);
-    console.log(`📊 Всего страниц: ${allRoutes.length}`);
+    // Сохраняем файлы
+    const files = [
+      { name: 'sitemap.xml', content: sitemapIndex },
+      { name: 'page-sitemap.xml', content: staticSitemap },
+      { name: 'events-sitemap.xml', content: eventsSitemap },
+      { name: 'news-sitemap.xml', content: newsSitemap }
+    ];
     
-    // Детальная статистика
-    const staticCount = staticRoutes.length;
-    const dynamicCount = dynamicRoutes.length;
+    files.forEach(file => {
+      const outputPath = path.join(publicDir, file.name);
+      fs.writeFileSync(outputPath, file.content);
+      console.log(`✅ Создан файл: ${file.name}`);
+    });
+    
+    console.log('\n✅ Все sitemap файлы успешно сгенерированы!');
+    console.log(`📁 Файлы сохранены в: ${publicDir}`);
+    console.log(`🔗 Основной sitemap: ${hostname}/sitemap.xml`);
+    
+    // Статистика
     console.log(`\n📈 Статистика:`);
-    console.log(`   📄 Статических страниц: ${staticCount}`);
-    console.log(`   🔄 Динамических страниц: ${dynamicCount}`);
-    console.log(`   🌐 Общее количество: ${allRoutes.length}`);
+    console.log(`   📄 Статических страниц: 4`);
+    console.log(`   🔄 Событий: ${events.length}`);
+    console.log(`   📰 Новостей: ${news.length}`);
+    console.log(`   📂 Всего файлов: ${files.length}`);
     
   } catch (error) {
     console.error('\n❌ Критическая ошибка при генерации sitemap:', error);
@@ -177,12 +225,11 @@ if (require.main === module) {
 
 Опции:
   --help, -h    Показать помощь
-  --verbose     Подробный вывод
   --domain      Указать домен (например: --domain http://mysite.ru)
 
 Примеры:
   node sitemap-generator.js
-  node sitemap-generator.js --domain http://mysite.ru
+  node sitemap-generator.js --domain https://ваш-сайт.рф
     `);
     process.exit(0);
   }
