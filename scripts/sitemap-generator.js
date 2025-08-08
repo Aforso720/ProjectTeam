@@ -61,25 +61,34 @@ async function fetchAllNews() {
   }
 }
 
-// Генерация sitemap для статических страниц
+// Генерация sitemap для статических страниц (в формате Victorious)
 function generateStaticSitemap(hostname) {
-  const staticRoutes = [
-    { path: '/', priority: '1.0', changefreq: 'daily' },
-    { path: '/contests', priority: '0.8', changefreq: 'weekly' },
-    { path: '/about-us', priority: '0.7', changefreq: 'monthly' },
-    { path: '/members', priority: '0.6', changefreq: 'weekly' }
-  ];
-
+  const now = new Date().toISOString();
+  
   let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  sitemap += '<?xml-stylesheet type="text/xsl" href="' + hostname + '/sitemaps_xsl.xsl"?>\n';
   sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   
-  staticRoutes.forEach(route => {
-    const urlPath = route.path === '/' ? '' : route.path;
+  // Главная страница
+  sitemap += `  <url>\n`;
+  sitemap += `    <loc>${hostname}/</loc>\n`;
+  sitemap += `    <lastmod>${now}</lastmod>\n`;
+  sitemap += `    <changefreq>daily</changefreq>\n`;
+  sitemap += `    <priority>1.0</priority>\n`;
+  sitemap += `  </url>\n`;
+  
+  // Другие статические страницы
+  const staticPages = [
+    { path: '/contests', changefreq: 'weekly', priority: '0.8' },
+    { path: '/about-us', changefreq: 'monthly', priority: '0.7' },
+    { path: '/members', changefreq: 'weekly', priority: '0.6' }
+  ];
+  
+  staticPages.forEach(page => {
     sitemap += `  <url>\n`;
-    sitemap += `    <loc>${hostname}${urlPath}</loc>\n`;
-    sitemap += `    <changefreq>${route.changefreq}</changefreq>\n`;
-    sitemap += `    <priority>${route.priority}</priority>\n`;
+    sitemap += `    <loc>${hostname}${page.path}</loc>\n`;
+    sitemap += `    <lastmod>${now}</lastmod>\n`;
+    sitemap += `    <changefreq>${page.changefreq}</changefreq>\n`;
+    sitemap += `    <priority>${page.priority}</priority>\n`;
     sitemap += `  </url>\n`;
   });
   
@@ -88,18 +97,24 @@ function generateStaticSitemap(hostname) {
   return sitemap;
 }
 
-// Генерация sitemap для событий
+// Генерация sitemap для событий (в формате Victorious)
 function generateEventsSitemap(events, hostname) {
   let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  sitemap += '<?xml-stylesheet type="text/xsl" href="' + hostname + '/sitemaps_xsl.xsl"?>\n';
   sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  
+  // Главная страница событий
+  const now = new Date().toISOString();
+  sitemap += `  <url>\n`;
+  sitemap += `    <loc>${hostname}/contests</loc>\n`;
+  sitemap += `    <lastmod>${now}</lastmod>\n`;
+  sitemap += `  </url>\n`;
   
   events.forEach(event => {
     if (event.id) {
+      const lastmod = event.updated_at || event.created_at || now;
       sitemap += `  <url>\n`;
       sitemap += `    <loc>${hostname}/events/${event.id}</loc>\n`;
-      sitemap += `    <changefreq>weekly</changefreq>\n`;
-      sitemap += `    <priority>0.8</priority>\n`;
+      sitemap += `    <lastmod>${new Date(lastmod).toISOString()}</lastmod>\n`;
       sitemap += `  </url>\n`;
     }
   });
@@ -109,18 +124,24 @@ function generateEventsSitemap(events, hostname) {
   return sitemap;
 }
 
-// Генерация sitemap для новостей
+// Генерация sitemap для новостей (в формате Victorious)
 function generateNewsSitemap(news, hostname) {
   let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  sitemap += '<?xml-stylesheet type="text/xsl" href="' + hostname + '/sitemaps_xsl.xsl"?>\n';
   sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  
+  // Главная страница новостей (если есть)
+  const now = new Date().toISOString();
+  sitemap += `  <url>\n`;
+  sitemap += `    <loc>${hostname}/</loc>\n`;
+  sitemap += `    <lastmod>${now}</lastmod>\n`;
+  sitemap += `  </url>\n`;
   
   news.forEach(article => {
     if (article.id) {
+      const lastmod = article.updated_at || article.created_at || now;
       sitemap += `  <url>\n`;
       sitemap += `    <loc>${hostname}/news/${article.id}</loc>\n`;
-      sitemap += `    <changefreq>weekly</changefreq>\n`;
-      sitemap += `    <priority>0.7</priority>\n`;
+      sitemap += `    <lastmod>${new Date(lastmod).toISOString()}</lastmod>\n`;
       sitemap += `  </url>\n`;
     }
   });
@@ -130,12 +151,11 @@ function generateNewsSitemap(news, hostname) {
   return sitemap;
 }
 
-// Генерация sitemap index
+// Генерация sitemap index (в формате Victorious)
 function generateSitemapIndex(hostname) {
   const now = new Date().toISOString();
   
   let sitemapIndex = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  sitemapIndex += '<?xml-stylesheet type="text/xsl" href="' + hostname + '/sitemaps_xsl.xsl"?>\n';
   sitemapIndex += '<sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ';
   sitemapIndex += 'xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" ';
   sitemapIndex += 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
@@ -204,7 +224,7 @@ async function generateSitemap() {
     
     // Статистика
     console.log(`\n📈 Статистика:`);
-    console.log(`   📄 Статических страниц: 4`);
+    console.log(`   📄 Статических страниц: 4 (включая главную)`);
     console.log(`   🔄 Событий: ${events.length}`);
     console.log(`   📰 Новостей: ${news.length}`);
     console.log(`   📂 Всего файлов: ${files.length}`);
