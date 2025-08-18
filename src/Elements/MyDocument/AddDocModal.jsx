@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import style from "./MyDocument.module.scss";
+// import axiosInstance from "../../API/axiosInstance";
 import axios from "axios";
 
 const DocumentModal = ({ onDocumentAdded }) => {
@@ -92,7 +93,6 @@ const DocumentModal = ({ onDocumentAdded }) => {
 
         console.log("Данные успешно отправлены:", response.data);
         closeModal();
-        // Вызываем функцию обновления после успешного создания
         if (onDocumentAdded) {
           onDocumentAdded();
         }
@@ -106,7 +106,7 @@ const DocumentModal = ({ onDocumentAdded }) => {
     };
 
     submitData();
-  }, [shouldSubmit]);
+  }, [shouldSubmit,myDocumObj , onDocumentAdded ]);
 
  const customStyles = {
   content: {

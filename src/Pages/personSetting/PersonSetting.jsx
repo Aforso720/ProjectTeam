@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./PersonSetting.scss";
-import { PersonContext } from "../../context/PersonContext";
+import usePeople from "../../API/usePeople";
 import axiosInstance from "../../API/axiosInstance";
+import Loader from '../../Component/Loader'
 
 const PersonSetting = () => {
-  const {
-    topPerson: initialPeople,
-    isloadingTop: initialPeopleLoad
-  } = React.useContext(PersonContext);
+  const { person: initialPeople, isLoadingTop: initialPeopleLoad } =
+    usePeople();
   const [people, setPeople] = useState([]);
   const [filteredPeople, setFilteredPeople] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +16,7 @@ const PersonSetting = () => {
     name: "",
     group: "",
     phone: "",
+    email: "", // Добавь это поле
     role: "Стандарт",
   });
   const [error, setError] = useState(null);
@@ -31,12 +31,11 @@ const PersonSetting = () => {
         is_admin: newUser.role === "Админ",
         group: newUser.group || null,
         avatar: null,
+        phone: newUser.phone, // Добавь это
+        email: newUser.email, // Добавь это
       };
 
-      const response = await axiosInstance.post(
-        "/register",
-        payload,
-      );
+      const response = await axiosInstance.post("/register", payload);
 
       console.log("✅ Пользователь создан:", response.data);
 
@@ -54,6 +53,7 @@ const PersonSetting = () => {
         name: "",
         group: "",
         phone: "",
+        email: "", // Добавь это
         role: "Стандарт",
         firstName: "",
         lastName: "",
@@ -114,12 +114,9 @@ const PersonSetting = () => {
   const handleSaveRating = async (id) => {
     try {
       const person = people.find((p) => p.id === id);
-      const response = await axiosInstance.put(
-        `/users/${id}`,
-        {
-          rating: person.rating,
-        }
-      );
+      const response = await axiosInstance.put(`/users/${id}`, {
+        rating: person.rating,
+      });
 
       console.log(`Рейтинг пользователя ${id} обновлен`, response.data);
 
@@ -157,12 +154,9 @@ const PersonSetting = () => {
   const handleRoleChange = async (id, newRole) => {
     try {
       const isAdmin = newRole === "Админ";
-      await axiosInstance.put(
-        `/users/${id}`,
-        {
-          is_admin: isAdmin,
-        }
-      );
+      await axiosInstance.put(`/users/${id}`, {
+        is_admin: isAdmin,
+      });
 
       setPeople((prev) =>
         prev.map((person) =>
@@ -198,6 +192,8 @@ const PersonSetting = () => {
       console.log("Удаление отменено");
     }
   };
+
+  if(initialPeopleLoad) return <Loader/>
 
   return (
     <section className="person-setting">
@@ -320,14 +316,14 @@ const PersonSetting = () => {
 
             <div className="input-row">
               <div>
-                <label>Группа</label>
+                <label>Email</label>
                 <input
-                  type="text"
-                  value={newUser.group}
+                  type="email"
+                  value={newUser.email}
                   onChange={(e) =>
-                    setNewUser({ ...newUser, group: e.target.value })
+                    setNewUser({ ...newUser, email: e.target.value })
                   }
-                  placeholder="ПИ-22-1"
+                  placeholder="example@domain.com"
                 />
               </div>
               <div>
@@ -344,6 +340,17 @@ const PersonSetting = () => {
             </div>
 
             <div className="input-row">
+              <div>
+                <label>Группа</label>
+                <input
+                  type="text"
+                  value={newUser.group}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, group: e.target.value })
+                  }
+                  placeholder="ПИ-22-1"
+                />
+              </div>
               <div>
                 <label>Статус</label>
                 <select

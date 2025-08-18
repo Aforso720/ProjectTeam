@@ -4,7 +4,7 @@ import style from "./Card.module.scss";
 const Card = ({ first_name, image, position, extraClass, group }) => {
   return (
     <article className={`${style.Card} ${extraClass}`}>
-      <img src="img/kot.jpg" loading="lazy" alt="Card" />
+      <img src="img/kot.webp" loading="lazy" alt="Card" />
       <span>
         <b>{position}</b>st
       </span>

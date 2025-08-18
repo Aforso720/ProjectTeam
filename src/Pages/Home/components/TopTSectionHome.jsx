@@ -1,10 +1,10 @@
 import React from 'react'
 import Loader from '../../../Component/Loader'
 import CardsTop from './CardsTop'
-import { PersonContext } from '../../../context/PersonContext'
+import usePerson from '../../../API/usePerson'
 
 const TopTSectionHome = () => {
-    const { isloadingPersHome } = React.useContext(PersonContext);
+  const { isloading: isloadingPersHome } = usePerson({ amount: 3});
   return (
     <section className="TopT">
         <h2>Лидеры рейтинга</h2>

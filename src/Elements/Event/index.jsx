@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router';
-import style from './Event.module.scss';
+import { useNavigate } from "react-router";
+import style from "./Event.module.scss";
 
 const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
   const navigate = useNavigate();
@@ -9,19 +9,20 @@ const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
   };
 
   const truncateDescription = (text, wordLimit = 8) => {
+    if (!text || typeof text !== "string") return ""; 
     const words = text.trim().split(/\s+/);
     if (words.length <= wordLimit) return text;
-    return words.slice(0, wordLimit).join(' ') + '...';
+    return words.slice(0, wordLimit).join(" ") + "...";
   };
 
   return (
-    <article 
-      className={`${style.swiperSlide} ${contMyEvent} ${homeEvent}`} 
+    <article
+      className={`${style.swiperSlide} ${contMyEvent} ${homeEvent}`}
       onClick={handleClick}
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: "pointer" }}
     >
       <img
-        src={image === null ? image : '/img/DefaultImage.png'}
+        src={image === null ? image : "/img/DefaultImage.webp"}
         alt="Slide 1"
         className={style.SliderImg}
       />

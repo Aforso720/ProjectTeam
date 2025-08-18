@@ -12,7 +12,7 @@ const EventsSectionHome = () => {
           <div className="myContestsMobile">
             <div className="mobileHeader">Мои конкурсы</div>
             <div className="sliderMyContests">
-              <Slider section="my-contests" />
+              <Slider eventCategory='myProject' />
             </div>
           </div>
         )}

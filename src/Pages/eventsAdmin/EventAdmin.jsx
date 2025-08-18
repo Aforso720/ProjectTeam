@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import "./EventAdmin.scss";
 import axiosInstance from "../../API/axiosInstance";
@@ -20,21 +20,54 @@ const EventAdmin = () => {
     startDate: "",
     endDate: "",
     description: "",
+    previewImage: null,
+    status: "active", // 👈 новое поле
     participants: [
       { id: 1, name: "Эльдарханов Абдул-Малик", selected: false },
       { id: 2, name: "Алаудинов Илисхан", selected: true },
     ],
   });
+
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+
+  const handleDeleteEvent = async (eventId) => {
+    const ok = window.confirm("Удалить мероприятие?");
+    if (!ok) return;
+    try {
+      setDeletingId(eventId);
+      await axiosInstance.delete(`/events/${eventId}`);
+
+      // если на странице оставался один элемент — уходим на предыдущую страницу
+      if (events.length === 1 && currentPage > 1) {
+        setCurrentPage((p) => p - 1);
+      } else {
+        await fetchEvents(currentPage);
+      }
+    } catch (error) {
+      console.error("Не удалось удалить:", error.response?.data || error);
+      alert(error.response?.data?.message || "Ошибка при удалении");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day} 00:00:00`; // сервер ждёт время обязательно
+  };
 
   const fetchEvents = async (page = 1) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/events?page=${page}&per_page=5`,
+        `/events?page=${page}&per_page=5`
       );
 
       const result = response.data;
@@ -76,10 +109,11 @@ const EventAdmin = () => {
     setEventData({
       type: event.type,
       title: event.title,
-      startDate: event.date.split("T")[0],
-      endDate: event.date.split("T")[0], // или используйте реальную дату окончания
+      startDate: event.start_date.split(" ")[0], // YYYY-MM-DD
+      endDate: event.end_date.split(" ")[0],
+      status: event.status,
       description: event.description,
-      participants: eventData.participants, // или реальные участники события
+      participants: event.participants || [],
     });
   };
 
@@ -135,6 +169,73 @@ const EventAdmin = () => {
     }));
   };
 
+  const updateEvent = async () => {
+    if (!currentEvent) return;
+
+    try {
+      const payload = {
+        title: eventData.title,
+        description: eventData.description,
+        start_date: formatDateTime(eventData.startDate),
+        end_date: formatDateTime(eventData.endDate),
+        status: eventData.status,
+        project_id: currentEvent.project_id || 4,
+      };
+
+      const response = await axiosInstance.put(
+        `/events/${currentEvent.id}`,
+        payload
+      );
+
+      const updatedEvent = response.data.data;
+      console.log("Обновлено мероприятие:", updatedEvent);
+
+      setEvents((prev) =>
+        prev.map((event) =>
+          event.id === updatedEvent.id ? updatedEvent : event
+        )
+      );
+
+      setIsViewModalOpen(false);
+      setIsEditMode(false);
+      setCurrentEvent(null);
+    } catch (error) {
+      console.error(
+        "Ошибка при обновлении мероприятия:",
+        error.response?.data || error
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    fetchEvents(currentPage);
+  }, [currentPage]);
+
+  const createEvent = async () => {
+    try {
+      const payload = {
+        title: eventData.title,
+        description: eventData.description,
+        start_date: formatDateTime(eventData.startDate),
+        end_date: formatDateTime(eventData.endDate),
+        status: eventData.status, // "active" или "completed"
+        project_id: 2,
+      };
+
+      // Если нужно изображение — тогда FormData + append, но сначала проверим без
+      const response = await axiosInstance.post("/events", payload);
+
+      const createdEvent = response.data.data;
+      console.log("Создано мероприятие:", createdEvent);
+      await fetchEvents(currentPage);
+    } catch (error) {
+      console.error(
+        "Ошибка при создании мероприятия:",
+        error.response?.data || error
+      );
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -158,66 +259,7 @@ const EventAdmin = () => {
     });
   };
 
-  const updateEvent = async () => {
-  if (!currentEvent) return;
-
-  try {
-    const response = await axiosInstance.put(
-      `/events/${currentEvent.id}`,
-      {
-        title: eventData.title,
-        description: eventData.description,
-        date: `${eventData.startDate} 00:00:00`,
-        status: currentEvent.status || "active",
-        project_id: currentEvent.project_id || "4",
-      },
-    );
-
-    const updatedEvent = response.data.data;
-    console.log("Обновлено мероприятие:", updatedEvent);
-
-    setEvents((prev) =>
-      prev.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
-    );
-
-    setIsViewModalOpen(false);
-    setIsEditMode(false);
-    setCurrentEvent(null);
-  } catch (error) {
-    if (error.response) {
-      console.error("Ошибка при обновлении мероприятия:", error.response.data);
-      alert(JSON.stringify(error.response.data.errors || error.response.data, null, 2));
-    } else {
-      console.error("Ошибка:", error);
-    }
-  }
-};
-
-
-  React.useEffect(() => {
-    fetchEvents(currentPage);
-  }, [currentPage]);
-
-  const createEvent = async () => {
-    try {
-      const response = await axiosInstance.post(
-        "/events",
-        {
-          title: eventData.title,
-          description: eventData.description,
-          date: eventData.startDate, // предполагаем что это дата мероприятия
-          status: "active", // или "finished"
-          project_id: "4", // как в примере
-        },
-      );
-
-      const createdEvent = response.data.data;
-      console.log("Создано мероприятие:", createdEvent);
-      setEvents((prev) => [createdEvent, ...prev]); // добавим в начало списка
-    } catch (error) {
-      console.error("Ошибка при создании мероприятия:", error);
-    }
-  };
+  if (loading) return <Loader />;
 
   return (
     <section className="event-admin">
@@ -258,8 +300,22 @@ const EventAdmin = () => {
           <div>Добавить</div>
         </div>
 
-        {filteredEvents.map((event) => (
+        {events.map((event) => (
           <div key={event.id} className="event-card">
+            {/* Кнопка удаления */}
+            <button
+              className="event-delete"
+              aria-label="Удалить мероприятие"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteEvent(event.id);
+              }}
+              disabled={deletingId === event.id}
+              title="Удалить"
+            >
+              <img src="/img/DeleteCor.svg" alt="" />
+            </button>
+
             <div
               className="event-image"
               style={{ backgroundImage: `url(${event.preview_image})` }}
@@ -269,8 +325,10 @@ const EventAdmin = () => {
               {event.description && <p>{event.description}</p>}
               <div className="event-footer">
                 <span className="event-date">
-                  {new Date(event.date).toLocaleDateString("ru-RU")}
+                  {new Date(event.start_date).toLocaleDateString("ru-RU")} –{" "}
+                  {new Date(event.end_date).toLocaleDateString("ru-RU")}
                 </span>
+
                 <div className="event-actions">
                   <button
                     className="view-btn"
@@ -292,24 +350,31 @@ const EventAdmin = () => {
       </div>
 
       <ul className="paginationEvents">
-        <li onClick={handlePrevPage}>
-          <img src="/img/arrow-circle-left.png" alt="arrow" />
+        <li
+          onClick={handlePrevPage}
+          className={currentPage === 1 ? "disabled" : ""}
+        >
+          <img src="/img/arrow-circle-left.png" alt="Назад" />
         </li>
-        {loading ? (
-          <Loader />
-        ) : (
-          Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <li
-              key={page}
-              onClick={() => handlePageClick(page)}
-              className={currentPage === page ? "active_page" : ""}
-            >
-              {page}
-            </li>
-          ))
-        )}
-        <li onClick={handleNextPage}>
-          <img src="/img/arrow-circle-left.png" alt="arrow" />
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <li
+            key={page}
+            onClick={() => handlePageClick(page)}
+            className={currentPage === page ? "active_page" : ""}
+          >
+            {page}
+          </li>
+        ))}
+
+        <li
+          onClick={handleNextPage}
+          className={currentPage === totalPages ? "disabled" : ""}
+        >
+          <img
+            src="/img/arrow-circle-right.png" // 👉 картинка вперёд
+            alt="Вперёд"
+          />
         </li>
       </ul>
 
@@ -387,6 +452,36 @@ const EventAdmin = () => {
               className="modal-textarea"
               placeholder="Введите описание мероприятия"
             />
+          </div>
+
+          <div className="modal-section">
+            <h3>Превью мероприятия</h3>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) =>
+                setEventData((prev) => ({
+                  ...prev,
+                  previewImage: e.target.files[0],
+                }))
+              }
+            />
+            {eventData.previewImage && (
+              <p>Выбран файл: {eventData.previewImage.name}</p>
+            )}
+          </div>
+
+          <div className="modal-section">
+            <h3>Статус</h3>
+            <select
+              name="status"
+              value={eventData.status}
+              onChange={handleInputChange}
+              className="modal-input"
+            >
+              <option value="active">Активное</option>
+              <option value="completed">Завершённое</option>
+            </select>
           </div>
 
           <div className="modal-section">
@@ -603,6 +698,36 @@ const EventAdmin = () => {
             </div>
 
             <div className="modal-section">
+              <h3>Превью мероприятия</h3>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) =>
+                  setEventData((prev) => ({
+                    ...prev,
+                    previewImage: e.target.files[0],
+                  }))
+                }
+              />
+              {eventData.previewImage && (
+                <p>Выбран файл: {eventData.previewImage.name}</p>
+              )}
+            </div>
+
+            <div className="modal-section">
+              <h3>Статус</h3>
+              <select
+                name="status"
+                value={eventData.status}
+                onChange={handleInputChange}
+                className="modal-input"
+              >
+                <option value="active">Активное</option>
+                <option value="completed">Завершённое</option>
+              </select>
+            </div>
+
+            <div className="modal-section">
               <h3>Участники</h3>
               <div className="participants-list">
                 {eventData.participants
@@ -662,7 +787,11 @@ const EventAdmin = () => {
               <div className="modal-section">
                 <h3>Дата проведения</h3>
                 <p>
-                  {new Date(currentEvent?.date).toLocaleDateString("ru-RU")}
+                  {new Date(currentEvent?.start_date).toLocaleDateString(
+                    "ru-RU"
+                  )}{" "}
+                  –{" "}
+                  {new Date(currentEvent?.end_date).toLocaleDateString("ru-RU")}
                 </p>
               </div>
             </div>

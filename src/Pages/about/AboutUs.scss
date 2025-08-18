@@ -537,96 +537,116 @@
       }
 
       .infoAbout {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 400px;
-        margin-bottom: 20px;
-        // background-image: url("fon.png");
-        margin-left: 40px;
-          
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  margin-bottom: 20px;
+  // background-image: url("fon.png");
+  margin-left: 40px;
 
-        @media (max-width: 800px) and (min-width: 320px) {
-          transform: translateX(1.5em);
-        } 
+  @media (max-width: 800px) and (min-width: 320px) {
+    transform: translateX(1.5em);
+  } 
 
-        h2 {
-          color: #4b1218;
-          width: 260px;
-          height: 90px;
-          font-size: 64px;
-          margin-bottom: 13px;
+  h2 {
+    color: #4b1218;
+    width: 260px;
+    height: 90px;
+    font-size: 64px;
+    margin-bottom: 13px;
 
-          @media (max-width: 1500px) {
-              font-size: 54px;
-          }
+    @media (max-width: 1500px) {
+      font-size: 54px;
+    }
 
-          @media (max-width: 1300px) {
-            font-size: 44px;
-            transform: translateY(0.5em);
-          }
+    @media (max-width: 1300px) {
+      font-size: 44px;
+      transform: translateY(0.5em);
+    }
 
-          @media (max-width: 1000px) {
-            font-size: 34px;
-            transform: translateY(1.5em);
-          }
+    @media (max-width: 1000px) {
+      font-size: 34px;
+      transform: translateY(1.5em);
+    }
 
-          @media (max-width: 900px) {
-            font-size: 34px;
-            transform: translateY(1em);
-          }
-        }
+    @media (max-width: 900px) {
+      font-size: 34px;
+      transform: translateY(1em);
+    }
+  }
 
-        li {
-          display: flex;
-          justify-content: start;
-          align-items: center;
-          text-align: start;
-          width: 488px;
-          height: 72px;
-          background-color: #4B12184D;
-          border-radius: 15px;
-          padding: 13px;
-          color: white;
-          font-family: Calibri sans-serif;
-          font-weight: bold;
-          font-size: 32px;
-          margin-bottom: 15px;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
 
-          @media (max-width: 1500px) {
-            font-size: 28px;
-            width: 358px;
-            height: 72px;
-          }
+    div {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      width: 488px;
+      height: 72px;
+      background-color: #4B12184D;
+      border-radius: 15px;
+      padding: 13px;
+      font-family: Calibri, sans-serif;
+      font-weight: bold;
+      font-size: 32px;
+      color: white;
 
-          @media (max-width: 1300px) {
-            font-size: 24px;
-            width: 258px;
-            height: 52px;
-          }
+      label {
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
 
-          @media (max-width: 1000px) {
-            font-size: 20px;
-            width: 208px;
-            height: 42px;
-            transform: translateX(-1.5em);
-          }
+      input {
+        border: none;
+        background: transparent;
+        color: white;
+        font-family: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+        width: 100%;
+        outline: none;
+      }
 
-          @media (max-width: 900px) {
-            font-size: 18px;
-            width: 250px;
-            height: 42px;
-            text-align: center;
-          }
-        }
+      @media (max-width: 1500px) {
+        font-size: 28px;
+        width: 358px;
+        height: 72px;
+      }
 
-        ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
+      @media (max-width: 1300px) {
+        font-size: 24px;
+        width: 258px;
+        height: 52px;
+      }
+
+      @media (max-width: 1000px) {
+        font-size: 20px;
+        width: 208px;
+        height: 42px;
+        transform: translateX(-1.5em);
+      }
+
+      @media (max-width: 900px) {
+        font-size: 18px;
+        width: 250px;
+        height: 42px;
+        text-align: center;
+
+        label {
+          display: none; // можно скрыть текст label на очень маленьких экранах
         }
       }
+    }
+  }
+      }
+
     }
 
     @media screen and (max-width: 900px){ 

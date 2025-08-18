@@ -1,6 +1,6 @@
 // useDocument.js
 import React from 'react';
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
 const useDocument = () => {
     const [myDocument, setMyDocument] = React.useState([]);
@@ -9,7 +9,7 @@ const useDocument = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('https://67b9c5be51192bd378de636d.mockapi.io/MyDocument');
+            const response = await axiosInstance.get('/certificates');
             setMyDocument(response.data);
         } catch (error) {
             console.log("Произошла ошибка:" + error);

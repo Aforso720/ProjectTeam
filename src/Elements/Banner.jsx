@@ -5,11 +5,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-flip";
 import { Navigation } from "swiper/modules";
-import { ContentContext } from "../context/ContentContext";
+import usePosts from "../API/usePosts";
 
 const Banner = () => {
-  const { news } = React.useContext(ContentContext);
-  console.log(news);
+  const { data: news  } = usePosts();
   const navigate = useNavigate();
 
   const handleSlideClick = (eventId) => {
@@ -49,21 +48,21 @@ const Banner = () => {
           },
         }}
       >
-        {news.map((item) => (
+        {news?.map((item) => (
           <SwiperSlide
             key={item.id}
             onClick={() => handleSlideClick(item.id)}
             style={{ cursor: "pointer" }}
           >
             <img
-              src={item.image ? item.image : "/img/image2.png"}
+              src={item.image ? item.image : "/img/image2.webp"}
               alt="Слайд"
               width="1440"
               height="487"
               style={{ width: "100%", borderRadius: "10px" }}
               className="BannerImg"
               loading="eager"
-              fetchpriority="high"
+              fetchPriority="high"
             />
           </SwiperSlide>
         ))}

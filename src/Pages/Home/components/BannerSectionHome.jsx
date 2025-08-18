@@ -1,14 +1,14 @@
 import React from 'react'
 import Loader from '../../../Component/Loader';
 import Banner from '../../../Elements/Banner';
-import { ContentContext } from '../../../context/ContentContext';
+import usePosts from '../../../API/usePosts';
 
 const BannerSectionHome = () => {
-    const { loadingMyNews } = React.useContext(ContentContext);
+ const {date: isLoading } = usePosts()
     
   return (
      <section className="Banner">
-        {loadingMyNews ? <Loader /> : <Banner />}
+        {isLoading ? <Loader /> : <Banner />}
       </section>
   )
 }

@@ -1,8 +1,9 @@
 import React from "react";
-import { PersonContext } from "../../../context/PersonContext";
+import usePerson from "../../../API/usePerson";
 import Card from "../../../Elements/Card";
 const CardsTop = () => {
-  const { homePerson } = React.useContext(PersonContext);
+  const { person: homePerson } = usePerson({ amount: 3});
+  
   return (
     <>
       {homePerson.map((person) => (

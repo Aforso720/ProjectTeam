@@ -4,7 +4,7 @@ const Loader = () => {
   return (
     <article className="loader-wrapper">
       <div className="spinner"></div>
-      <p>Загрузка...</p>
+      {/* <p>Загрузка...</p> */}
     </article>
   );
 };

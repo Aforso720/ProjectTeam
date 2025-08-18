@@ -1,9 +1,9 @@
 import React from "react";
-import { PersonContext } from "../../../context/PersonContext";
+import useManager from "../../../API/useManager";
 import Loader from "../../../Component/Loader";
 
 const ManagerList = () => {
-  const { manager, isloadingMng } = React.useContext(PersonContext);
+  const {isloading:isloadingMng , manager } = useManager()
 
   return (
     <ul className="manager__list">
@@ -16,7 +16,7 @@ const ManagerList = () => {
         : manager.map((item, index) => (
             <li key={index}>
               <div className="card_manager">
-                <img src="img/kot.jpg" alt="" />
+                <img src="img/kot.webp" alt="" />
                 <h4>{item.first_name}</h4>
                 {item.status === "главный админ" ? (
                   <p>Руководитель проектной команды</p>

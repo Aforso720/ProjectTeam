@@ -1,16 +1,16 @@
 import React from "react";
 import { useParams,useNavigate } from "react-router";
 import "./EventDetail.scss";
-import { ContentContext } from "../../context/ContentContext";
+import usePosts from "../../API/usePosts";
 
 const EventDetail = () => {
-  const {news:events} = React.useContext(ContentContext)
+  const {data:  news} = usePosts()
   const navigate = useNavigate();
   const { id } = useParams();
-  const event = events?.find(event => event.id.toString() === id);
+  const event = news?.find(event => event.id.toString() === id);
 
   if (!event) {
-    return <div>Событие не найдено</div>;
+    return <div className="errorHeader">Событие не найдено</div>;
   }
 
   return (

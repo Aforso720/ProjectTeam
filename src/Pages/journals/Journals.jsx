@@ -1,4 +1,4 @@
-import React, { useState,  } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Modal from "react-modal";
 import "./Journals.scss";
@@ -24,61 +24,99 @@ const Journals = () => {
     attendees: [],
   });
   const [availableParticipants, setAvailableParticipants] = useState([]);
+  const [deletingId, setDeletingId] = useState(null);
 
-  React.useEffect(() => {
-  const fetchJournals = async () => {
-    if (!authToken) {
-      setError("Требуется авторизация");
-      setLoading(false);
-      return;
-    }
+  const handleDeleteJournal = async (id) => {
+    const ok = window.confirm("Удалить журнал?");
+    if (!ok) return;
 
     try {
-      setLoading(true);
-      setError(null);
+      setDeletingId(id);
+      await axiosInstance.delete(`/journals/${id}`);
 
-      const endpoint =
-        active === "all"
-          ? `/journals?per_page=8&page=${currentPage}`
-          : `/journals?per_page=8&page=${currentPage}&type=${active}`;
-
-      const response = await axiosInstance.get(endpoint);
-
-      const formattedJournals = response.data.data.map((journal) => ({
-        id: journal.id.toString(),
-        type: journal.type,
-        title: journal.title,
-        date: journal.date,
-        participants: journal.participants,
-        user_created: journal.user_created,
-      }));
-
-      setJournals(formattedJournals);
-      setCurrentPage(response.data.meta.current_page);
-      setTotalPages(response.data.meta.last_page);
-
-      if (formattedJournals.length > 0) {
-        const participants = formattedJournals[0].participants.map((p) => ({
-          id: p.id,
-          name: p.full_name,
-          group: "Группа",
-          status: p.status,
-        }));
-        setAvailableParticipants(participants);
+      // если на странице остался один элемент, откатываем на предыдущую страницу
+      if (journals.length === 1 && currentPage > 1) {
+        setCurrentPage((p) => p - 1);
       } else {
-        setAvailableParticipants([]);
+        // перезапрашиваем текущую страницу
+        const endpoint =
+          active === "all"
+            ? `/journals?per_page=8&page=${currentPage}`
+            : `/journals?per_page=8&page=${currentPage}&type=${active}`;
+        const response = await axiosInstance.get(endpoint);
+        setJournals(
+          response.data.data.map((journal) => ({
+            id: journal.id.toString(),
+            type: journal.type,
+            title: journal.title,
+            date: journal.date,
+            participants: journal.participants,
+            user_created: journal.user_created,
+          }))
+        );
+        setTotalPages(response.data.meta.last_page);
       }
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
-      console.error("Ошибка при загрузке данных:", err);
+    } catch (error) {
+      console.error("Ошибка при удалении:", error.response?.data || error);
+      alert(error.response?.data?.message || "Не удалось удалить журнал");
     } finally {
-      setLoading(false);
+      setDeletingId(null);
     }
   };
 
-  fetchJournals();
-}, [authToken, active, currentPage]);
+  React.useEffect(() => {
+    const fetchJournals = async () => {
+      if (!authToken) {
+        setError("Требуется авторизация");
+        setLoading(false);
+        return;
+      }
 
+      try {
+        setLoading(true);
+        setError(null);
+
+        const endpoint =
+          active === "all"
+            ? `/journals?per_page=8&page=${currentPage}`
+            : `/journals?per_page=8&page=${currentPage}&type=${active}`;
+
+        const response = await axiosInstance.get(endpoint);
+
+        const formattedJournals = response.data.data.map((journal) => ({
+          id: journal.id.toString(),
+          type: journal.type,
+          title: journal.title,
+          date: journal.date,
+          participants: journal.participants,
+          user_created: journal.user_created,
+        }));
+
+        setJournals(formattedJournals);
+        setCurrentPage(response.data.meta.current_page);
+        setTotalPages(response.data.meta.last_page);
+
+        if (formattedJournals.length > 0) {
+          const participants = formattedJournals[0].participants.map((p) => ({
+            id: p.id,
+            name: p.full_name,
+            group: "Группа",
+            status: p.status,
+          }));
+          setAvailableParticipants(participants);
+        } else {
+          setAvailableParticipants([]);
+        }
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+        console.error("Ошибка при загрузке данных:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJournals();
+  }, [authToken, active, currentPage]);
 
   const navigate = useNavigate();
 
@@ -226,6 +264,20 @@ const Journals = () => {
 
         {filteredJournals.map((j) => (
           <div key={j.id} className="journal-card-modern">
+            {/* Кнопка удаления */}
+            <button
+              className="journal-delete"
+              aria-label="Удалить журнал"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteJournal(j.id);
+              }}
+              disabled={deletingId === j.id}
+              title="Удалить"
+            >
+              <img src="/img/DeleteCor.svg" alt="" />
+            </button>
+
             <div className="journal-header">
               <h4>
                 {new Date(j.date)
@@ -337,33 +389,35 @@ const Journals = () => {
         </div>
       </Modal>
 
-      <ul className="pagination">
-        <li onClick={handlePrevPage}>
-          <img src="/img/arrow-circle-left.png" alt="prev" />
-        </li>
+      {totalPages > 1 && (
+        <ul className="pagination">
+          <li onClick={handlePrevPage}>
+            <img src="/img/arrow-circle-left.png" alt="prev" />
+          </li>
 
-        {loading ? (
-          <li className="active_page">Загрузка...</li>
-        ) : (
-          Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <li
-              key={page}
-              onClick={() => handlePageClick(page)}
-              className={currentPage === page ? "active_page" : ""}
-            >
-              {page}
-            </li>
-          ))
-        )}
+          {loading ? (
+            <li className="active_page">Загрузка...</li>
+          ) : (
+            Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <li
+                key={page}
+                onClick={() => handlePageClick(page)}
+                className={currentPage === page ? "active_page" : ""}
+              >
+                {page}
+              </li>
+            ))
+          )}
 
-        <li onClick={handleNextPage}>
-          <img
-            src="/img/arrow-circle-left.png"
-            alt="next"
-            style={{ transform: "rotate(180deg)" }}
-          />
-        </li>
-      </ul>
+          <li onClick={handleNextPage}>
+            <img
+              src="/img/arrow-circle-left.png"
+              alt="next"
+              style={{ transform: "rotate(180deg)" }}
+            />
+          </li>
+        </ul>
+      )}
     </section>
   );
 };

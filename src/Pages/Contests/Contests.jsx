@@ -16,8 +16,8 @@ import Loader from '../../Component/Loader';
 const Contests = () => {
   const [status, setSelectedStatus] = React.useState('active');
   const { isAuthenticated } = React.useContext(AuthContext);
-  const { events, loading } = useEvent({ status});
-  const { news, loadingNewsloadingMyNews } = usePosts();
+  const { events, loading } = useEvent({status});
+  const { data : news, isLoading:loadingNewsloadingMyNews } = usePosts();
   const [isMobileView, setIsMobileView] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 9;
@@ -66,12 +66,10 @@ const Contests = () => {
           </div>
         </div>
       )}
-
       <article className='BannerCont'>
         <div className='bannerSlider'>
           <Swiper
             ref={swiperRef}
-            key={news.length}
             modules={[Navigation]}
             spaceBetween={200}
             slidesPerView={1}
@@ -85,7 +83,7 @@ const Contests = () => {
                 <SwiperSlide key={item.id}>
                   <img
                     onClick={() => handleSlideClick(item.id)}
-                    src={ item.image ? 'item.image' : '/img/image2.png'}
+                    src={ item.image ? 'item.image' : '/img/image2.webp'}
                     alt={item.title}
                     className="BannerImg"
                   />
@@ -146,11 +144,11 @@ const Contests = () => {
               ))}
             </div>
           )
-        ) : (
-          <Loader/>
+        ) : ( 
+            <Loader />
         )}
 
-        {currentEvents.length > 0 && (
+        {currentEvents?.length > 0 && (
           <ul className='paginationEvents'>
             <li onClick={handlePrevPage}>
               <img src='/img/arrow-circle-left.png' alt='Назад' />

@@ -1,51 +1,45 @@
-import React from 'react';
-import axiosInstance from './axiosInstance';
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "./axiosInstance";
+
+const fetchManagers = async () => {
+  const res = await axiosInstance.get("/users?per_page=100");
+  const response = res.data;
+
+  // фильтруем админов
+  const admins = response.data.filter((item) => item.is_admin === true);
+
+  // находим главного админа
+  const mainAdmin = admins.find((item) => item.id === 1);
+
+  // главный админ идёт первым
+  const adminsWithMain = mainAdmin
+    ? [mainAdmin, ...admins.filter((admin) => admin.id !== 1)]
+    : admins;
+
+  // добавляем статус
+  const updatedAdmins = adminsWithMain.map((admin) => {
+    const status = admin.id === 1 ? "главный админ" : "секретарь";
+    return { ...admin, status };
+  });
+
+  return updatedAdmins;
+};
 
 const useManager = () => {
-    const [manager, setManager] = React.useState([]);
-    const [isloading, setIsLoading] = React.useState(true);
-    
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true);
-                const res = await axiosInstance.get("/users?per_page=500");
-                const response = res.data;
-                const admins = response.data.filter(item => item.is_admin === true);
+  const {
+    data: manager = [], // по умолчанию []
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["managers"],
+    queryFn: fetchManagers,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
 
-                const mainAdmin = admins.find(item => item.id === 11);
-
-                // Если главный админ есть, добавляем его в начало списка
-                const adminsWithMain = mainAdmin ? [mainAdmin, ...admins.filter(admin => admin.id !== 1)] : admins;
-
-                // Берем первые три админа (включая главного, если он есть)
-                const firstThreeAdmins = adminsWithMain.slice(0, 3);
-
-                // Добавляем поле status и дополнительный атрибут к объекту с id = 10
-                const updatedAdmins = firstThreeAdmins.map(admin => {
-                    // Добавляем статус
-                    const status = admin.id === 11 ? "главный админ" : "секретарь";
-
-                    // Добавляем дополнительный атрибут, если id = 10
-                    const newAdmin = { ...admin, status };
-                    if (admin.id === 10) {
-                        newAdmin.newAttribute = 'Новое значение';
-                    }
-
-                    return newAdmin;
-                });
-
-                setManager(updatedAdmins);
-            } catch (error) {
-                console.log("Произошла ошибка:" + error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
-
-    return { manager, isloading };
+  // ⚡ можно вернуть сразу удобный объект, чтобы в компонентах не вытаскивать data
+  return { manager, isLoading, isError, error };
 };
 
 export default useManager;

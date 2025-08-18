@@ -8,12 +8,12 @@ const Header = ({ userActive, user }) => {
     <header className='Header'>
       <div className="logo-admin-container">
         <Link to={'/'}>
-          <img alt='Logo' src='/img/Лого (2).png' className='Logotip' />
+          <img alt='Logo' src='/img/Лого (2).webp' className='Logotip' />
         </Link>
 
         {user?.is_admin && (
           <Link to={'/admin/journal'} className='adminNav'>
-            <img src="/img/AdminIcon.svg" alt="AdminPanel" style={{width:30}}/>
+            <img src="/img/AdminIcon.webp" alt="AdminPanel" style={{width:30}}/>
           </Link>
         )}
       </div>
@@ -21,7 +21,7 @@ const Header = ({ userActive, user }) => {
       <input type="checkbox" id="menu-toggle" className="menu-toggle" />
 
       <label htmlFor="menu-toggle" className="burger-button">
-        <img src="/img/_Nav menu button.png" alt="Menu" />
+        <img src="/img/_Nav menu button.webp" alt="Menu" />
       </label>
 
       <ul className='navig'>

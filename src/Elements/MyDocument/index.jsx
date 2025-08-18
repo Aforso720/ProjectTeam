@@ -6,99 +6,116 @@ import InfoModal from './InfoModal';
 import Loader from '../../Component/Loader';
 
 const MyDocument = () => {
-    const { myDocument, loading, fetchData } = useDocument();
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const [modalIsOpen, setModalIsOpen] = React.useState(false);
-    const [selectedItem, setSelectedItem] = React.useState(null); 
-    const itemsPerPage = 8;
+  const { myDocument, loading, fetchData } = useDocument();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [modalIsOpen, setModalIsOpen] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState(null);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = myDocument.slice(indexOfFirstItem, indexOfLastItem);
+  // Берём данные и мету
+  const documents = myDocument?.data || [];
+  const meta = myDocument?.meta || { current_page: 1, last_page: 1 };
+  const totalPages = meta.last_page;
 
-    const totalPages = Math.ceil(myDocument.length / itemsPerPage);
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+      fetchData(currentPage + 1);
+    }
+  };
 
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+      fetchData(currentPage - 1);
+    }
+  };
 
-    const handlePrevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
+  const handlePageClick = (page) => {
+    if (page !== currentPage) {
+      setCurrentPage(page);
+      fetchData(page);
+    }
+  };
 
-    const handlePageClick = (page) => {
-        setCurrentPage(page);
-    };
+  const openModal = (item) => {
+    setSelectedItem(item);
+    setModalIsOpen(true);
+  };
 
-    const openModal = (item) => {
-        setSelectedItem(item);
-        setModalIsOpen(true);
-    };
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedItem(null);
+  };
 
-    const closeModal = () => {
-        setModalIsOpen(false);
-        setSelectedItem(null);
-    };
+  return (
+    <section className={style.wrapper}>
+      <div className={style.MyDocument}>
+        {currentPage === 1 && <AddDocModal onDocumentAdded={fetchData} />}
 
-    return (
-        <section className={style.wrapper}>
-            <div className={style.MyDocument}>
-                {currentPage === 1 && <AddDocModal onDocumentAdded={fetchData} />}
-
-                {loading ?  <Loader/> : (
-                    currentItems.map((item) => (
-                        <div
-                            className={style.card}
-                            key={item.id}
-                            onClick={() => openModal(item)} 
-                        >
-                            <h3 className={style.cardTitle}>{item.description}</h3>
-                            <p className={style.cardDate}>{item.startDate}</p>
-                        </div>
-                    ))
-                )}
+        {loading ? (
+          <Loader />
+        ) : (
+          documents.map((item) => (
+            <div
+              className={style.card}
+              key={item.id}
+              onClick={() => openModal(item)}
+            >
+              <h3 className={style.cardTitle}>
+                {item.event?.title || 'Без названия'}
+              </h3>
+              <p className={style.cardDate}>
+                {new Date(item.issue_date).toLocaleDateString('ru-RU')}
+              </p>
             </div>
+          ))
+        )}
+      </div>
 
-            <ul className={style.pagination}>
-                <li onClick={handlePrevPage}>
-                    <img src='/img/arrow-circle-left.png' alt='arrow' />
-                </li>
+      {/* пагинация только если страниц больше одной */}
+      {totalPages > 1 && (
+        <ul className={style.pagination}>
+          <li
+            onClick={handlePrevPage}
+            className={currentPage === 1 ? style.disabled : ''}
+          >
+            <img src='/img/arrow-circle-left.png' alt='prev' />
+          </li>
 
-                {loading ? (
-                    <li
-                        key={1}
-                        onClick={() => handlePageClick(1)}
-                        className={currentPage === 1 ? `${style.active_page}` : ''}
-                    >
-                        {1}
-                    </li>
-                ) : (
-                    Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                        <li
-                            key={page}
-                            onClick={() => handlePageClick(page)}
-                            className={currentPage === page ? style.active_page : ''}
-                        >
-                            {page}
-                        </li>
-                    ))
-                )}
-                <li onClick={handleNextPage}>
-                    <img src='/img/arrow-circle-left.png' alt='arrow' />
-                </li>
-            </ul>
+          {loading ? (
+            <li className={style.active_page}>Загрузка...</li>
+          ) : (
+            Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <li
+                key={page}
+                onClick={() => handlePageClick(page)}
+                className={currentPage === page ? style.active_page : ''}
+              >
+                {page}
+              </li>
+            ))
+          )}
 
-            <InfoModal
-                modalIsOpen={modalIsOpen}
-                closeModal={closeModal}
-                selectedItem={selectedItem} 
+          <li
+            onClick={handleNextPage}
+            className={currentPage === totalPages ? style.disabled : ''}
+          >
+            <img
+              src='/img/arrow-circle-left.png'
+              alt='next'
+              style={{ transform: 'rotate(180deg)' }}
             />
-        </section>
-    );
+          </li>
+        </ul>
+      )}
+
+      <InfoModal
+        modalIsOpen={modalIsOpen}
+        closeModal={closeModal}
+        selectedItem={selectedItem}
+      />
+    </section>
+  );
 };
 
 export default MyDocument;

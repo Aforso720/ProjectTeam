@@ -31,6 +31,9 @@
     }
   }
 
+  .swiper-button-next{
+    transform: translateX(-1em);
+  }
 }
 
 .sliderContainer {
@@ -161,7 +164,7 @@
   }
 
   .supervisor {
-    height: 485px;
+    min-height: 485px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -894,7 +897,7 @@
               }
 
               .textGroup {
-                font-size: 8px;
+                font-size: 12px;
                 transform: translateY(0) translateX(0);
               }
             }
@@ -918,7 +921,7 @@
             .detailsButton {
               width: 83px;
               height: 15px;
-              font-size: 10px;
+              font-size: 12px;
               transform: translateY(0) translateX(0);
             }
           }

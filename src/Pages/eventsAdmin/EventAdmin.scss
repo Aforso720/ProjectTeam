@@ -578,3 +578,54 @@
   }
 }
 
+
+.event-card {
+  position: relative; // чтобы absolute внутри работал относительно карточки
+}
+
+/* Кнопка удаления */
+.event-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+  padding: 0;
+
+  background: rgba(255, 255, 255, 0.92);
+  border: none;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer;
+
+  transition: transform .12s ease, box-shadow .12s ease;
+
+  img {
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    display: block;
+  }
+
+  &:hover { transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
+  &:disabled { opacity: .6; cursor: progress; }
+}
+
+/* Адаптив: на мобильных иконка чуть меньше и ближе к краю */
+@media (max-width: 640px) {
+  .event-delete {
+    top: 6px;
+    right: 6px;
+    width: 32px;
+    height: 32px;
+
+    img { width: 18px; height: 18px; }
+  }
+}

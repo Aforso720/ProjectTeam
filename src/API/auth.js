@@ -23,10 +23,10 @@ export const useAuth = () => {
       const { token, user } = response.data;
 
       localStorage.setItem("authToken", token);
-      localStorage.setItem("user", JSON.stringify(user)); // ✅
+      localStorage.setItem("user", JSON.stringify(user)); 
 
       setToken(token);
-      setUser(user); // ✅
+      setUser(user); 
       return true;
     } catch (error) {
       console.error("Ошибка авторизации:", error.response?.data || error.message);

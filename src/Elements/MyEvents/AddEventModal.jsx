@@ -5,13 +5,15 @@ import axiosInstance from "../../API/axiosInstance";
 import usePeople from "../../API/usePeople";
 import { AuthContext } from "../../context/AuthContext";
 
-
 const AddEventModal = () => {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
   const { user } = React.useContext(AuthContext);
   const { person } = usePeople({});
   const [projectName, setProjectName] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [startDate, setStartDate] = React.useState("");
+  const [endDate, setEndDate] = React.useState("");
+  const [previewImage, setPreviewImage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [selectedParticipants, setSelectedParticipants] = React.useState([]);
@@ -22,6 +24,9 @@ const AddEventModal = () => {
     setError(null);
     setProjectName("");
     setDescription("");
+    setStartDate("");
+    setEndDate("");
+    setPreviewImage(null);
   };
 
   const handleSubmit = async () => {
@@ -34,36 +39,27 @@ const AddEventModal = () => {
     setError(null);
 
     try {
-      const response = await axiosInstance.post(
-        "/projects",
-        {
-          name: projectName,
-          description: description,
-          user_id: user?.id,
-          status: "active",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const formData = new FormData();
+      formData.append("name", projectName);
+      formData.append("description", description);
+      if (previewImage) formData.append("preview_image", previewImage);
+      if (startDate) formData.append("start_date", startDate);
+      if (endDate) formData.append("end_date", endDate);
+
+      const response = await axiosInstance.post("/projects", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       const projectId = response.data?.id;
 
       if (projectId) {
-        await axiosInstance.post(
-          `/projects/${projectId}/join`,
-          {},
-        );
-
+        await axiosInstance.post(`/projects/${projectId}/join`, {});
         await Promise.all(
-          selectedParticipants.map(async (participantId) => {
-            return axiosInstance.post(
-              `/projects/${projectId}/join`,
-              { user_id: participantId },
-            );
-          })
+          selectedParticipants.map((participantId) =>
+            axiosInstance.post(`/projects/${projectId}/join`, {
+              user_id: participantId,
+            })
+          )
         );
       }
 
@@ -82,8 +78,6 @@ const AddEventModal = () => {
     content: {
       top: "50%",
       left: "50%",
-      right: "auto",
-      bottom: "auto",
       transform: "translate(-50%, -50%)",
       width: "800px",
       maxWidth: "95%",
@@ -122,6 +116,7 @@ const AddEventModal = () => {
 
           {error && <div className={style.errorMessage}>{error}</div>}
 
+          {/* Название и описание */}
           <div className={style.section}>
             <input
               type="text"
@@ -139,6 +134,26 @@ const AddEventModal = () => {
             />
           </div>
 
+          {/* Даты */}
+          <div className={style.section}>
+            <h3>Дата начала</h3>
+            <input
+              type="date"
+              className={style.projectInput}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+
+            <h3>Дата окончания</h3>
+            <input
+              type="date"
+              className={style.projectInput}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+
+          {/* Участники */}
           <div className={style.section}>
             <h3>Добавить участников</h3>
             <select
@@ -182,25 +197,27 @@ const AddEventModal = () => {
                   </div>
                 );
               })}
-
-              {/* <div className={style.addParticipantRow}>
-                <button type="button" className={style.addButton}>
-                  +
-                </button>
-              </div> */}
             </div>
           </div>
 
+          {/* Файл */}
           <div className={style.section}>
             <h3>Медиафайлы</h3>
             <div className={style.fileList}>
               <label className={style.fileUpload}>
-                <input type="file" hidden multiple />
-                <div>📁 Прикрепить медиафайл</div>
+                <input
+                  type="file"
+                  hidden
+                  onChange={(e) => setPreviewImage(e.target.files[0])}
+                />
+                <div>
+                  📁 {previewImage ? previewImage.name : "Прикрепить медиафайл"}
+                </div>
               </label>
             </div>
           </div>
 
+          {/* Кнопка */}
           <div className={style.section}>
             <button
               className={style.saveButton}
