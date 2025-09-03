@@ -571,3 +571,80 @@ body, html {
     transform: rotate(360deg);
   }
 }
+
+* {
+  scrollbar-width: thin; 
+  scrollbar-color: #5b151b #fff; 
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px; 
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #5b151b; 
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darken(#5b151b, 10%); 
+  }
+}
+
+textarea::-webkit-scrollbar,
+input::-webkit-scrollbar {
+  width: 6px; 
+}
+
+textarea::-webkit-scrollbar-thumb,
+input::-webkit-scrollbar-thumb {
+  background-color: lighten(#5b151b, 20%); 
+}
+
+.notification-badge {
+  position: absolute;
+  top: 10px;
+  right: 50px;
+  background: #d32f2f;
+  color: white;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 100000; 
+  box-shadow: 0 0 0 2px white; 
+}
+
+.profile-notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  
+  @media screen and (max-width: 800px) {
+    top: -5px;
+    right: -5px;
+    
+    .notification-badge {
+      width: 13px;
+      height: 13px;
+      font-size: 0.7rem;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .profile-notification-badge {
+    top: -5px;
+    right: -40px;
+  }
+}

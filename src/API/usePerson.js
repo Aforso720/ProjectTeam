@@ -22,7 +22,7 @@ const usePerson = ({ amount } = {}) => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["person", amount], // ключ зависит от amount, чтобы кэш был разный
+    queryKey: ["person", amount], 
     queryFn: () => fetchPerson(amount),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,

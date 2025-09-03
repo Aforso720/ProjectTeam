@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import style from "./MyDocument.module.scss";
-// import axiosInstance from "../../API/axiosInstance";
-import axios from "axios";
+import axiosInstance from "../../API/axiosInstance";
 
 const DocumentModal = ({ onDocumentAdded }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -42,28 +41,38 @@ const DocumentModal = ({ onDocumentAdded }) => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setMyDocumObj((prev) => ({
-        ...prev,
-        image: imageUrl,
-        file: file,
-      }));
+    if (!file) return;
+
+    const allowed = ["image/png", "image/jpeg", "image/jpg", "application/pdf"];
+    if (!allowed.includes(file.type)) {
+      setError("Разрешены только JPG/PNG/PDF");
+      return;
     }
+
+    const imageUrl = URL.createObjectURL(file);
+    setMyDocumObj((prev) => ({
+      ...prev,
+      image: imageUrl, 
+      file, 
+    }));
   };
 
-  const validateForm = () => {
-    if (!myDocumObj.description || !myDocumObj.startDate || !myDocumObj.image) {
-      setError("Пожалуйста, заполните все поля");
+   const validateForm = () => {
+    if (!myDocumObj.description || !myDocumObj.startDate || !myDocumObj.file) {
+      setError("Пожалуйста, заполните все поля и загрузите файл");
+      return false;
+    }
+    const today = new Date().toISOString().slice(0, 10);
+    if (myDocumObj.startDate > today) {
+      setError("Дата выдачи не может быть позже сегодняшнего дня");
       return false;
     }
     return true;
   };
 
   const prepareSubmit = () => {
-    if (validateForm()) {
-      setShouldSubmit(true);
-    }
+    if (!validateForm()) return;
+    setShouldSubmit(true);
   };
 
   useEffect(() => {
@@ -75,30 +84,28 @@ const DocumentModal = ({ onDocumentAdded }) => {
 
       try {
         const formData = new FormData();
-        formData.append("image", myDocumObj.file);
-        formData.append("description", myDocumObj.description);
-        formData.append("date", myDocumObj.date);
-        formData.append("startDate", myDocumObj.startDate);
-        formData.append("endDate", myDocumObj.endDate || myDocumObj.startDate);
+        formData.append("file", myDocumObj.file); 
+        formData.append("issued_by", myDocumObj.description); 
+        formData.append("issue_date", myDocumObj.startDate); 
 
-        const response = await axios.post(
-          "https://67b9c5be51192bd378de636d.mockapi.io/MyDocument",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
 
-        console.log("Данные успешно отправлены:", response.data);
+        const response = await axiosInstance.post("/certificates", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        console.log("Сертификат успешно создан:", response.data);
+
         closeModal();
-        if (onDocumentAdded) {
-          onDocumentAdded();
-        }
+        onDocumentAdded?.(response.data);
       } catch (err) {
-        console.error("Ошибка при отправке данных:", err);
-        setError("Произошла ошибка при сохранении. Попробуйте снова.");
+        console.error(
+          "Ошибка при сохранении сертификата:",
+          err.response?.data || err
+        );
+        setError(
+          err.response?.data?.message ||
+            "Произошла ошибка при сохранении. Попробуйте снова."
+        );
         setShouldSubmit(false);
       } finally {
         setIsLoading(false);
@@ -106,29 +113,28 @@ const DocumentModal = ({ onDocumentAdded }) => {
     };
 
     submitData();
-  }, [shouldSubmit,myDocumObj , onDocumentAdded ]);
+  }, [shouldSubmit, myDocumObj, onDocumentAdded]);
 
- const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    width: "90%",
-    maxWidth: "600px",
-    padding: "0",
-    borderRadius: "16px",
-    backgroundColor: "#fff",
-    border: "1px solid #ccc",
-  },
-  overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.75)",
-    zIndex: 1000,
-  },
-};
-
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      width: "90%",
+      maxWidth: "600px",
+      padding: "0",
+      borderRadius: "16px",
+      backgroundColor: "#fff",
+      border: "1px solid #ccc",
+    },
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.75)",
+      zIndex: 1000,
+    },
+  };
 
   return (
     <div>
@@ -145,26 +151,20 @@ const DocumentModal = ({ onDocumentAdded }) => {
       >
         <div className={style.Modal}>
           <h2>Добавить сертификат</h2>
-          {/* <img
-            className={style.closeModal}
-            src="img/+.png"
-            onClick={closeModal}
-            alt=""
-          /> */}
           <div className={style.contentDocum}>
             {error && <div className={style.errorMessage}>{error}</div>}
             <div className={style.inputGroup}>
               <input
-                className={`${style.infoDocum}`}
                 name="description"
-                placeholder="Описание. Пример: Tech Innovators Summit in Moscow"
+                placeholder="Описание сертификата"
                 value={myDocumObj.description}
                 onChange={handleInputChange}
               />
               <input
-                className={`${style.dataDocum}`}
+                className={style.dataDocum}
+                type="date"
                 name="startDate"
-                placeholder="Дата начала. Пример: 2025-02-20"
+                max={new Date().toISOString().slice(0, 10)} 
                 value={myDocumObj.startDate}
                 onChange={handleInputChange}
               />
@@ -194,31 +194,30 @@ const DocumentModal = ({ onDocumentAdded }) => {
               <label className={style.addedPhoto}>
                 <input
                   type="file"
-                  accept="image/*,.pdf,.doc,.docx"
+                  accept="image/*,.pdf"
                   style={{ display: "none" }}
                   onChange={handleFileUpload}
                 />
+
                 <img src="img/gallery-add.png" alt="" />
                 <p>Загрузите сертификат</p>
               </label>
             )}
           </div>
 
-         <section className={style.buttonsMyDocum}>
-           <button
-            className={style.submitButton}
-            onClick={prepareSubmit}
-            disabled={isLoading}
-          >
-            {isLoading ? "Отправка..." : "Сохранить"}
-          </button>
-          <button
-            className={style.submitButton}
-             onClick={closeModal}
-          >
-            Отмена
-          </button>
-         </section>
+          <section className={style.buttonsMyDocum}>
+            <button
+              className={style.primaryButton}
+              onClick={prepareSubmit}
+              disabled={isLoading}
+            >
+              {isLoading ? "Отправка..." : "Сохранить"}
+            </button>
+
+            <button className={style.secondaryButton} onClick={closeModal}>
+              Отмена
+            </button>
+          </section>
         </div>
       </Modal>
     </div>

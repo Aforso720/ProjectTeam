@@ -54,6 +54,7 @@ const Banner = () => {
             onClick={() => handleSlideClick(item.id)}
             style={{ cursor: "pointer" }}
           >
+            {/* {console.log(item.preview_image)} */}
             <img
               src={item.image ? item.image : "/img/image2.webp"}
               alt="Слайд"

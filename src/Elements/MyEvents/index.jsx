@@ -4,6 +4,7 @@ import useMyEvents from '../../API/useMyEvents';
 import AddEventModal from './AddEventModal';
 import { AuthContext } from '../../context/AuthContext';
 import Loader from '../../Component/Loader';
+import { normalizeImageUrl } from '../imageUtils'
 
 const MyEvents = () => {
   const { user } = React.useContext(AuthContext);
@@ -15,6 +16,15 @@ const MyEvents = () => {
     page: currentPage,
     perPage: itemsPerPage
   });
+
+ const normalizedEvents = React.useMemo(() => {
+    if (!myEvents) return [];
+
+    return myEvents.map(event => ({
+      ...event,
+      preview_image: normalizeImageUrl(event.preview_image)
+    }));
+  }, [myEvents]);
 
   const handleNextPage = () => {
     if (currentPage < meta.last_page) {
@@ -38,17 +48,19 @@ const MyEvents = () => {
         {currentPage === 1 && <AddEventModal/>}
 
         {loading ? <Loader/> : (
-          myEvents.map((item) => (
+          normalizedEvents.map((item) => ( 
             <div className={style.card} key={item.id}>
               <img
                 src={item.preview_image || '/img/DefaultImage.webp'}
-                alt='Проект'
+                alt='Фото проекта'
                 className={style.cardImage}
+                onError={(e) => {
+                  e.target.src = '/img/DefaultImage.webp';
+                }}
               />
               <div className={style.cardContent}>
                 <h3 className={style.cardTitle}>{item.name}</h3>
                 <p className={style.cardDescription}>{item.description}</p>
-                <button className={style.cardButton}>Подробнее</button>
               </div>
             </div>
           ))
@@ -72,7 +84,7 @@ const MyEvents = () => {
           ))}
 
           <li onClick={handleNextPage} className={currentPage === meta.last_page ? style.disabled : ''}>
-            <img src='/img/arrow-circle-right.png' alt='next' />
+            <img src='/img/arrow-circle-left.png' alt='next' />
           </li>
         </ul>
       )}

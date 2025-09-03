@@ -82,12 +82,21 @@
   }
   
   .projectInput {
-    padding: 12px 15px;
-    border: 1px solid #4B1218;
-    border-radius: 8px;
-    font-size: 16px;
-    font-family: "Calibri", sans-serif;
-  }
+  border: 1.5px solid #4B1218;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: #4B1218;
+  transition: all 0.2s ease;
+  font-family: "Calibri", sans-serif;
+}
+
+.projectInput:focus {
+  outline: none;
+  border-color: #64181f;
+  box-shadow: 0 0 0 3px rgba(100,24,31,0.15);
+}
+
   
   .checkboxSection, .participantsList {
     display: flex;
@@ -188,7 +197,7 @@
   padding: 10px 5px;
   max-width: 100%;
   min-height: 100px;
-  max-height: 100px;
+  max-height: 200px;
   text-align: center;
 }
 
@@ -459,4 +468,77 @@
   border-radius: 6px;
   border: 1px solid #ccc;
   min-width: 250px;
+}
+
+
+.fileUpload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px dashed #4B1218;
+  border-radius: 16px;
+  padding: 32px 20px;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.fileUpload:hover {
+  border-color: #64181f;
+  background: #fafafa;
+}
+.fileUpload div {
+  font-weight: 600;
+  color: #4B1218;
+}
+
+
+.errorMessage {
+  color: #ff0000;
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #fff5f5;
+  border-radius: 8px;
+  border: 1px solid #ffd6d6;
+  width: 100%;
+  font-size: 14px;
+}
+
+.primaryButton {
+  background-color: #4B1218;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.primaryButton:hover {
+  background-color: #64181f;
+  transform: translateY(-1px);
+}
+
+.secondaryButton {
+  background-color: transparent;
+  border: 1.5px solid #ccc;
+  color: #333;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.secondaryButton:hover {
+  border-color: #999;
+  color: #111;
+}
+
+.buttonsMyDocum{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }

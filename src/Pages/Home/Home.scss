@@ -66,7 +66,7 @@
             gap: 20px;
             display: flex;
             justify-content: flex-end;
-            margin-top: 60px;
+            margin: 20px;
           }
 
           @media (max-width:600px) {
@@ -105,12 +105,35 @@
             max-width: 1300px;
             margin: 2rem;
 
+            @media (max-width: 1400px){
+              max-width: 800px;
+            }
+
+            @media (max-width: 900px){
+              max-width: 600px;
+
+              .swiper-slide{
+                  display: flex;
+                  justify-content: center;
+                }
+            }
+
+            @media (max-width: 600px){
+              max-width: 320px;
+
+              .swiper-slide{
+                  display: flex;
+                  justify-content: center;
+                }
+            }
+
             @media (max-width: 1200px){
               margin:0;
             }
         }
 
           @media (max-width: 1400px){
+          
               .stateEvents {
                   font-size: 16px;
                   height: 46px; 
@@ -127,6 +150,19 @@
                       min-width: 90px; 
                       font-size: 16px;
                   }
+
+                  .swiper-slide{
+                  display: flex;
+                  justify-content: center;
+                }
+              }
+
+                .swiper-button-prev{
+                  transform: translateX(0em);
+              }
+
+              .swiper-button-next{
+                  transform: translateX(0em);
               }
           }
 
@@ -136,8 +172,16 @@
                 flex-direction: column;
                 align-items: center;
                 width: 100%;
-                height: 240px;
                 gap: 10px;
+
+                 .swiper-slide{
+                  display: flex;
+                  justify-content: center;
+                }
+
+                .sliderMyContests{
+                  max-width: 600px;
+                }
             }
 
             .stateEvents {
@@ -151,6 +195,10 @@
           @media (max-width: 600px){
             .myContestsMobile {
                 padding: 0px;
+
+                .sliderMyContests{
+                  max-width: 320px;
+                }
             }
 
             .stateEvents {
@@ -179,6 +227,9 @@
         text-align: center;
         position: relative;
         border-top: 5px solid #4B1218;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
       
         h2 {
           color: #5C131C;
@@ -220,6 +271,7 @@
         }
 
         @media (max-width: 1050px) {
+          display: block;
               h2 {
                 font-size: 44px;
                 margin-bottom: 1.5em;
@@ -227,7 +279,7 @@
           
               .CardTop {
                 .KingTop {
-                  transform: translateX(-5.5em) translateY(-20em);
+                  transform: translateX(-4.5em) translateY(-20em);
                   width: 150px;
                 }
               }
@@ -300,7 +352,7 @@
 
             li:nth-child(1){
               .KingTop{
-                transform: translateX(-9.5em) translateY(-7.5em);
+                transform: translateX(-8.5em) translateY(-7.5em);
                 position: relative;
                 width: 50px;
               }
@@ -634,7 +686,7 @@
         }
       }
     
-      @media (max-width: 800px) {
+      @media (max-width: 900px) {
 
         .manager{
           display: flex;

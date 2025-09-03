@@ -38,7 +38,7 @@ const Footer = () => {
                 </ul>
             </div>
             <div className='madeIn'>
-                <p>© 2025 Made by IMPULSE</p>
+                <p>© 2025 Made by ImpDev</p>
             </div>
         </footer>
     )

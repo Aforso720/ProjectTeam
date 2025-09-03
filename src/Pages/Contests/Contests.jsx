@@ -109,14 +109,7 @@ const Contests = () => {
 
         {loading ? (
           isMobileView ? (
-            <Swiper
-              spaceBetween={20}
-              slidesPerView={3}
-              effect="flip"
-              pagination={{ clickable: true }}
-            >
               <Loader/>
-            </Swiper>
           ) : (
             <div className='arrEvents'>
               <Loader/>
@@ -129,6 +122,14 @@ const Contests = () => {
               navigation
               spaceBetween={20}
               slidesPerView={2}
+              breakpoints={{
+              320: {
+                slidesPerView: 1,
+              },
+              900: {
+                slidesPerView: 2,
+              },
+              }}
               className='mobSlaiderCont'
             >
               {currentEvents.map(item => (
@@ -149,6 +150,7 @@ const Contests = () => {
         )}
 
         {currentEvents?.length > 0 && (
+          currentEvents?.length < 1 && (
           <ul className='paginationEvents'>
             <li onClick={handlePrevPage}>
               <img src='/img/arrow-circle-left.png' alt='Назад' />
@@ -166,6 +168,7 @@ const Contests = () => {
               <img src='/img/arrow-circle-left.png' alt='Вперед' />
             </li>
           </ul>
+          )
         )}
       </section>
     </section>

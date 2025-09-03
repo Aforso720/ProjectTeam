@@ -198,7 +198,7 @@ const PersonSetting = () => {
   return (
     <section className="person-setting">
       <header className="header">
-        <h2>Управление участниками</h2>
+        <h2 style={{color:'white'}}>Управление участниками</h2>
         <div className="header-controls">
           <div className="search-container">
             <input

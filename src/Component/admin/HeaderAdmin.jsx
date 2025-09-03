@@ -8,8 +8,8 @@ const HeaderAdmin = () => {
     const {pathname } = useLocation();
     const test = [
         ["Журнал", "journal"],
-        ["Конкурсы", "contest"],
-        ["Управление участниками", "managing"]
+        ["Активности", "contest"],
+        ["Участники", "managing"]
     ]
 
     return (

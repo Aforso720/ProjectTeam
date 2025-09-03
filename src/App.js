@@ -13,27 +13,27 @@ import HeaderAdmin from "./Component/admin/HeaderAdmin";
 
 import Home from "./Pages/Home/Home.jsx";
 import Contests from "./Pages/Contests/Contests.jsx";
-import Account from "./Pages/Account";
+import Account from "./Pages/Account/Account.jsx";
 import About from "./Pages/about/AboutUs";
-import Members from "./Pages/Members";
+import Members from "./Pages/Members/Members.jsx";
 import AuthModal from "./Pages/AuthModal/AuthModal.jsx";
 
-
-import EventAdmin from './Pages/eventsAdmin/EventAdmin.jsx'
-import Journals from './Pages/journals/Journals.jsx'
-import PersonSetting from './Pages/personSetting/PersonSetting.jsx'
-import Table from './Pages/tables/Table.jsx'
+import Journals from "./Pages/journals/Journals.jsx";
+import PersonSetting from "./Pages/personSetting/PersonSetting.jsx";
+import Table from "./Pages/tables/Table.jsx";
 
 // API hooks
 import { useAuth } from "./API/auth";
 
 // Contexts
 import { AuthContext } from "./context/AuthContext";
-import Loader from "./Component/Loader.jsx";
-import EventDetail from './Component/EventDetail/EventDetail.jsx'
+import EventDetail from "./Component/EventDetail/EventDetail.jsx";
+import AdminFilterEvent from "./Component/adminHeaderEvent/adminHeaderEvent.jsx";
+
+import { NotificationProvider } from "./context/NotificationContext.js";
+import Notisfaction from "./Elements/Notisfaction/index.jsx";
 
 function App() {
-
   // AUTH
   const {
     token: authToken,
@@ -85,6 +85,7 @@ function App() {
     <AuthContext.Provider
       value={{ authToken, user, login, logout, isAuthenticated }}
     >
+      <NotificationProvider>
         <div className="App">
           {isAdminPage ? (
             <HeaderAdmin handleLogout={logout} />
@@ -98,59 +99,59 @@ function App() {
 
           <main className="Content">
             {/* <Suspense fallback={<Loader/>}> */}
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/contests" element={<Contests />} />
-                <Route path="/about-us" element={<About />} />
-                <Route path="/members" element={<Members />} />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/contests" element={<Contests />} />
+              <Route path="/about-us" element={<About />} />
+              <Route path="/members" element={<Members />} />
 
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <Account handleLogoutAuth={logout} />
-                    </ProtectedRoute>
-                  }
-                />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Account handleLogoutAuth={logout} />
+                  </ProtectedRoute>
+                }
+              />
 
-                {/* Lazy admin routes */}
-                <Route
-                  path="/admin/journal"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <Journals />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/managing"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <PersonSetting />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/contest"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <EventAdmin />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin/journals/:id"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <Table />
-                    </ProtectedRoute>
-                  }
-                />
+              <Route
+                path="/admin/journal"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <Journals />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/managing"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <PersonSetting />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/contest"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <section className="eventAdminPage">
+                      <AdminFilterEvent />
+                    </section>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/journals/:id"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <Table />
+                  </ProtectedRoute>
+                }
+              />
 
-
-                <Route path="/events/:id" element={<EventDetail />} />
-                {/* <Route path="/events/:id" element={<EventDetail events={events} />} /> */}
-              </Routes>
+              <Route path="/events/:id" element={<EventDetail />} />
+              {/* <Route path="/events/:id" element={<EventDetail events={events} />} /> */}
+            </Routes>
             {/* </Suspense> */}
           </main>
           <Footer />
@@ -163,6 +164,7 @@ function App() {
             />
           )}
         </div>
+      </NotificationProvider>
     </AuthContext.Provider>
   );
 }

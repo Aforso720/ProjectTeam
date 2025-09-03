@@ -7,7 +7,6 @@ import Loader from "../../Component/Loader";
 Modal.setAppElement("#root");
 
 const EventAdmin = () => {
-  const [activeFilter, setActiveFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isParticipantModalOpen, setIsParticipantModalOpen] = useState(false);
   const [newParticipantName, setNewParticipantName] = useState("");
@@ -21,11 +20,7 @@ const EventAdmin = () => {
     endDate: "",
     description: "",
     previewImage: null,
-    status: "active", // 👈 новое поле
-    participants: [
-      { id: 1, name: "Эльдарханов Абдул-Малик", selected: false },
-      { id: 2, name: "Алаудинов Илисхан", selected: true },
-    ],
+    status: "active",
   });
 
   const [events, setEvents] = useState([]);
@@ -81,19 +76,6 @@ const EventAdmin = () => {
     }
   };
 
-  const handleAddParticipant = () => {
-    if (newParticipantName.trim()) {
-      const newId = Math.max(0, ...eventData.participants.map((p) => p.id)) + 1;
-      setEventData((prev) => ({
-        ...prev,
-        participants: [
-          ...prev.participants,
-          { id: newId, name: newParticipantName, selected: true },
-        ],
-      }));
-      setNewParticipantName("");
-    }
-  };
 
   const handleViewEvent = (event) => {
     setCurrentEvent(event);
@@ -113,27 +95,8 @@ const EventAdmin = () => {
       endDate: event.end_date.split(" ")[0],
       status: event.status,
       description: event.description,
-      participants: event.participants || [],
     });
   };
-
-  const handleRemoveParticipant = (id) => {
-    setEventData((prev) => ({
-      ...prev,
-      participants: prev.participants.filter((p) => p.id !== id),
-    }));
-  };
-
-  const filters = [
-    { id: "all", name: "Все" },
-    { id: "active", name: "Активные" },
-    { id: "finished", name: "Завершённые" },
-  ];
-
-  const filteredEvents =
-    activeFilter === "all"
-      ? events
-      : events.filter((event) => event.status === activeFilter);
 
   const handlePageClick = (page) => {
     if (page !== currentPage) {
@@ -156,17 +119,6 @@ const EventAdmin = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEventData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleParticipantToggle = (id) => {
-    setEventData((prev) => ({
-      ...prev,
-      participants: prev.participants.map((participant) =>
-        participant.id === id
-          ? { ...participant, selected: !participant.selected }
-          : participant
-      ),
-    }));
   };
 
   const updateEvent = async () => {
@@ -252,10 +204,6 @@ const EventAdmin = () => {
       startDate: "",
       endDate: "",
       description: "",
-      participants: [
-        { id: 1, name: "Эльдарханов Абдул-Малик", selected: false },
-        { id: 2, name: "Алаудинов Илисхан", selected: true },
-      ],
     });
   };
 
@@ -263,20 +211,6 @@ const EventAdmin = () => {
 
   return (
     <section className="event-admin">
-      {/* <div className="event-filters">
-        {filters.map((filter) => (
-          <button
-            key={filter.id}
-            className={`filter-btn ${
-              activeFilter === filter.id ? "active" : ""
-            }`}
-            onClick={() => setActiveFilter(filter.id)}
-          >
-            {filter.name}
-          </button>
-        ))}
-      </div> */}
-
       <div className="event-list">
         <div
           className="addEvent"
@@ -287,10 +221,6 @@ const EventAdmin = () => {
               startDate: "",
               endDate: "",
               description: "",
-              participants: [
-                { id: 1, name: "Эльдарханов Абдул-Малик", selected: false },
-                { id: 2, name: "Алаудинов Илисхан", selected: true },
-              ],
             });
             setIsEditMode(false); // убедимся, что не редактирование
             setIsModalOpen(true);
@@ -349,34 +279,36 @@ const EventAdmin = () => {
         ))}
       </div>
 
-      <ul className="paginationEvents">
-        <li
-          onClick={handlePrevPage}
-          className={currentPage === 1 ? "disabled" : ""}
-        >
-          <img src="/img/arrow-circle-left.png" alt="Назад" />
-        </li>
-
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      {totalPages > 1 && (
+        <ul className="paginationEvents">
           <li
-            key={page}
-            onClick={() => handlePageClick(page)}
-            className={currentPage === page ? "active_page" : ""}
+            onClick={handlePrevPage}
+            className={currentPage === 1 ? "disabled" : ""}
           >
-            {page}
+            <img src="/img/arrow-circle-left.png" alt="Назад" />
           </li>
-        ))}
 
-        <li
-          onClick={handleNextPage}
-          className={currentPage === totalPages ? "disabled" : ""}
-        >
-          <img
-            src="/img/arrow-circle-right.png" // 👉 картинка вперёд
-            alt="Вперёд"
-          />
-        </li>
-      </ul>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <li
+              key={page}
+              onClick={() => handlePageClick(page)}
+              className={currentPage === page ? "active_page" : ""}
+            >
+              {page}
+            </li>
+          ))}
+
+          <li
+            onClick={handleNextPage}
+            className={currentPage === totalPages ? "disabled" : ""}
+          >
+            <img
+              src="/img/arrow-circle-right.png" // 👉 картинка вперёд
+              alt="Вперёд"
+            />
+          </li>
+        </ul>
+      )}
 
       <Modal
         isOpen={isModalOpen}
@@ -456,18 +388,34 @@ const EventAdmin = () => {
 
           <div className="modal-section">
             <h3>Превью мероприятия</h3>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                setEventData((prev) => ({
-                  ...prev,
-                  previewImage: e.target.files[0],
-                }))
-              }
-            />
+
+            <label className="file-upload-label">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) =>
+                  setEventData((prev) => ({
+                    ...prev,
+                    previewImage: e.target.files[0],
+                  }))
+                }
+              />
+              <img src="/img/gallery-add.png" alt="Добавить изображение" />
+              <p>Загрузите изображение</p>
+            </label>
+
             {eventData.previewImage && (
-              <p>Выбран файл: {eventData.previewImage.name}</p>
+              <div className="file-selected">
+                <span className="file-name">{eventData.previewImage.name}</span>
+                <span
+                  className="file-remove"
+                  onClick={() =>
+                    setEventData((prev) => ({ ...prev, previewImage: null }))
+                  }
+                >
+                  ×
+                </span>
+              </div>
             )}
           </div>
 
@@ -483,38 +431,7 @@ const EventAdmin = () => {
               <option value="completed">Завершённое</option>
             </select>
           </div>
-
-          <div className="modal-section">
-            <h3>Участники</h3>
-            <div className="participants-list">
-              {eventData.participants
-                .filter((p) => p.selected)
-                .map((participant) => (
-                  <div
-                    key={participant.id}
-                    className="participant-item selected"
-                  >
-                    <span>{participant.name}</span>
-                    <button
-                      type="button"
-                      className="remove-participant"
-                      onClick={() => handleParticipantToggle(participant.id)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-            </div>
-
-            <button
-              type="button"
-              className="manage-participants-btn"
-              onClick={() => setIsParticipantModalOpen(true)}
-            >
-              Управление участниками
-            </button>
-          </div>
-
+            
           <div className="modal-actions">
             <button
               type="button"
@@ -555,46 +472,9 @@ const EventAdmin = () => {
               <button
                 type="button"
                 className="add-participant-btn"
-                onClick={handleAddParticipant}
               >
                 +
               </button>
-            </div>
-            <div className="participants-to-add">
-              {eventData.participants
-                .filter((p) => !p.selected)
-                .map((participant) => (
-                  <div key={participant.id} className="participant-item">
-                    <span>{participant.name}</span>
-                    <button
-                      type="button"
-                      className="add-participant-btn"
-                      onClick={() => handleParticipantToggle(participant.id)}
-                    >
-                      +
-                    </button>
-                  </div>
-                ))}
-            </div>
-          </div>
-
-          <div className="participant-section">
-            <h3>Удалить участника</h3>
-            <div className="participants-to-remove">
-              {eventData.participants
-                .filter((p) => p.selected)
-                .map((participant) => (
-                  <div key={participant.id} className="participant-item">
-                    <button
-                      type="button"
-                      className="remove-participant"
-                      onClick={() => handleParticipantToggle(participant.id)}
-                    >
-                      ×
-                    </button>
-                    <span>{participant.name}</span>
-                  </div>
-                ))}
             </div>
           </div>
         </div>
@@ -725,37 +605,6 @@ const EventAdmin = () => {
                 <option value="active">Активное</option>
                 <option value="completed">Завершённое</option>
               </select>
-            </div>
-
-            <div className="modal-section">
-              <h3>Участники</h3>
-              <div className="participants-list">
-                {eventData.participants
-                  .filter((p) => p.selected)
-                  .map((participant) => (
-                    <div
-                      key={participant.id}
-                      className="participant-item selected"
-                    >
-                      <span>{participant.name}</span>
-                      <button
-                        type="button"
-                        className="remove-participant"
-                        onClick={() => handleParticipantToggle(participant.id)}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
-              </div>
-
-              <button
-                type="button"
-                className="manage-participants-btn"
-                onClick={() => setIsParticipantModalOpen(true)}
-              >
-                Управление участниками
-              </button>
             </div>
 
             <div className="modal-actions">

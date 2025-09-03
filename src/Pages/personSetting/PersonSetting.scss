@@ -254,6 +254,20 @@
     align-items: center;
     justify-content: center;
     z-index: 999;
+    overflow-y: auto; 
+    padding: 20px 0;
+
+    @media (max-width:600px) {
+      align-items: flex-start;
+      padding: 20px 0;
+
+      .modal{
+        width: 90%;
+      padding: 20px;
+      max-height: 80vh; // Уменьшаем максимальную высоту для мобильных
+      margin: 20px 0; // Добавляем отступы
+      }
+    }
 
     .modal {
       background: white;
@@ -263,6 +277,26 @@
       max-width: 90%;
       position: relative;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      max-height: 90vh;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+    
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
 
       h2 {
         text-align: center;

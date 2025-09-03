@@ -2,13 +2,9 @@ import React from "react";
 import Modal from "react-modal";
 import style from "./MyEvents.module.scss";
 import axiosInstance from "../../API/axiosInstance";
-import usePeople from "../../API/usePeople";
-import { AuthContext } from "../../context/AuthContext";
 
 const AddEventModal = () => {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
-  const { user } = React.useContext(AuthContext);
-  const { person } = usePeople({});
   const [projectName, setProjectName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [startDate, setStartDate] = React.useState("");
@@ -62,34 +58,31 @@ const AddEventModal = () => {
           )
         );
       }
-
-      console.log("Проект создан и участники добавлены:", response.data);
       closeModal();
       setSelectedParticipants([]);
     } catch (err) {
-      console.error("Ошибка:", err);
       setError(err?.response?.data?.message || err.message);
     } finally {
       setIsLoading(false);
     }
   };
-
   const customStyles = {
     content: {
       top: "50%",
       left: "50%",
+      right: "auto",
+      bottom: "auto",
       transform: "translate(-50%, -50%)",
-      width: "800px",
-      maxWidth: "95%",
-      padding: "30px",
-      borderRadius: "12px",
+      width: "90%",
+      maxWidth: "640px",
+      padding: "0", // паддинги уже есть в .Modal
+      borderRadius: "16px",
       backgroundColor: "#fff",
-      overflow: "auto",
-      border: "1px solid #4B1218",
+      border: "1px solid #ccc",
     },
     overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.7)",
-      overflow: "auto",
+      backgroundColor: "rgba(0, 0, 0, 0.75)",
+      zIndex: 1000,
     },
   };
 
@@ -153,53 +146,6 @@ const AddEventModal = () => {
             />
           </div>
 
-          {/* Участники */}
-          <div className={style.section}>
-            <h3>Добавить участников</h3>
-            <select
-              className={style.projectInput}
-              onChange={(e) => {
-                const userId = parseInt(e.target.value);
-                if (!selectedParticipants.includes(userId)) {
-                  setSelectedParticipants([...selectedParticipants, userId]);
-                }
-              }}
-            >
-              <option value="">Выберите участника</option>
-              {person.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.last_name} {p.first_name}
-                </option>
-              ))}
-            </select>
-
-            <div className={style.participantsList}>
-              {selectedParticipants.map((id) => {
-                const userObj = person.find((p) => p.id === id);
-                const displayName = userObj
-                  ? `${userObj.first_name} ${userObj.last_name}`
-                  : `ID ${id}`;
-
-                return (
-                  <div key={id} className={style.participantItem}>
-                    <span>{displayName}</span>
-                    <button
-                      type="button"
-                      className={style.removeButton}
-                      onClick={() =>
-                        setSelectedParticipants(
-                          selectedParticipants.filter((uid) => uid !== id)
-                        )
-                      }
-                    >
-                      ✕
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Файл */}
           <div className={style.section}>
             <h3>Медиафайлы</h3>
@@ -219,13 +165,19 @@ const AddEventModal = () => {
 
           {/* Кнопка */}
           <div className={style.section}>
-            <button
-              className={style.saveButton}
-              onClick={handleSubmit}
-              disabled={isLoading}
-            >
-              {isLoading ? "Сохранение..." : "Сохранить"}
-            </button>
+            <section className={style.buttonsMyDocum}>
+              <button
+                className={style.primaryButton}
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                {isLoading ? "Сохранение..." : "Сохранить"}
+              </button>
+
+              <button className={style.secondaryButton} onClick={closeModal}>
+                Отмена
+              </button>
+            </section>
           </div>
         </div>
       </Modal>

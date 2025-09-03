@@ -38,10 +38,9 @@ const AboutUs = () => {
       <div className="contacts">
         <div className="about">
           <div className="infoAbout">
-            <h2>Контакты</h2>
+            <h2 style={{textAlign:"center"}}>Контакты</h2>
             <form>
               <div>
-                <label htmlFor="phone">Телефон:</label>
                 <input
                   type="text"
                   id="phone"
@@ -52,7 +51,6 @@ const AboutUs = () => {
               </div>
 
               <div>
-                <label htmlFor="email">E-mail:</label>
                 <input
                   type="email"
                   id="email"
@@ -63,12 +61,11 @@ const AboutUs = () => {
               </div>
 
               <div>
-                <label htmlFor="address">Адрес:</label>
                 <input
                   type="text"
                   id="address"
                   name="address"
-                  value="Грозный , ул. Исаева 100 "
+                  value="ул. Исаева 100 "
                   readOnly
                 />
               </div>
