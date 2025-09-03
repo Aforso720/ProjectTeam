@@ -16,9 +16,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run sitemap && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sitemap": "node scripts/sitemap-generator.js",
+    "sitemap:prod": "node scripts/sitemap-generator.js --domain http://gstouteam.dpdns.org"
   },
   "eslintConfig": {
     "extends": [
