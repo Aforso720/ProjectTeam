@@ -2,6 +2,7 @@ import React from 'react';
 import style from './MyEvents.module.scss';
 import useMyEvents from '../../API/useMyEvents';
 import AddEventModal from './AddEventModal';
+import InfoModalProject from './infoModalProject';
 import { AuthContext } from '../../context/AuthContext';
 import Loader from '../../Component/Loader';
 import { normalizeImageUrl } from '../imageUtils'
@@ -9,6 +10,8 @@ import { normalizeImageUrl } from '../imageUtils'
 const MyEvents = () => {
   const { user } = React.useContext(AuthContext);
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [selectedProject, setSelectedProject] = React.useState(null);
+  const [isInfoModalOpen, setIsInfoModalOpen] = React.useState(false);
   const itemsPerPage = 5; 
 
   const { myEvents, loading, meta } = useMyEvents({
@@ -17,7 +20,7 @@ const MyEvents = () => {
     perPage: itemsPerPage
   });
 
- const normalizedEvents = React.useMemo(() => {
+  const normalizedEvents = React.useMemo(() => {
     if (!myEvents) return [];
 
     return myEvents.map(event => ({
@@ -25,6 +28,16 @@ const MyEvents = () => {
       preview_image: normalizeImageUrl(event.preview_image)
     }));
   }, [myEvents]);
+
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+    setIsInfoModalOpen(true);
+  };
+
+  const closeInfoModal = () => {
+    setIsInfoModalOpen(false);
+    setSelectedProject(null);
+  };
 
   const handleNextPage = () => {
     if (currentPage < meta.last_page) {
@@ -49,7 +62,12 @@ const MyEvents = () => {
 
         {loading ? <Loader/> : (
           normalizedEvents.map((item) => ( 
-            <div className={style.card} key={item.id}>
+            <div 
+              className={style.card} 
+              key={item.id}
+              onClick={() => handleProjectClick(item)}
+              style={{ cursor: 'pointer' }}
+            >
               <img
                 src={item.preview_image || '/img/DefaultImage.webp'}
                 alt='Фото проекта'
@@ -66,6 +84,13 @@ const MyEvents = () => {
           ))
         )}
       </div>
+
+      {/* Модалка для просмотра информации о проекте */}
+      <InfoModalProject
+        project={selectedProject}
+        isOpen={isInfoModalOpen}
+        onRequestClose={closeInfoModal}
+      />
 
       {meta.last_page > 1 && (
         <ul className={style.paginationEvents}>

@@ -356,12 +356,15 @@ const NewsAdmin = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) =>
-                      setNewsData((prev) => ({
-                        ...prev,
-                        previewImage: e.target.files?.[0] || null,
-                      }))
-                    }
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setNewsData((prev) => ({
+                          ...prev,
+                          previewImage: file,
+                        }));
+                      }
+                    }}
                   />
                 </label>
               )}

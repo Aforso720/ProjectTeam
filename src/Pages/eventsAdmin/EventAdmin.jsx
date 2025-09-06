@@ -76,7 +76,6 @@ const EventAdmin = () => {
     }
   };
 
-
   const handleViewEvent = (event) => {
     setCurrentEvent(event);
     setIsViewModalOpen(true);
@@ -174,10 +173,10 @@ const EventAdmin = () => {
         project_id: 2,
       };
 
-      // Если нужно изображение — тогда FormData + append, но сначала проверим без
       const response = await axiosInstance.post("/events", payload);
-
+      console.log(response);
       const createdEvent = response.data.data;
+      
       console.log("Создано мероприятие:", createdEvent);
       await fetchEvents(currentPage);
     } catch (error) {
@@ -302,10 +301,7 @@ const EventAdmin = () => {
             onClick={handleNextPage}
             className={currentPage === totalPages ? "disabled" : ""}
           >
-            <img
-              src="/img/arrow-circle-right.png" // 👉 картинка вперёд
-              alt="Вперёд"
-            />
+            <img src="/img/arrow-circle-right.png" alt="Вперёд" />
           </li>
         </ul>
       )}
@@ -431,7 +427,7 @@ const EventAdmin = () => {
               <option value="completed">Завершённое</option>
             </select>
           </div>
-            
+
           <div className="modal-actions">
             <button
               type="button"
@@ -469,10 +465,7 @@ const EventAdmin = () => {
                 placeholder="Введите имя участника"
                 className="modal-input"
               />
-              <button
-                type="button"
-                className="add-participant-btn"
-              >
+              <button type="button" className="add-participant-btn">
                 +
               </button>
             </div>
