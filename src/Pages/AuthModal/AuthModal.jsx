@@ -1,5 +1,6 @@
 import "./AuthModal.scss";
 import { useForm } from "react-hook-form";
+import InputField from "../../utils/InputField";
 
 const AuthModal = ({ onClose, handleLogin, loading, error }) => {
   const { register, handleSubmit, formState, reset } = useForm({
@@ -31,44 +32,39 @@ const AuthModal = ({ onClose, handleLogin, loading, error }) => {
           <div className="auth-modal__divider"></div>
         </div>
         <form onSubmit={handleSubmit(logAuthSubmit)} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              id="email"
-              type="email"
-              // value={email}
-              placeholder="Введите ваш email"
-              disabled={loading}
-              {...register('email',{
-                required: "Это поле обязательно",
-                pattern: {
-                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i,
-                  message: "Email некорректен",
-                },
-              })}
-            />
-          </div>
-          {emailError && <div className="error-message">{emailError}</div>}
-          <div className="form-group">
-            <label htmlFor="password">Пароль:</label>
-            <input
-              id="password"
-              type="password"
-              // value={password}
-              placeholder="Введите ваш пароль"
-              disabled={loading}
-              {...register("password", {
-                required: "Это поле обязательно",
-                pattern: {
-                  value: /^.{6,}$/,
-                  message: "Пароль должен быть не короче 6 символов",
-                },
-              })}
-            />
-          </div>
-          {passwordError && (
-            <div className="error-message">{passwordError}</div>
-          )}
+          <InputField
+            label="Email:"
+            name="email"
+            type="email"
+            placeholder="Введите ваш email"
+            disabled={loading}
+            register={register}
+            validation={{
+              required: "Это поле обязательно",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i,
+                message: "Email некорректен",
+              },
+            }}
+            error={emailError}
+          />
+
+          <InputField
+            label="Пароль:"
+            name="password"
+            type="password"
+            placeholder="Введите ваш пароль"
+            disabled={loading}
+            register={register}
+            validation={{
+              required: "Это поле обязательно",
+              pattern: {
+                value: /^.{6,}$/,
+                message: "Пароль должен быть не короче 6 символов",
+              },
+            }}
+            error={passwordError}
+          />
           <button type="submit" className="auth-button" disabled={loading}>
             {loading ? "Вход..." : "Войти"}
           </button>
