@@ -28,6 +28,7 @@ const InputField = ({
       registered.onChange(e);
     }
     // custom onChange from parent if needed
+
     if (onChange) {
       onChange(e);
     }
@@ -39,7 +40,9 @@ const InputField = ({
       <input
         id={name}
         type={type}
+
         {...registered}
+
         onChange={handleChange}
         {...rest}
       />

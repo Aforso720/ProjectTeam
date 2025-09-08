@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import InputField from "../../utils/InputField";
 import { useForm } from "react-hook-form";
 
+
 Modal.setAppElement("#root");
 
 // хелперы для даты
