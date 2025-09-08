@@ -4,6 +4,7 @@ import "./NewsAdmin.scss";
 import axiosInstance from "../../API/axiosInstance";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import InputField from "../../utils/InputField";
 
 Modal.setAppElement("#root");
 
@@ -257,7 +258,7 @@ const NewsAdmin = () => {
           <form onSubmit={handleSubmit}>
             <div className="modal-section">
               <h3>Заголовок</h3>
-              <input
+              <InputField
                 type="text"
                 name="title"
                 value={newsData.title}
@@ -281,7 +282,7 @@ const NewsAdmin = () => {
 
             <div className="modal-section">
               <h3>Дата</h3>
-              <input
+              <InputField
                 type="datetime-local"
                 name="date"
                 value={newsData.date}
