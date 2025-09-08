@@ -15,11 +15,20 @@ const InputField = ({
   onChange,
   ...rest
 }) => {
+  // retrieve register props (onChange, ref, etc.) if provided
+  const registered = register ? register(name, validation) : {};
+
   const handleChange = (e) => {
     if (type === 'date' || type === 'datetime-local') {
       // Blur after selecting date to close the picker modal
       e.target.blur();
     }
+    // allow react-hook-form to handle change events
+    if (registered.onChange) {
+      registered.onChange(e);
+    }
+    // custom onChange from parent if needed
+
     if (onChange) {
       onChange(e);
     }
@@ -31,7 +40,9 @@ const InputField = ({
       <input
         id={name}
         type={type}
-        {...(register ? register(name, validation) : {})}
+
+        {...registered}
+
         onChange={handleChange}
         {...rest}
       />

@@ -135,6 +135,8 @@ const AddEventModal = () => {
               className={style.projectInput}
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
+              min="1900-01-01"
+              max="2100-12-31"
             />
 
             <h3>Дата окончания</h3>
@@ -143,6 +145,8 @@ const AddEventModal = () => {
               className={style.projectInput}
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
+              min="1900-01-01"
+              max="2100-12-31"
             />
           </div>
 

@@ -3,6 +3,8 @@ import Modal from "react-modal";
 import "./EventAdmin.scss";
 import axiosInstance from "../../API/axiosInstance";
 import Loader from "../../Component/Loader";
+import { useForm } from "react-hook-form";
+import InputField from "../../utils/InputField";
 
 Modal.setAppElement("#root");
 
@@ -22,6 +24,15 @@ const EventAdmin = () => {
     previewImage: null,
     status: "active",
   });
+
+  const {
+    register,
+    handleSubmit: rhfHandleSubmit,
+    formState,
+  } = useForm({ mode: "onChange" });
+  const titleError = formState.errors["title"]?.message;
+  const startDateError = formState.errors["startDate"]?.message;
+  const endDateError = formState.errors["endDate"]?.message;
 
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -187,22 +198,21 @@ const EventAdmin = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleFormSubmit = async () => {
     if (isEditMode && currentEvent) {
       await updateEvent();
     } else {
       await createEvent();
       setIsModalOpen(false);
     }
-    // Очистить форму
     setEventData({
       type: "forums",
       title: "",
       startDate: "",
       endDate: "",
       description: "",
+      previewImage: null,
+      status: "active",
     });
   };
 
@@ -316,7 +326,7 @@ const EventAdmin = () => {
           <h2>Добавление мероприятия</h2>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={rhfHandleSubmit(handleFormSubmit)}>
           {/* <div className="modal-section">
             <h3>Тип мероприятия</h3>
             <select
@@ -332,39 +342,67 @@ const EventAdmin = () => {
 
           <div className="modal-section">
             <h3>Название мероприятия</h3>
-            <input
+            <InputField
               type="text"
               name="title"
               value={eventData.title}
               onChange={handleInputChange}
               className="modal-input"
               placeholder="Введите название"
-              required
+              register={register}
+              validation={{ required: "Введите название" }}
+              error={titleError}
             />
           </div>
 
           <div className="modal-dates">
             <div className="modal-section">
               <h3>Дата начала</h3>
-              <input
+              <InputField
                 type="date"
                 name="startDate"
                 value={eventData.startDate}
                 onChange={handleInputChange}
                 className="modal-input"
-                required
+                register={register}
+                validation={{
+                  required: "Укажите дату",
+                  validate: (value) => {
+                    const y = new Date(value).getFullYear();
+                    return (
+                      y >= 1900 && y <= 2100 ||
+                      "Год должен быть между 1900 и 2100"
+                    );
+                  },
+                }}
+                error={startDateError}
+                min="1900-01-01"
+                max="2100-12-31"
               />
             </div>
 
             <div className="modal-section">
               <h3>Дата окончания</h3>
-              <input
+              <InputField
                 type="date"
                 name="endDate"
                 value={eventData.endDate}
                 onChange={handleInputChange}
                 className="modal-input"
-                required
+                register={register}
+                validation={{
+                  required: "Укажите дату",
+                  validate: (value) => {
+                    const y = new Date(value).getFullYear();
+                    return (
+                      y >= 1900 && y <= 2100 ||
+                      "Год должен быть между 1900 и 2100"
+                    );
+                  },
+                }}
+                error={endDateError}
+                min="1900-01-01"
+                max="2100-12-31"
               />
             </div>
           </div>
@@ -504,7 +542,7 @@ const EventAdmin = () => {
         </div>
 
         {isEditMode ? (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={rhfHandleSubmit(handleFormSubmit)}>
             {/* <div className="modal-section">
               <h3>Тип мероприятия</h3>
               <select
@@ -520,39 +558,67 @@ const EventAdmin = () => {
 
             <div className="modal-section">
               <h3>Название мероприятия</h3>
-              <input
+              <InputField
                 type="text"
                 name="title"
                 value={eventData.title}
                 onChange={handleInputChange}
                 className="modal-input"
                 placeholder="Введите название"
-                required
+                register={register}
+                validation={{ required: "Введите название" }}
+                error={titleError}
               />
             </div>
 
             <div className="modal-dates">
               <div className="modal-section">
                 <h3>Дата начала</h3>
-                <input
+                <InputField
                   type="date"
                   name="startDate"
                   value={eventData.startDate}
                   onChange={handleInputChange}
                   className="modal-input"
-                  required
+                  register={register}
+                  validation={{
+                    required: "Укажите дату",
+                    validate: (value) => {
+                      const y = new Date(value).getFullYear();
+                      return (
+                        y >= 1900 && y <= 2100 ||
+                        "Год должен быть между 1900 и 2100"
+                      );
+                    },
+                  }}
+                  error={startDateError}
+                  min="1900-01-01"
+                  max="2100-12-31"
                 />
               </div>
 
               <div className="modal-section">
                 <h3>Дата окончания</h3>
-                <input
+                <InputField
                   type="date"
                   name="endDate"
                   value={eventData.endDate}
                   onChange={handleInputChange}
                   className="modal-input"
-                  required
+                  register={register}
+                  validation={{
+                    required: "Укажите дату",
+                    validate: (value) => {
+                      const y = new Date(value).getFullYear();
+                      return (
+                        y >= 1900 && y <= 2100 ||
+                        "Год должен быть между 1900 и 2100"
+                      );
+                    },
+                  }}
+                  error={endDateError}
+                  min="1900-01-01"
+                  max="2100-12-31"
                 />
               </div>
             </div>
