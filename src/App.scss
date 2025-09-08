@@ -1,5 +1,3 @@
-@import "~@fontsource/inter/index.css";
-
 @font-face {
   font-family: "Labil Grotesk";
   src: url("https://db.onlinewebfonts.com/t/3624085123711a73a22276b47ea3e323.eot");
@@ -19,7 +17,6 @@ body, html {
   padding: 0;
   height: 100%;
   overflow-x: hidden;
-  // overflow-y: hidden;
 }
 
 #root {
@@ -469,7 +466,7 @@ body, html {
         width: auto;
         padding-left: 0;
         .UlH {
-          font-size: 12px;
+          font-size: 10px;
         }
 
         li:nth-child(1){
@@ -494,8 +491,8 @@ body, html {
   }
 
 
-  @media (min-width:375px ) and (max-width:600px) {
-    font-size: 8px;
+  @media (min-width:320px ) and (max-width:600px) {
+    font-size: 10px;
     min-height: 144px;
 
     .LogoFoot {
@@ -521,7 +518,7 @@ body, html {
         width: auto;
         padding-left: 0;
         .UlH {
-          font-size: 10px;
+          font-size: 12px;
         }
 
         li:nth-child(1){
@@ -548,3 +545,106 @@ body, html {
   
 }
 
+.loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+  color: white;
+  font-size: 18px;
+  font-family: "Calibri", sans-serif;
+  gap: 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid #fff;
+  border-top: 6px solid #4B1218;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+* {
+  scrollbar-width: thin; 
+  scrollbar-color: #5b151b #fff; 
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px; 
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #5b151b; 
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darken(#5b151b, 10%); 
+  }
+}
+
+textarea::-webkit-scrollbar,
+input::-webkit-scrollbar {
+  width: 6px; 
+}
+
+textarea::-webkit-scrollbar-thumb,
+input::-webkit-scrollbar-thumb {
+  background-color: lighten(#5b151b, 20%); 
+}
+
+.notification-badge {
+  position: absolute;
+  top: 10px;
+  right: 50px;
+  background: #d32f2f;
+  color: white;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 100000; 
+  box-shadow: 0 0 0 2px white; 
+}
+
+.profile-notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  
+  @media screen and (max-width: 800px) {
+    top: -5px;
+    right: -5px;
+    
+    .notification-badge {
+      width: 13px;
+      height: 13px;
+      font-size: 0.7rem;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .profile-notification-badge {
+    top: -5px;
+    right: -40px;
+  }
+}

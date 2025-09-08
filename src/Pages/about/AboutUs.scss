@@ -124,21 +124,21 @@
             height: 226px;
           }
 
-          @media (max-width:800px) and (min-width:600px)  {
+          @media (max-width:800px){
             width: 130px;
             height: 130px;    
             top: 100px;
             left: 50px;        
           }
 
-          @media (max-width:600px) and (min-width:500px)  {
+          @media (max-width:600px){
             width: 101px;
             height: 101px;    
             top: -30px;
             left: 40px;        
           }
 
-          @media (max-width:500px) and (min-width:375px) {
+          @media (max-width:500px){
             width: 101px;
             height: 101px;    
             top: -30px;
@@ -181,7 +181,7 @@
           text-wrap: wrap;
         }
 
-        @media (max-width:800px) and (min-width:600px) {
+        @media (max-width:800px)  {
           font-size: 14px;
           width: 300px;
           font-weight: 700;
@@ -189,7 +189,7 @@
           margin-right: 25px;
         }
 
-        @media (max-width:600px) and (min-width:500px) {
+        @media (max-width:600px)  {
           font-size: 10px;
           width: 250px;
           font-weight: 700;
@@ -197,7 +197,7 @@
           margin-right: 45px;
         }
 
-        @media (max-width:500px) and (min-width:375px) {
+        @media (max-width:500px)  {
           font-size: 10px;
           width: 180px;
           font-weight: 700;
@@ -225,12 +225,12 @@
       height: 558px;
       margin: 57px 12px 60px 42px;
 
-       @media (max-width: 600px) and (min-width:375px) {
+       @media (max-width: 600px)  {
         height: 150px;
         width: 100%;
       }
 
-      @media (max-width: 800px) and (min-width:600px) {
+      @media (max-width: 800px)  {
         height: 180px;
         width: 100%;
       }
@@ -239,14 +239,14 @@
         color: white;
         margin-top: 30px;
 
-        @media (max-width: 600px) and (min-width:375px) {
+        @media (max-width: 600px) {
           margin-top: 15px;
           margin-left: -40px;
         }
 
-        @media (max-width: 800px) and (min-width:600px) {
+        @media (max-width: 800px) {
           margin-top: 25px;
-          margin-left: -15px;
+          margin-left: -40px;
         }
 
 
@@ -259,43 +259,38 @@
           margin: 16px 51px 32px auto;
 
           @media (max-width: 1400px) {
-            // width: 580px;
             height: auto;
             font-size: 54px;
             margin: 56px 51px 32px 20px;
           }
 
           @media (max-width: 1200px) {
-            // width: 540px;
             font-size: 44px;
             margin-left: 15px;
             margin: 56px 51px 32px 20px;
           }
 
           @media (max-width: 1000px) {
-            // width: 200px;
             height: 100px;
             left: 162px;
             margin-top: 0;
           }
 
-          @media (max-width: 800px) and (min-width:600px) {
+          @media (max-width: 800px) {
             font-size: 26px;
-            // width: 220px;
             height: 25px;
             margin-top: -30px;
           }
 
 
-          @media (max-width: 600px) and (min-width:425px) {
+          @media (max-width: 600px) {
             font-size: 24px;
             width: 100%;
             height: 25px;
           }
 
-          @media (max-width: 425px) and (min-width:350px) {
+          @media (max-width: 425px)  {
             font-size: 20px;
-            // width: 220px;
             height: 25px;
           }
         }
@@ -326,7 +321,7 @@
             height: 200px;
           }
 
-          @media (max-width: 800px) and (min-width:600px) {
+          @media (max-width: 800px)  {
             font-size: 12px;
              margin-left: 20px;
              width: 225px;
@@ -334,14 +329,14 @@
           }
 
 
-          @media (max-width: 600px) and (min-width:425px) {
+          @media (max-width: 600px) {
            font-size: 10px;
             margin-left: 20px;
             width: 200px;
             height: 65px;
           }
 
-          @media (max-width: 425px) and (min-width:375px) {
+          @media (max-width: 425px) {
             font-size: 10px;
             margin-left: 20px;
             width: 160px;
@@ -383,21 +378,21 @@
             right: 96px;
           }
 
-          @media (max-width: 800px) and (min-width:600px) {
+          @media (max-width: 800px)  {
             width: 155px;
             height: 155px;
             top: 65px;
             right: 20px;
           }
 
-          @media (max-width: 600px) and (min-width:425px) {
+          @media (max-width: 600px) {
             width: 115px;
             height: 115px;
             top: 55px;
             right: 55px;
           }
 
-          @media (max-width: 425px) and (min-width:375px) {
+          @media (max-width: 425px) {
             width: 115px;
             height: 115px;
             top: 55px;
@@ -434,21 +429,21 @@
             bottom: 180px;
           }
 
-          @media (max-width: 800px) and (min-width:600px) {
+          @media (max-width: 800px)  {
             width: 165px;
             height: 165px;
             bottom: 5px;
             right: 40px;
           }
 
-          @media (max-width: 600px) and (min-width:425px) {
+          @media (max-width: 600px) {
             width: 125px;
             height: 125px;
             bottom: 20px;
             right: 25px;
           }
 
-          @media (max-width: 425px) and (min-width:375px) {
+          @media (max-width: 425px) {
             width: 125px;
             height: 125px;
             bottom: 20px;
@@ -478,11 +473,15 @@
       height: auto;
       margin-bottom: 20px;
 
-      @media (max-width: 800px) and (min-width:375px) {
+      @media (max-width: 900px) {
         flex-direction: column;
         margin: 0;
       }
 
+      
+      @media (max-width: 1050px) and (min-width:800px) {
+        gap: 100px;
+      }
      
       .ifrMap {
         display: flex;
@@ -490,21 +489,18 @@
         justify-content: center;
         align-items: center;
         margin-right: 50px;
-        @media (min-width:375px) and (max-width:800px) {
+        @media (max-width:900px) {
           width: 100%;
           padding-bottom: 120px;
           align-items: center;
           margin-right: 0;
         }
 
-        @media (max-width: 900px) and (min-width: 801px) {
-          transform: translateX(-3em);
-        } 
         h2{
-          @media (min-width:800px) {
+          @media (min-width:900px) {
             display: none;
           }
-          @media (max-width:800px) {
+          @media (max-width:900px) {
             font-weight: 700;
             font-size: 34px;
             color: white;
@@ -531,7 +527,7 @@
             height: 250px;
             margin-right: 5em;
           }
-          @media (max-width: 800px) {
+          @media (max-width: 900px) {
             width: 80%;
             height: 400px;
             margin: 0;
@@ -541,112 +537,120 @@
       }
 
       .infoAbout {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 400px;
-        margin-bottom: 20px;
-        // background-image: url("fon.png");
-        margin-left: 40px;
-          
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  margin-bottom: 20px;
+  // background-image: url("fon.png");
+  margin-left: 40px;
 
-        @media (max-width: 1000px) and (min-width: 800px) {
-          transform: translateX(10em);
-        } 
+  @media (max-width: 800px) and (min-width: 320px) {
+    // transform: translateX(1.5em);
+  } 
 
-        @media (max-width: 800px) and (min-width: 320px) {
-          transform: translateX(1.5em);
-        } 
+  h2 {
+    color: #4b1218;
+    width: 260px;
+    height: 90px;
+    font-size: 64px;
+    margin-bottom: 13px;
 
-        h2 {
-          color: #4b1218;
-          width: 260px;
-          height: 90px;
-          font-size: 64px;
-          margin-bottom: 13px;
+    @media (max-width: 1500px) {
+      font-size: 54px;
+    }
 
-          @media (max-width: 1500px) {
-              font-size: 54px;
-          }
+    @media (max-width: 1300px) {
+      font-size: 44px;
+      transform: translateY(0.5em);
+    }
 
-          @media (max-width: 1300px) {
-            font-size: 44px;
-            transform: translateY(0.5em);
-          }
+    @media (max-width: 1000px) {
+      font-size: 34px;
+      transform: translateY(1.5em);
+    }
 
-          @media (max-width: 1000px) {
-            font-size: 34px;
-            transform: translateY(1.5em);
-          }
+    @media (max-width: 900px) {
+      font-size: 34px;
+      transform: translateY(1em);
+      margin-right: 50px;
+    }
+  }
 
-          @media (max-width: 800px) and (min-width:375px) {
-            font-size: 34px;
-            transform: translateY(1em);
-          }
-        }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
 
-        li {
-          display: flex;
-          justify-content: start;
-          align-items: center;
-          text-align: start;
-          width: 488px;
-          height: 72px;
-          background-color: #4B12184D;
-          border-radius: 15px;
-          padding: 13px;
-          color: white;
-          font-family: Calibri sans-serif;
-          font-weight: bold;
-          font-size: 32px;
-          margin-bottom: 15px;
+    div {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      width: 488px;
+      height: 72px;
+      background-color: #4B12184D;
+      border-radius: 15px;
+      padding: 13px;
+      font-family: Calibri, sans-serif;
+      font-weight: bold;
+      font-size: 32px;
+      color: white;
 
-          @media (max-width: 1500px) {
-            font-size: 28px;
-            width: 358px;
-            height: 72px;
-          }
+      label {
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
 
-          @media (max-width: 1300px) {
-            font-size: 24px;
-            width: 258px;
-            height: 52px;
-          }
+      input {
+        border: none;
+        background: transparent;
+        color: white;
+        font-family: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+        width: 100%;
+        outline: none;
+      }
 
-          @media (max-width: 1000px) {
-            font-size: 20px;
-            width: 208px;
-            height: 42px;
-            transform: translateX(-1.5em);
-          }
+      @media (max-width: 1500px) {
+        font-size: 28px;
+        width: 358px;
+        height: 72px;
+      }
 
-          @media (max-width: 800px) and (min-width:375px) {
-            font-size: 18px;
-            width: 250px;
-            height: 42px;
-            text-align: center;
-          }
-        }
+      @media (max-width: 1300px) {
+        font-size: 24px;
+        width: 258px;
+        height: 52px;
+      }
 
-        ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
+      @media (max-width: 1000px) {
+        font-size: 20px;
+        width: 208px;
+        height: 42px;
+        transform: translateX(-1.5em);
+      }
+
+      @media (max-width: 900px) {
+        font-size: 18px;
+        width: 250px;
+        height: 42px;
+        text-align: center;
+
+        label {
+          display: none; // можно скрыть текст label на очень маленьких экранах
         }
       }
     }
+  }
+      }
 
-    @media screen and (max-width: 900px){
-      // .contacts {
-      //   display: flex; 
-      //   flex-direction: column;
-      //   align-items: center;
-      //   justify-content: start;
-      //   padding: 0 10px;
-      // }
-    
+    }
+
+    @media screen and (max-width: 900px){ 
       .about {
         gap: 20px; 
       }
@@ -681,7 +685,7 @@
         background-color: #4B1218;
         background-image: url("fon2.png");
         text-align: center;
-        padding: 20px 0; // добавим отступы
+        padding: 20px 0;
       
         h2 {
           font-weight: 700;
@@ -691,11 +695,9 @@
       }
       
       .ifrMap iframe {
-        width: 100%; // пусть будет на всю ширину
-        height: 300px; // увеличим, чтобы не выглядело мелко
+        width: 100%;
+        height: 300px; 
         border-radius: 15px;
-        // border: none;
-        // z-index: 2;
       }
     }
 

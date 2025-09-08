@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import "./HeaderAdmin.scss";
 import {Link} from "react-router";
 
@@ -8,8 +8,8 @@ const HeaderAdmin = () => {
     const {pathname } = useLocation();
     const test = [
         ["Журнал", "journal"],
-        ["Конкурсы", "contest"],
-        ["Управление участниками", "managing"]
+        ["Активности", "contest"],
+        ["Участники", "managing"]
     ]
 
     return (

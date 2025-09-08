@@ -1,0 +1,67 @@
+.eventAdminPage {
+  width: 100vw;
+  background-color: #5b151b;
+  padding: 20px; 
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  .event-filters {
+    display: inline-flex;
+    margin: 0 auto;
+    gap: 10px;
+    border: 2px solid #fff;
+    border-radius: 80px;
+    padding:5px;
+    width: 373px;
+    height: auto;
+    background-color: #5b151b;
+    justify-content: space-between;
+
+    .filter-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 33px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'TT Travels Trl', sans-serif;
+      font-weight: 500;
+      color: #fff;
+      text-align: center;
+      min-width: 80px;
+      box-sizing: border-box;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &.active {
+        background: #fff;
+        color: #5b151b;
+      }
+    }
+
+    @media (max-width: 400px) {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      padding: 10px;
+      border-radius: 20px;
+
+      .filter-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 15px;
+      }
+    }
+  }
+}
+
+.activeEventAdmin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

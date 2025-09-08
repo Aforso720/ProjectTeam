@@ -94,11 +94,19 @@
 
     span {
       position: absolute;
-      top: 5px;
-      right: 0.5em;
+      top: -5px;
+      right: 25px;
       font-weight: 700;
       font-size: 80px;
       color: white;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      img{
+        filter: brightness(0) invert(1);
+        height: 40px ;
+        width: 40px;
+      }
     }
 
     .infoPerson {
@@ -139,21 +147,102 @@
   }
 }
 
+@media (max-width:1400px){
+  .profile{
+      width: 80%;
+      max-width: 850px;
+      max-height: 660px;
+      margin: 0;
+
+      .InfoProfile{
+        padding-top: 40px;
+        padding-left: 40px;
+        justify-content: space-around;
+        gap: 20px;
+        .infoPerson{
+          justify-content: flex-start;
+          align-items: center;
+          gap: 20px;
+        }
+        .buttonEdit{
+          transform:  translateX(0em);
+          height: 37px;
+          font-size: 22px;
+        }
+        span{
+          font-size: 48px ;
+        }
+        .inputGroup p{
+          font-size: 11px;
+        }
+        .inputGroup input{
+          width: auto;
+          font-size: 20px;
+          margin: 0;
+        }
+        .inputGroup{
+          margin: 0;
+        }
+
+      }
+
+      .photoProf{
+        padding-top: 10px;
+        margin-left: 10px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img{
+          padding: 5px;
+          width: 200px;
+          height: 200px;
+          transform: none;
+        }
+        .deletePhotos{
+          width: auto; 
+          height: auto;
+          padding: 8px 16px;
+          font-size: 12px;
+          border: 1px solid white;
+        }
+        .addPhotos{
+          width: auto;
+          height: auto;
+          padding: 8px 16px;
+          font-size: 12px;
+        }
+        .butPhotos {
+          justify-content: center;
+          align-items: center;
+          margin: 0;
+          bottom: 0; 
+          left: 0; 
+          transform: translateX(0em);
+          position: relative;
+          text-align: center;
+        }
+    }
+  }
+
+}
+
 @media (max-width:900px){
   .profile{
       width: 80%;
       max-width: 545px;
       height: 660px;
-      justify-content: center;
       align-items: center;
       flex-direction: column;
       margin: 0 auto;
+      justify-content: space-between;
 
       .InfoProfile{
+        justify-content: flex-end;
         width: 80%;
-        height: 800px;
-        justify-content: space-between;
-        padding: 120px 0 20px 0;
+        flex-grow: 0;
+        padding: 0px 0 20px 0;
+        max-height: 500px;
         .infoPerson{
           justify-content: flex-start;
           flex-direction: column;
@@ -185,7 +274,7 @@
       .photoProf{
         padding-top: 10px;
         margin-left: 0;
-        height: 100px;
+        height: auto;
         img{
           padding: 5px;
           width: 150px;
@@ -224,17 +313,19 @@
   .profile{
       width: 80%;
       max-width: 345px;
-      height: 660px;
+      height: 100%;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       margin: 0 auto;
+      max-height: 100%;
 
       .InfoProfile{
         width: 80%;
-        height: 800px;
+        height: 100%;
+        max-height: 100%;
         justify-content: space-between;
-        padding: 120px 0 20px 0;
+        padding: 40px 0 20px 0;
         .infoPerson{
           justify-content: flex-start;
           flex-direction: column;
@@ -266,7 +357,8 @@
       .photoProf{
         padding-top: 10px;
         margin-left: 0;
-        height: 100px;
+        margin-top: 20px;
+        height: auto;
         img{
           padding: 5px;
           width: 150px;

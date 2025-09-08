@@ -1,5 +1,4 @@
-import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router";
 import "./Table.scss";
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -12,45 +11,60 @@ const formatDate = (dateString) => {
   return parts.join(' ');
 };
 
-const JournalView = () => {
+const translateType = (type) => {
+  switch (type) {
+    case "event":
+      return "Мероприятие";
+    default :
+      return "Собрание";
+  }
+};
+
+const Table = () => {
   const { state } = useLocation();
 
   if (!state) return <div>Журнал не найден</div>;
 
+  const { title, date, type, students } = state;
+
   return (
-    <div className="container">
-      <div className="nav-container">
-        <Link to="/admin/journal" className="arrow"></Link>
-        <p>{state.title}</p>
-        <p>{formatDate(state.date)}</p>
-      </div>
-      <div className="table-container">
+    <section className="journal-container">
+      <header className="journal-header">
+        <Link to="/admin/journal" className="journal-back-arrow" aria-label="Назад к списку журналов" />
+        <div className="journal-header-info">
+          <p className="journal-title">{title}</p>
+          <p className="journal-type">{translateType(type)}</p>
+          <p className="journal-date">{formatDate(date)}</p>
+        </div>
+      </header>
+
+      <div className="journal-table-wrapper">
         <table>
           <thead>
             <tr>
-              <th>ФИО</th>
-              <th>Группа</th>
-              <th className="mark">Отметка</th>
+              <th className="student-name">ФИО</th>
+              <th className="student-group">Группа</th>
+              <th className="attendance-mark">Отметка</th>
             </tr>
           </thead>
-            <tbody>
-              {state.students.map((student, index) => (
-                <tr key={index}>
-                  <td>{student.name}</td>
-                  <td>{student.group}</td>
-                  <td className="mark">
-                    {student.mark
-                      ? <img src="/img/was.png" alt="Присутствовал" />
-                      : <img src="/img/wasNot.png" alt="Отсутствовал" />
-                    }
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+          <tbody>
+            {students.map((student, index) => (
+              <tr key={index}>
+                <td>{student.name}</td>
+                <td>{student.group}</td>
+                <td className="attendance-mark">
+                  <img
+                    src={student.mark ? "/img/was.png" : "/img/wasNot.png"}
+                    alt={student.mark ? "Присутствовал" : "Отсутствовал"}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default JournalView;
+export default Table;

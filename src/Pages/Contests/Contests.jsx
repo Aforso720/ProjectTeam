@@ -8,17 +8,16 @@ import "swiper/css/effect-flip";
 import { Navigation } from "swiper/modules";
 import Event from '../../Elements/Event';
 import usePosts from '../../API/usePosts';
-import LoadingEvent from '../../Elements/Loading/loadingEvent';
-import { MyContext } from '../../App';
+import { AuthContext } from '../../context/AuthContext';
 import useEvent from '../../API/useEvent';
 import { useNavigate } from 'react-router';
+import Loader from '../../Component/Loader';
 
 const Contests = () => {
-  const [status, setSelectedStatus] = React.useState("active");
-  const { userActive , authToken } = React.useContext(MyContext);
-  const { events, loading } = useEvent({ status, authToken });
-  const { news, loadingNewsloadingMyNews } = usePosts();
-
+  const [status, setSelectedStatus] = React.useState('active');
+  const { isAuthenticated } = React.useContext(AuthContext);
+  const { events, loading } = useEvent({status});
+  const { data : news, isLoading:loadingNewsloadingMyNews } = usePosts();
   const [isMobileView, setIsMobileView] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 9;
@@ -58,8 +57,8 @@ const Contests = () => {
   };
 
   return (
-    <div className='Contests'>
-      {userActive && (
+    <section className='Contests'>
+      {isAuthenticated && (
         <div className='MyEvents'>
           <h2>Мои конкурсы</h2>
           <div className="slider_cont">
@@ -67,12 +66,10 @@ const Contests = () => {
           </div>
         </div>
       )}
-
-      <div className='BannerCont'>
+      <article className='BannerCont'>
         <div className='bannerSlider'>
           <Swiper
             ref={swiperRef}
-            key={news.length}
             modules={[Navigation]}
             spaceBetween={200}
             slidesPerView={1}
@@ -81,16 +78,12 @@ const Contests = () => {
             effect="flip"
             loop
           >
-            {loadingNewsloadingMyNews ? (
-              <SwiperSlide>
-                <LoadingEvent width="1300px" height="600px" />
-              </SwiperSlide>
-            ) : (
+            {loadingNewsloadingMyNews ? <Loader/> : (
               news.map((item) => (
                 <SwiperSlide key={item.id}>
                   <img
                     onClick={() => handleSlideClick(item.id)}
-                    src={ item.image ? 'item.image' : '/img/image2.png'}
+                    src={ item.image ? 'item.image' : '/img/image2.webp'}
                     alt={item.title}
                     className="BannerImg"
                   />
@@ -99,9 +92,9 @@ const Contests = () => {
             )}
           </Swiper>
         </div>
-      </div>
+      </article>
 
-      <div className='EventsCont'>
+      <section className='EventsCont'>
         <ul className='statesCont'>
           {["active", "completed"].map((cat) => (
             <li
@@ -116,23 +109,10 @@ const Contests = () => {
 
         {loading ? (
           isMobileView ? (
-            <Swiper
-              spaceBetween={20}
-              slidesPerView={3}
-              effect="flip"
-              pagination={{ clickable: true }}
-            >
-              {Array(9).fill().map((_, i) => (
-                <SwiperSlide key={i}>
-                  <LoadingEvent width="40vw" height="250px" />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+              <Loader/>
           ) : (
             <div className='arrEvents'>
-              {Array(9).fill().map((_, i) => (
-                <LoadingEvent key={i} width="400px" height="250px" />
-              ))}
+              <Loader/>
             </div>
           )
         ) : currentEvents.length > 0 ? (
@@ -142,6 +122,14 @@ const Contests = () => {
               navigation
               spaceBetween={20}
               slidesPerView={2}
+              breakpoints={{
+              320: {
+                slidesPerView: 1,
+              },
+              900: {
+                slidesPerView: 2,
+              },
+              }}
               className='mobSlaiderCont'
             >
               {currentEvents.map(item => (
@@ -157,13 +145,12 @@ const Contests = () => {
               ))}
             </div>
           )
-        ) : (
-          <div className='no-events-message'>
-            <p>Нет мероприятий этой категории</p>
-          </div>
+        ) : ( 
+            <Loader />
         )}
 
-        {currentEvents.length > 0 && (
+        {currentEvents?.length > 0 && (
+          currentEvents?.length < 1 && (
           <ul className='paginationEvents'>
             <li onClick={handlePrevPage}>
               <img src='/img/arrow-circle-left.png' alt='Назад' />
@@ -181,9 +168,10 @@ const Contests = () => {
               <img src='/img/arrow-circle-left.png' alt='Вперед' />
             </li>
           </ul>
+          )
         )}
-      </div>
-    </div>
+      </section>
+    </section>
   );
 };
 

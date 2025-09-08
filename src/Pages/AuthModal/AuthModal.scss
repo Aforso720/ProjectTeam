@@ -1,29 +1,27 @@
 .auth-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   padding: 20px;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(6px);
 
   &__content {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
+    background: linear-gradient(145deg, #fff, #fdfdfd);
+    padding: 32px;
+    border-radius: 16px;
     width: 100%;
     max-width: 450px;
     position: relative;
-    box-shadow: 0 10px 25px rgba(75, 18, 24, 0.2);
-    animation: fadeIn 0.3s ease-out;
+    box-shadow: 0 15px 35px rgba(75, 18, 24, 0.25);
+    animation: modalAppear 0.35s ease-out;
 
     @media (max-width: 480px) {
-      padding: 25px 20px;
+      padding: 24px 18px;
+      border-radius: 10px;
     }
   }
 
@@ -31,34 +29,43 @@
     position: absolute;
     top: 15px;
     right: 15px;
-    background: none;
+    width: 36px;
+    height: 36px;
+    background: #f4f4f4;
     border: none;
-    font-size: 24px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
     color: #4B1218;
-    transition: transform 0.2s;
+    transition: all 0.25s ease;
 
     &:hover {
-      transform: scale(1.1);
+      background: #4B1218;
+      color: white;
+      transform: rotate(90deg) scale(1.1);
     }
   }
 
   &__header {
     margin-bottom: 25px;
     text-align: center;
+
+    h2 {
+      color: #4B1218;
+      margin: 0;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
   }
 
   &__divider {
     height: 2px;
     background: linear-gradient(90deg, transparent, #4B1218, transparent);
-    margin: 10px 0;
-  }
-
-  h2 {
-    color: #4B1218;
-    margin: 0;
-    font-size: 24px;
-    font-weight: 600;
+    margin: 12px auto;
+    border-radius: 2px;
+    width: 60%;
   }
 }
 
@@ -68,7 +75,7 @@
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 
   label {
     display: block;
@@ -82,14 +89,14 @@
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
+    border-radius: 8px;
+    font-size: 15px;
     transition: border-color 0.3s, box-shadow 0.3s;
 
     &:focus {
       outline: none;
       border-color: #4B1218;
-      box-shadow: 0 0 0 2px rgba(75, 18, 24, 0.2);
+      box-shadow: 0 0 0 3px rgba(75, 18, 24, 0.25);
     }
 
     &::placeholder {
@@ -101,10 +108,10 @@
 .auth-button {
   width: 100%;
   padding: 14px;
-  background-color: #4B1218;
+  background: #4B1218;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -112,7 +119,7 @@
   margin-top: 10px;
 
   &:hover {
-    background-color: darken(#4B1218, 10%);
+    background-color: darken(#4B1218, 8%);
     transform: translateY(-2px);
   }
 
@@ -121,52 +128,47 @@
   }
 }
 
+/* Ошибки */
 .error-message {
-  color: #d9534f;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #b32d2d;
   margin-bottom: 15px;
-  padding: 10px;
-  background-color: rgba(217, 83, 79, 0.1);
-  border-radius: 4px;
-  text-align: center;
+  padding: 4px 8px;
+  background-color: #fdeaea;
+  border: 1px solid rgba(179, 45, 45, 0.3);
+  border-radius: 6px;
+  text-align: left;
   font-size: 14px;
+  line-height: 1.4;
+  animation: fadeSlideIn 0.3s ease forwards;
+
+  &::before {
+    content: "⚠️";
+    font-size: 16px;
+  }
 }
 
-@keyframes fadeIn {
+/* Анимации */
+@keyframes modalAppear {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-// Адаптивность для мобильных устройств
-@media (max-width: 576px) {
-  .auth-modal {
-    padding: 10px;
-
-    &__content {
-      border-radius: 8px;
-    }
-
-    h2 {
-      font-size: 20px;
-    }
-  }
-
-  .form-group {
-    margin-bottom: 15px;
-
-    input {
-      padding: 10px 12px;
-      font-size: 14px;
-    }
-  }
-
-  .auth-button {
-    padding: 12px;
-    font-size: 15px;
   }
 }

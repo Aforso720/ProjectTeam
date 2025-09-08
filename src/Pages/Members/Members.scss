@@ -1,0 +1,751 @@
+.Members {
+  width: 100%;
+  height: 100%;
+  font-family: "Calibri", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+
+  .mobSlaidMemb{
+    display: none;
+  }
+
+  .supervisor {
+    min-height: 485px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h2 {
+      font-size: 64px;
+      font-weight: 700;
+      padding-bottom: 5px;
+      color: #4B1218;
+      margin: 10px 0 0 0;
+    }
+
+    .cardSupervisor {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      gap: 2em;
+      padding: 0;
+
+      li:nth-child(1) {
+        border: 5px solid #4B1218;
+      }
+
+      li:nth-child(3) {
+        order: -1;
+      }
+
+      li {
+        border: 3px solid #4B1218;
+        width: 400px;
+        height: 330px;
+        border-radius: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        img {
+          height: 200px;
+          width: 200px;
+          transform: translateY(26px);
+          border-radius: 50%;
+        }
+
+
+        h4 {
+          font-weight: 700;
+          font-size: 30px;
+          transform: translateY(-10px);
+        }
+
+        p {
+          font-weight: 700;
+          font-size: 20px;
+          margin: 0;
+          padding: 0 1em;
+          color: white;
+          background-color: #4B1218;
+          border-radius: 48px;
+          transform: translateY(-30px);
+        }
+      }
+
+
+    }
+  }
+
+    .rating {
+      margin-top: 40px;
+      background-image: url("../../../public/img/Фон.png");
+      background-color: #4B1218;
+      color: white;
+      width: 100%;
+      height: 100%;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      h2 {
+        font-size: 64px;
+        font-weight: 700;
+        margin-top: 17px;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      ul {
+        list-style-type: none;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        li:nth-child(2) {
+          transform: translateX(-15em);
+          margin-bottom: 30px;
+        }
+
+        li:nth-child(3) {
+          position: absolute;
+          top: 208px;
+          right: 200px;
+        }
+      }
+
+      .cardRating {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        color: black;
+        width: 420px;
+        height: 200px;
+        border: 5px solid #4B1218;
+        border-radius: 32px;
+        background-color: white;
+
+        .textCard {
+          width: 260px;
+          height: 200px;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .imgRating {
+          width: 160px;
+          height: 160px;
+          margin: 20px 8px 20px 20px;
+          border-radius: 50%;
+        }
+
+        .KingTop {
+          position: absolute;
+          transform: translateY(-5.5em) translateX(-3.2em);
+          height: 150px;
+          width: 150px;
+        }
+
+        .numRating {
+          width: 108.73px;
+          height: 43.28px;
+          border-radius: 16px;
+          background-color: #4B1218;
+          color: white;
+          text-align: center;
+          font-weight: 700;
+          font-size: 27px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: translateX(30px) translateY(-10px);
+        }
+
+        .positionRating {
+          color: #4B1218;
+          font-size: 26px;
+          font-weight: 700;
+          transform: translateY(0) translateX(70px);
+
+          b {
+            font-size: 42px;
+            font-weight: 700;
+          }
+        }
+
+        .textInfo {
+          width: 250px;
+          height: 72px;
+          font-size: 25px;
+          font-weight: 700;
+          color: black;
+          // overflow: hidden;
+
+          .textName,
+          .textGroup {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+          }
+        }
+      }
+
+      .cardWithButton {
+        background-color: #f0f0f0;
+        width: 1264px;
+        height: 200px;
+
+
+        .textCard {
+          width: 1080px;
+          height: 200px;
+          display: flex;
+          justify-content: space-between;
+
+          .textInfo {
+            flex-grow: 1;
+            width: 418px;
+            height: 80px;
+            transform: translateX(-12em) translateY(-1em);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .textName {
+              font-size: 48px;
+              font-weight: 700;
+            }
+          }
+
+          .numRating {
+            width: 200px;
+            height: 80px;
+            font-weight: 700;
+            font-size: 50px;
+            transform: translateX(8em) translateY(-1em);
+          }
+
+          .positionRating {
+            width: 40px;
+            height: 60px;
+            transform: translateX(19em);
+          }
+        }
+
+
+        .detailsButton {
+          background-color: white;
+          color: #4B1218;
+          border: 2px solid #4B1218;
+          width: 268px;
+          height: 50px;
+          border-radius: 30px;
+          cursor: pointer;
+          font-weight: 700;
+          font-size: 32px;
+          transform: translateY(-1.5em) translateX(-3em);
+        }
+      }
+    }
+
+    @media (max-width:1300px){
+      .supervisor{
+        .cardSupervisor{
+        display: none;
+        }
+
+        .swiper-slide{
+              display: flex;
+              justify-content: center;
+        }
+
+        .mobSlaidMemb{
+          margin-top: 40px;
+          display: flex;
+          width: 40vw;
+
+          .swiper-button-prev{
+        transform: translateX(0em);
+    }
+
+    .swiper-button-next{
+        transform: translateX(-0em);
+    }
+
+          .card_manager {
+            border: 3px solid #4B1218;
+            width: 400px;
+            height: 330px;
+            border-radius: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            
+
+        img {
+          height: 200px;
+          width: 200px;
+          transform: translateY(26px);
+          border-radius: 50%;
+        }
+
+
+        h4 {
+          font-weight: 700;
+          font-size: 30px;
+          transform: translateY(-10px);
+        }
+
+        p {
+          font-weight: 700;
+          font-size: 20px;
+          margin: 0;
+          padding: 0 1em;
+          color: white;
+          background-color: #4B1218;
+          border-radius: 48px;
+          transform: translateY(-30px);
+        }
+      }
+        }
+      }
+
+      .rating{
+        h2{
+          font-size: 42px;
+        }
+
+        ul{
+          padding-left: 0;
+          li:nth-child(2){
+            transform: translateX(-12em) translateY(0.5em);
+          }
+
+          li:nth-child(3){
+            transform: translateX(12em) translateY(0);
+          }
+        }
+
+        .cardRating{
+          width: 350px;
+
+          .textCard{
+            width: auto;
+            height: auto;
+            display: flex;
+            align-items:start;
+            .numRating{
+            transform: translateX(0) translateY(0);
+            margin-top: 10px;
+            margin-left: 20px;
+          }
+
+          .positionRating{
+            transform: translateX(4em) translateY(-0.5em);
+          }
+
+          .textInfo{
+            margin-left: 30px;
+          }
+          }
+        }
+
+        .cardWithButton{
+          width: 750px;
+
+          .textCard{
+            width: auto;
+            height: auto;
+            display: flex;
+            align-items:start;
+          .numRating{
+            transform: translateX(5em) translateY(-1em);
+            margin-top: 10px;
+            margin-left: 20px;
+            width: 150px;
+          }
+
+          .positionRating{
+            transform: translateX(13.5em) translateY(1em);
+          }
+
+          .textInfo{
+            transform: translateX(-3em) translateY(-0.5em);
+          }
+          }
+        }
+      }
+
+    }
+
+    @media(max-width:900px){
+    .supervisor{
+      height: 100%;
+      min-height: 0;
+
+      h2{
+        font-size: 34px;
+      }
+
+      .cardSupervisor{
+        display: none;
+      }
+
+      .swiper-slide{
+        display: flex;
+        justify-content: center;
+      }
+
+      .mobSlaidMemb{
+        margin-top: 30px;
+        display: flex;
+        max-width: 600px;
+
+
+        .card_manager {
+          border: 2px solid #4B1218;
+          // width: 280px;
+          height: 250px;
+          border-radius: 30px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          text-align: center;
+
+          img {
+            height: 140px;
+            width: 140px;
+            transform: translateY(20px);
+            border-radius: 50%;
+          }
+
+          h4 {
+            font-weight: 700;
+            font-size: 22px;
+            transform: translateY(-10px);
+          }
+
+          p {
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0;
+            padding: 0 0.8em;
+            color: white;
+            background-color: #4B1218;
+            border-radius: 40px;
+            transform: translateY(-20px);
+          }
+        }
+      }
+    }
+
+    .rating{
+        h2{
+          font-size: 32px;
+        }
+
+        ul{
+          width: 450px;
+          li:nth-child(2){
+            transform: translateX(-12em) translateY(0.5em);
+          }
+
+          li:nth-child(3){
+            transform: translateX(12em) translateY(0);
+          }
+        }
+
+        .cardRating{
+          width: 150px;
+          max-width: 450px;
+
+          .textCard{
+            width: auto;
+            height: auto;
+            display: flex;
+            align-items:start;
+            .numRating{
+            transform: translateX(0) translateY(0);
+            margin-top: 10px;
+            margin-left: 20px;
+          }
+
+          .positionRating{
+            transform: translateX(4em) translateY(-0.5em);
+          }
+
+          .textInfo{
+            margin-left: 30px;
+          }
+          }
+        }
+      }
+    }
+
+    @media (max-width: 900px) {
+    margin: 0 auto;
+    justify-content: center;
+
+    .rating {
+      margin-top: 40px;
+
+      h2 {
+        font-size: 32px;
+        margin-bottom: 0;
+        text-align: center;
+        transform: translateY(0) translateX(0);
+      }
+
+      ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 0;
+        transform: translateY(0) translateX(0);
+
+        // Стили для первых трёх мест
+        li:nth-child(1),
+        li:nth-child(2),
+        li:nth-child(3) {
+          width: 100%;
+          max-width: 335px;
+          height: 80px;
+          position: relative;
+          border-radius: 12px 12px 0 0;
+          padding: 10px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          transform: translateY(0) translateX(0);
+
+        }
+
+        li:nth-child(1) {
+          background-color: #fffbea;
+          border-bottom: 4px solid #ffd700; // золото
+          z-index: 3;
+
+          .numRating {
+            font-size: 26px;
+            font-weight: bold;
+            color: #ffd700;
+            transform: translateY(0) translateX(0);
+          }
+
+          .KingTop{
+            width: 50px;
+            height: 50px;
+            transform: translateY(-2em) translateX(-1.8em);
+          }
+
+          .positionRating {
+            color: #ffd700;
+            font-weight: 600;
+            transform: translateY(0) translateX(0);
+          }
+
+          .textInfo {
+            transform: translateY(0) translateX(0);
+
+            .textName {
+              font-size: 14px;
+              color: #333;
+              transform: translateY(0) translateX(0);
+            }
+          }
+        }
+
+        li:nth-child(2) {
+          background-color: #f4f4f7;
+          border-bottom: 4px solid #c0c0c0; // серебро
+          z-index: 2;
+          margin: 0;
+
+          .numRating {
+            font-size: 24px;
+            font-weight: bold;
+            color: #c0c0c0;
+            transform: translateY(0) translateX(0);
+          }
+
+          .positionRating {
+            color: #c0c0c0;
+            transform: translateY(0) translateX(0);
+          }
+
+          .textInfo {
+            transform: translateY(0) translateX(0);
+
+            .textName {
+              font-size: 13px;
+              color: #444;
+              transform: translateY(0) translateX(0);
+            }
+          }
+        }
+
+        li:nth-child(3) {
+          background-color: #fdf6f2;
+          border-bottom: 4px solid #cd7f32; // бронза
+          z-index: 1;
+          position: relative;
+          top: 0;
+          right: 0;
+          margin-bottom: 40px;
+          
+
+          .numRating {
+            font-size: 22px;
+            font-weight: bold;
+            color: #cd7f32;
+            transform: translateY(0) translateX(0);
+          }
+
+          .positionRating {
+            color: #cd7f32;
+            transform: translateY(0) translateX(0);
+          }
+
+          .textInfo {
+            transform: translateY(0) translateX(0);
+
+            .textName {
+              font-size: 13px;
+              color: #555;
+              transform: translateY(0) translateX(0);
+            }
+          }
+        }
+
+        // Общая карточка
+        .cardRating {
+          width: 100%;
+          max-width: 328px;
+          height: 80px;
+          border-radius: 15px;
+          background: #fff;
+          transform: translateY(0) translateX(0);
+
+          .KingTop {
+            transform: translateY(0) translateX(0);
+          }
+
+          .imgRating {
+            width: 60px;
+            height: 60px;
+            transform: translateY(0) translateX(-1em);
+            // margin-right: 10px;
+          }
+
+          .textCard {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            
+            transform: translateY(0) translateX(0);
+
+            .textInfo {
+              width: 140px;
+              height: 30px;
+              font-size: 20px;
+              // left: 80px;
+              transform: translateY(0em) translateX(-1em);
+
+              .textName {
+                font-size: 15px;
+                transform: translateY(0) translateX(0);
+              }
+
+              .textGroup {
+                font-size: 12px;
+                transform: translateY(0) translateX(0);
+              }
+            }
+
+            .positionRating {
+              font-size: 13px;
+              transform: translateY(0.5em) translateX(12em);
+
+              b {
+                font-size: 13px;
+              }
+            }
+
+            .numRating {
+              width: 70px;
+              height: 25px;
+              font-size: 20px;
+              transform: translateY(-0.5em) translateX(2.5em);
+            }
+
+            .detailsButton {
+              width: 83px;
+              height: 15px;
+              font-size: 12px;
+              transform: translateY(0) translateX(0);
+            }
+          }
+        }
+
+        .cardWithButton {
+          // width: 80%;
+          transform: translateY(0) translateX(0);
+
+          
+
+         
+
+          .textCard{
+            transform: translateY(1.5em) translateX(-2em);
+
+            .textInfo{
+            transform: translateY(-2.5em) translateX(-1em);
+            }
+
+            .numRating{
+            transform: translateY(-3em) translateX(3em);
+            }
+
+             .positionRating{
+              transform: translateY(1em) translateX(13em);
+            }
+          }
+
+          
+
+          .detailsButton {
+            border: 1px solid #4B1218;
+            font-weight: 300;
+            transform: translateY(0) translateX(0);
+          }
+        }
+      }
+    }
+    }
+
+    @media (max-width:600px) {
+      .mobSlaidMemb{
+        min-width: 300px;
+      }
+    }
+
+}

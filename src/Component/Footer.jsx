@@ -17,8 +17,8 @@ const Footer = () => {
                 <div className='redLine'></div>
                 <ul>
                     <li className='UlH'>Сведения</li>
-                    <li><a href="https://gstou.ru/">Сайт ГГНТУ</a></li>
-                    <li><a href="https://icetp.gstou.ru/">Сайт ИЦЭиТп</a></li>
+                    <li><a href="https://gstou.ru/" target="_blank">Сайт ГГНТУ</a></li>
+                    <li><a href="https://icetp.gstou.ru/" target="_blank">Сайт ИЦЭиТп</a></li>
                 </ul>
                 <ul>
                     <li className='UlH'> Контакты</li>
@@ -33,12 +33,12 @@ const Footer = () => {
                 </ul>
                 <ul>
                     <li className='UlH'>Социальные сети</li>
-                    <li><img alt={'telegram'} src='/img/tg logo.svg'/> <a href="https://t.me/projectteamiceitp">@projectteamiceitp</a></li>
-                    <li><img alt={'instagram'} src='/img/Instagram.svg'/> <a href="https://www.instagram.com/project_team_iceitp">@project_team_iceitp</a></li>
+                    <li><img alt={'telegram'} src='/img/tg logo.svg'/> <a href="https://t.me/projectteamiceitp" target="_blank">@projectteamiceitp</a></li>
+                    <li><img alt={'instagram'} src='/img/Instagram.svg'/> <a href="https://www.instagram.com/project_team_iceitp" target="_blank">@project_team_iceitp</a></li>
                 </ul>
             </div>
             <div className='madeIn'>
-                <p>© 2025 Made by IMPULSE</p>
+                <p>© 2025 Made by ImpDev</p>
             </div>
         </footer>
     )

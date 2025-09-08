@@ -1,101 +1,133 @@
-@import "~@fontsource/inter/index.css";
-
-@font-face {
-  font-family: "Labil Grotesk";
-}
-.container{
+.journal-container {
   background-color: rgba(75, 18, 24, 1);
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  padding: 0 10px;
 
-  .nav-container{
+  .journal-header {
     width: 100%;
-    height: 86px;
-    border-bottom: 2px solid rgba(255, 255, 255, 1);
+    border-bottom: 1px solid #fff;
+    padding: 10px 20px;
+    position: relative;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
-    flex-direction: row;
-    justify-content: center;
-    gap: 31px;
+    gap: 16px;
 
-    .arrow {
+    .journal-back-arrow {
       position: absolute;
-      top: 293px;
-      left: 32px;
-      content: '';
-      width: 20px;
-      height: 20px;
-      border-left: 4px solid white;
-      border-bottom: 4px solid white;
+      left: 20px;
+      width: 12px;
+      height: 12px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
       transform: rotate(45deg);
       cursor: pointer;
     }
-    p {
-      font-family: Muller, sans-serif;
-      color: white;
-      font-weight: 500;
-      font-size: 32px;
 
+    .journal-header-info {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+
+      .journal-title {
+        font-family: Muller, sans-serif;
+        font-size: 18px;
+        color: white;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .journal-type {
+        font-family: "Inter", sans-serif;
+        color: #e0e0e0;
+        font-size: 14px;
+        font-style: italic;
+      }
+
+      .journal-date {
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        color: #d0d0d0;
+      }
+
+      @media (max-width: 400px) {
+        .journal-title {
+          font-size: 16px;
+        }
+        .journal-type, .journal-date {
+          font-size: 12px;
+        }
+      }
     }
+  }
 
-
-    }
-  .table-container{
+  .journal-table-wrapper {
     background-color: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 1240px;
-    margin-top: 38px;
-    margin-bottom: 100px;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 20px 0 40px;
+    overflow-x: auto;
 
     table {
       width: 100%;
       border-collapse: collapse;
-      border-style: hidden;
-      text-align: left;
-      th, td {
-        padding: 16px;
+      min-width: 350px;
+
+      th,
+      td {
+        padding: 8px 6px;
         font-family: "Labil Grotesk", sans-serif;
-        font-weight: 550;
-        font-size: 32px;
-        color: rgba(75, 18, 24, 1);
-        border: 2px solid rgba(75, 18, 24, 1);
+        font-weight: 500;
+        font-size: 14px;
+        color: #4b1218;
+        border: 1px solid #4b1218;
+        text-align: center;
+
+        @media (max-width: 400px) {
+          font-size: 12px;
+          padding: 6px 4px;
+        }
       }
+
       th {
-        background-color: white;
-        height: 60px;
-        color: rgba(75, 18, 24, 1);
-        border-bottom: 2px solid rgba(75, 18, 24, 1);
-
-        text-align: center;
+        background-color: #f9f9f9;
+        font-weight: 600;
       }
-      tbody tr{
-        max-height: 100px;
-        &:hover {
-          background-color: #f8fafc;
+
+      .student-name {
+        text-align: left;
+        min-width: 150px;
+        font-weight: 600;
+        @media (max-width: 400px) {
+          min-width: 120px;
         }
       }
-      .table-name{
-        max-width: 744px;
+
+      .student-group {
+        min-width: 80px;
       }
-      .table-group{
-        text-align: center;
-        max-width: 306px;
-      }
-      .mark {
-        max-width: 190px;
-        text-align: center;
-        cursor: pointer;
+
+      .attendance-mark {
+        min-width: 60px;
+
         img {
-          width: 75px;
-          height: 70px;
+          width: 26px;
+          height: 24px;
+          @media (max-width: 400px) {
+            width: 22px;
+            height: 20px;
+          }
         }
       }
-
     }
-
   }
 }
-

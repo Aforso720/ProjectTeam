@@ -3,30 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fontsource/inter": "^5.1.1",
-    "@react-google-maps/api": "^2.20.6",
+    "@tanstack/react-query": "^5.85.3",
     "axios": "^1.7.9",
-    "cra-template": "1.2.0",
-    "leaflet": "^1.9.4",
-    "node-sass": "^9.0.0",
-    "react": "^19.0.0",
-    "react-content-loader": "^7.0.2",
-    "react-dom": "^19.0.0",
-    "react-leaflet": "^5.0.0",
-    "react-loading-skeleton": "^3.5.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.62.0",
     "react-modal": "^3.16.3",
+    "react-quill": "^2.0.0",
     "react-router": "^7.1.1",
-    "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
-    "swiper": "^11.2.1",
-    "typeface-inter": "^3.18.1",
-    "web-vitals": "^4.2.4"
+    "swiper": "^11.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run sitemap && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sitemap": "node scripts/sitemap-generator.js",
+    "sitemap:prod": "node scripts/sitemap-generator.js --domain http://gstouteam.dpdns.org"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +45,7 @@
     "postcss-loader": "^8.1.1",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.83.1",
-    "sass-loader": "^16.0.4"
+    "sass-loader": "^16.0.4",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

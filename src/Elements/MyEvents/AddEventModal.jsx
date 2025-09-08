@@ -1,32 +1,71 @@
 import React from "react";
 import Modal from "react-modal";
 import style from "./MyEvents.module.scss";
+import axiosInstance from "../../API/axiosInstance";
 
 const AddEventModal = () => {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
-
-  const [participants, setParticipants] = React.useState([
-    "Эльдарханов Абдул–Малик",
-    "Алаудинов Илисхан",
-  ]);
-  const [newParticipant, setNewParticipant] = React.useState("");
-
-  const handleAddParticipant = () => {
-    if (newParticipant.trim()) {
-      setParticipants([...participants, newParticipant.trim()]);
-      setNewParticipant("");
-    }
-  };
-
-  const handleRemoveParticipant = (index) => {
-    const updated = [...participants];
-    updated.splice(index, 1);
-    setParticipants(updated);
-  };
+  const [projectName, setProjectName] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [startDate, setStartDate] = React.useState("");
+  const [endDate, setEndDate] = React.useState("");
+  const [previewImage, setPreviewImage] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
+  const [selectedParticipants, setSelectedParticipants] = React.useState([]);
 
   const openModal = () => setModalIsOpen(true);
-  const closeModal = () => setModalIsOpen(false);
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setError(null);
+    setProjectName("");
+    setDescription("");
+    setStartDate("");
+    setEndDate("");
+    setPreviewImage(null);
+  };
 
+  const handleSubmit = async () => {
+    if (!projectName.trim()) {
+      setError("Название проекта обязательно");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("name", projectName);
+      formData.append("description", description);
+      if (previewImage) formData.append("preview_image", previewImage);
+      if (startDate) formData.append("start_date", startDate);
+      if (endDate) formData.append("end_date", endDate);
+
+      const response = await axiosInstance.post("/projects", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const projectId = response.data?.id;
+
+      if (projectId) {
+        await axiosInstance.post(`/projects/${projectId}/join`, {});
+        await Promise.all(
+          selectedParticipants.map((participantId) =>
+            axiosInstance.post(`/projects/${projectId}/join`, {
+              user_id: participantId,
+            })
+          )
+        );
+      }
+      closeModal();
+      setSelectedParticipants([]);
+    } catch (err) {
+      setError(err?.response?.data?.message || err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const customStyles = {
     content: {
       top: "50%",
@@ -34,17 +73,16 @@ const AddEventModal = () => {
       right: "auto",
       bottom: "auto",
       transform: "translate(-50%, -50%)",
-      width: "800px",
-      maxWidth: "95%",
-      padding: "30px",
-      borderRadius: "12px",
+      width: "90%",
+      maxWidth: "640px",
+      padding: "0", // паддинги уже есть в .Modal
+      borderRadius: "16px",
       backgroundColor: "#fff",
-      overflow: "auto",
-      border: "1px solid #4B1218",
+      border: "1px solid #ccc",
     },
     overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.7)",
-      overflow: "auto",
+      backgroundColor: "rgba(0, 0, 0, 0.75)",
+      zIndex: 1000,
     },
   };
 
@@ -69,83 +107,81 @@ const AddEventModal = () => {
             </button>
           </div>
 
+          {error && <div className={style.errorMessage}>{error}</div>}
+
+          {/* Название и описание */}
           <div className={style.section}>
             <input
               type="text"
               className={style.projectInput}
               placeholder="Название проекта"
-            />
-            <input
-              type="text"
-              className={style.projectInput}
-              placeholder="Дата создания"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
             />
             <textarea
               className={style.projectInput}
               placeholder="Краткое описание"
               rows="3"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
+          {/* Даты */}
           <div className={style.section}>
-            <h3>Добавить участников</h3>
-            <div className={style.participantsList}>
-              {participants.map((name, index) => (
-                <div key={index} className={style.participantItem}>
-                  <span>{name}</span>
-                  <button
-                    type="button"
-                    className={style.removeButton}
-                    onClick={() => handleRemoveParticipant(index)}
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-              <div className={style.addParticipantRow}>
-                <input
-                  type="text"
-                  value={newParticipant}
-                  onChange={(e) => setNewParticipant(e.target.value)}
-                  className={style.participantInput}
-                  placeholder="Введите имя участника"
-                />
-                <button
-                  type="button"
-                  className={style.addButton}
-                  onClick={handleAddParticipant}
-                >
-                  +
-                </button>
-              </div>
-            </div>
+            <h3>Дата начала</h3>
+            <input
+              type="date"
+              className={style.projectInput}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              min="1900-01-01"
+              max="2100-12-31"
+            />
+
+            <h3>Дата окончания</h3>
+            <input
+              type="date"
+              className={style.projectInput}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              min="1900-01-01"
+              max="2100-12-31"
+            />
           </div>
 
-          <div className={style.section}>
-            <select className={style.projectInput}>
-              <option value="">Выберите мероприятие</option>
-              {/* Примеры:
-                            <option value="event1">Мероприятие 1</option>
-                            */}
-            </select>
-          </div>
-
+          {/* Файл */}
           <div className={style.section}>
             <h3>Медиафайлы</h3>
             <div className={style.fileList}>
               <label className={style.fileUpload}>
-                <input type="file" hidden multiple />
-                <div>📁 Прикрепить медиафайл</div>
+                <input
+                  type="file"
+                  hidden
+                  onChange={(e) => setPreviewImage(e.target.files[0])}
+                />
+                <div>
+                  📁 {previewImage ? previewImage.name : "Прикрепить медиафайл"}
+                </div>
               </label>
-              <div className={style.fileItem}>PDF</div>
-              <div className={style.fileItem}>PPTX</div>
-              <div className={style.fileItem}>PDF</div>
-              <div className={style.fileItem}>PPTX</div>
             </div>
           </div>
 
+          {/* Кнопка */}
           <div className={style.section}>
-            <button className={style.saveButton}>Сохранить</button>
+            <section className={style.buttonsMyDocum}>
+              <button
+                className={style.primaryButton}
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                {isLoading ? "Сохранение..." : "Сохранить"}
+              </button>
+
+              <button className={style.secondaryButton} onClick={closeModal}>
+                Отмена
+              </button>
+            </section>
           </div>
         </div>
       </Modal>

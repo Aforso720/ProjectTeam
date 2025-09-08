@@ -1,36 +1,27 @@
-import React, { useState } from "react";
 import "./AuthModal.scss";
+import { useForm } from "react-hook-form";
+import InputField from "../../utils/InputField";
 
 const AuthModal = ({ onClose, handleLogin, loading, error }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [localError, setLocalError] = useState("");
+  const { register, handleSubmit, formState, reset } = useForm({
+    mode: "onChange",
+  });
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
+  const emailError = formState.errors["email"]?.message;
+  const passwordError = formState.errors["password"]?.message;
 
-  if (!email.trim() || !password.trim()) {
-    setLocalError("Пожалуйста, заполните все поля");
-    return;
-  }
-
-  setLocalError("");
-  const success = await handleLogin(email, password);
-
-  if (success) {
-    onClose(); 
-  } else {
-    setPassword("");
-  }
-};
-
+  const logAuthSubmit = async (data) => {
+    await handleLogin(data.email , data.password)
+    reset();
+    onClose();
+  };
 
   return (
-    <div className="auth-modal">
+    <article className="auth-modal">
       <div className="auth-modal__content">
-        <button 
-          className="auth-modal__close" 
-          onClick={onClose} 
+        <button
+          className="auth-modal__close"
+          onClick={onClose}
           aria-label="Закрыть"
           disabled={loading}
         >
@@ -40,42 +31,46 @@ const AuthModal = ({ onClose, handleLogin, loading, error }) => {
           <h2>Вход в аккаунт</h2>
           <div className="auth-modal__divider"></div>
         </div>
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Введите ваш email"
-              disabled={loading}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Пароль:</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Введите ваш пароль"
-              disabled={loading}
-            />
-          </div>
-          {(error || localError) && (
-            <div className="error-message">{error || localError}</div>
-          )}
-          <button 
-            type="submit" 
-            className="auth-button" 
+        <form onSubmit={handleSubmit(logAuthSubmit)} className="auth-form">
+          <InputField
+            label="Email:"
+            name="email"
+            type="email"
+            placeholder="Введите ваш email"
             disabled={loading}
-          >
-            {loading ? 'Вход...' : 'Войти'}
+            register={register}
+            validation={{
+              required: "Это поле обязательно",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i,
+                message: "Email некорректен",
+              },
+            }}
+            error={emailError}
+          />
+
+          <InputField
+            label="Пароль:"
+            name="password"
+            type="password"
+            placeholder="Введите ваш пароль"
+            disabled={loading}
+            register={register}
+            validation={{
+              required: "Это поле обязательно",
+              pattern: {
+                value: /^.{6,}$/,
+                message: "Пароль должен быть не короче 6 символов",
+              },
+            }}
+            error={passwordError}
+          />
+          <button type="submit" className="auth-button" disabled={loading}>
+            {loading ? "Вход..." : "Войти"}
           </button>
         </form>
       </div>
-    </div>
+    </article>
   );
 };
 

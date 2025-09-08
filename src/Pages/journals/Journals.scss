@@ -8,6 +8,62 @@
   justify-content: flex-start;
   flex-direction: column;
 
+  .pagination {
+    font-family: "Calibri", sans-serif;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    flex-wrap: wrap; // Добавляем перенос на новую строку
+    padding: 0 10px; // Добавляем отступы по бокам
+  
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 32px;
+      background-color: white;
+      color: #4B1218;
+      border: 1px solid #4B1218;
+      cursor: pointer;
+      flex-shrink: 0; // Запрещаем сжатие элементов
+  
+      img {
+        width: 62px;
+        height: 62px;
+      }
+    }
+  
+    li:first-child {
+      width: 62px;
+      height: 62px;
+      border: 0;
+    }
+  
+    li:last-child {
+      border: 0;
+      width: 62px;
+      height: 62px;
+  
+      img {
+        transform: rotate(180deg);
+      }
+    }
+  
+    .active_page {
+      background-color: #4B1218;
+      color: white;
+    }
+  }
+
   .nav-container {
   display: flex;
   justify-content: center;
@@ -41,9 +97,9 @@
       text-align: center;
       box-sizing: border-box;
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
+      // &:hover {
+      //   background: rgba(255, 255, 255, 0.1);
+      // }
 
       &.active {
         background-color: white;
@@ -116,6 +172,9 @@
   gap: 24px;
   margin-top: 20px;
   justify-items: center;
+  // min-height: 600px;
+  // max-width: 1000px;
+  // margin: 0 auto;
 
   .journal-card-modern {
   width: 400px;
@@ -558,6 +617,176 @@
       
       button {
         width: 100%;
+      }
+    }
+  }
+}
+
+.journal-card-modern {
+  position: relative;
+}
+
+.journal-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+
+  img {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+}
+
+@media (max-width: 640px) {
+  .journal-delete {
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .container {
+    .pagination {
+      gap: 8px;
+      margin-top: 20px;
+      
+      li {
+        width: 44px;
+        height: 44px;
+        font-size: 26px;
+        
+        img {
+          width: 50px;
+          height: 50px;
+        }
+      }
+      
+      li:first-child,
+      li:last-child {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+}
+
+/* Адаптация для 600px и меньше */
+@media (max-width: 600px) {
+  .container {
+    .pagination {
+      gap: 6px;
+      
+      li {
+        width: 38px;
+        height: 38px;
+        font-size: 22px;
+        
+        img {
+          width: 42px;
+          height: 42px;
+        }
+      }
+      
+      li:first-child,
+      li:last-child {
+        width: 42px;
+        height: 42px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    .pagination {
+      gap: 4px;
+      
+      li {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+        
+        img {
+          width: 36px;
+          height: 36px;
+        }
+      }
+      
+      li:first-child,
+      li:last-child {
+        width: 36px;
+        height: 36px;
+      }
+      
+      // Показываем только первую, последнюю и активную страницу
+      li:not(:first-child):not(:last-child):not(.active_page) {
+        display: none;
+      }
+      
+      // Показываем активную страницу
+      li.active_page {
+        display: flex;
+      }
+    }
+  }
+}
+
+/* Адаптация для 360px и меньше */
+@media (max-width: 360px) {
+  .container {
+    .pagination {
+      gap: 3px;
+      
+      li {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+        
+        img {
+          width: 32px;
+          height: 32px;
+        }
+      }
+      
+      li:first-child,
+      li:last-child {
+        width: 32px;
+        height: 32px;
       }
     }
   }
