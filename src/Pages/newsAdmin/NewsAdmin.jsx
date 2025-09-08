@@ -4,34 +4,40 @@ import "./NewsAdmin.scss";
 import axiosInstance from "../../API/axiosInstance";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import InputField from "../../utils/InputField";
+import { useForm } from "react-hook-form";
 
 Modal.setAppElement("#root");
 
 // хелперы для даты
 const toInputDate = (d) => {
   const pad = (n) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
-    d.getHours()
-  )}:${pad(d.getMinutes())}`;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 };
-const toServerDate = (input) => (input ? input.replace("T", " ") + ":00" : "");
+const toServerDate = (input) => (input ? `${input} 00:00:00` : "");
 
 const ALLOWED = ["active", "completed"];
 
 const NewsAdmin = () => {
-  const initialState = {
-    title: "",
-    content: "",
-    previewImage: null,
-    date: toInputDate(new Date()),
-    status: "active",
-  };
+  const { register, handleSubmit, reset, formState } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      title: "",
+      date: toInputDate(new Date()),
+      status: "active",
+    },
+  });
+
+  const titleError = formState.errors["title"]?.message;
+  const dateError = formState.errors["date"]?.message;
+
+  const [content, setContent] = useState("");
+  const [previewImage, setPreviewImage] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentNews, setCurrentNews] = useState(null);
-  const [newsData, setNewsData] = useState(initialState);
 
   const [newsList, setNewsList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,22 +79,17 @@ const NewsAdmin = () => {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewsData((prev) => ({ ...prev, [name]: value }));
-  };
-
   const handleEditNews = (news) => {
     setCurrentNews(news);
     setIsViewModalOpen(true);
     setIsEditMode(true);
-    setNewsData({
+    reset({
       title: news.title || "",
-      content: news.content || "",
-      previewImage: null,
-      date: news.date ? news.date.substring(0, 16) : toInputDate(new Date()),
+      date: news.date ? news.date.substring(0, 10) : toInputDate(new Date()),
       status: ALLOWED.includes(news.status) ? news.status : "active",
     });
+    setContent(news.content || "");
+    setPreviewImage(null);
   };
 
   const handleViewNews = (news) => {
@@ -97,18 +98,15 @@ const NewsAdmin = () => {
     setIsEditMode(false);
   };
 
-  const createNews = async () => {
+  const createNews = async (data) => {
     try {
-      const status = ALLOWED.includes(newsData.status)
-        ? newsData.status
-        : "active";
+      const status = ALLOWED.includes(data.status) ? data.status : "active";
       const formData = new FormData();
-      formData.append("title", newsData.title.trim());
-      formData.append("content", newsData.content);
+      formData.append("title", data.title.trim());
+      formData.append("content", content);
       formData.append("status", status);
-      formData.append("date", toServerDate(newsData.date));
-      if (newsData.previewImage)
-        formData.append("preview_image", newsData.previewImage);
+      formData.append("date", toServerDate(data.date));
+      if (previewImage) formData.append("preview_image", previewImage);
 
       await axiosInstance.post("/news", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -123,19 +121,16 @@ const NewsAdmin = () => {
     }
   };
 
-  const updateNews = async () => {
+  const updateNews = async (data) => {
     if (!currentNews) return;
     try {
-      const status = ALLOWED.includes(newsData.status)
-        ? newsData.status
-        : "active";
+      const status = ALLOWED.includes(data.status) ? data.status : "active";
       const formData = new FormData();
-      formData.append("title", newsData.title.trim());
-      formData.append("content", newsData.content);
+      formData.append("title", data.title.trim());
+      formData.append("content", content);
       formData.append("status", status);
-      formData.append("date", toServerDate(newsData.date));
-      if (newsData.previewImage)
-        formData.append("preview_image", newsData.previewImage);
+      formData.append("date", toServerDate(data.date));
+      if (previewImage) formData.append("preview_image", previewImage);
 
       const response = await axiosInstance.post(
         `/news/${currentNews.id}?_method=PUT`,
@@ -159,15 +154,16 @@ const NewsAdmin = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     if (isEditMode && currentNews) {
-      await updateNews();
+      await updateNews(data);
     } else {
-      await createNews();
+      await createNews(data);
       setIsModalOpen(false);
     }
-    setNewsData({ ...initialState, date: toInputDate(new Date()) });
+    reset({ title: "", date: toInputDate(new Date()), status: "active" });
+    setContent("");
+    setPreviewImage(null);
   };
 
   useEffect(() => {
@@ -180,7 +176,9 @@ const NewsAdmin = () => {
         <div
           className="addNews"
           onClick={() => {
-            setNewsData({ ...initialState, date: toInputDate(new Date()) });
+            reset({ title: "", date: toInputDate(new Date()), status: "active" });
+            setContent("");
+            setPreviewImage(null);
             setIsEditMode(false);
             setIsModalOpen(true);
           }}
@@ -254,26 +252,24 @@ const NewsAdmin = () => {
         </div>
 
         {isEditMode || isModalOpen ? (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="modal-section">
               <h3>Заголовок</h3>
-              <input
+              <InputField
                 type="text"
                 name="title"
-                value={newsData.title}
-                onChange={handleInputChange}
                 className="modal-input"
-                required
+                register={register}
+                validation={{ required: "Введите заголовок" }}
+                error={titleError}
               />
             </div>
 
             <div className="modal-section">
               <h3>Описание</h3>
               <ReactQuill
-                value={newsData.content}
-                onChange={(value) =>
-                  setNewsData((prev) => ({ ...prev, content: value }))
-                }
+                value={content}
+                onChange={setContent}
                 theme="snow"
                 className="modal-textarea"
               />
@@ -281,15 +277,24 @@ const NewsAdmin = () => {
 
             <div className="modal-section">
               <h3>Дата</h3>
-              <input
-                type="datetime-local"
+              <InputField
+                type="date"
                 name="date"
-                value={newsData.date}
-                onChange={(e) =>
-                  setNewsData((prev) => ({ ...prev, date: e.target.value }))
-                }
                 className="modal-input"
-                required
+                register={register}
+                validation={{
+                  required: "Укажите дату",
+                  validate: (value) => {
+                    const year = new Date(value).getFullYear();
+                    return (
+                      year >= 1900 && year <= 2100 ||
+                      "Год должен быть между 1900 и 2100"
+                    );
+                  },
+                }}
+                error={dateError}
+                min="1900-01-01"
+                max="2100-12-31"
               />
             </div>
 
@@ -297,10 +302,8 @@ const NewsAdmin = () => {
               <h3>Статус</h3>
               <select
                 name="status"
-                value={newsData.status}
-                onChange={handleInputChange}
                 className="modal-input"
-                required
+                {...register("status")}
               >
                 <option value="active">Активный</option>
                 <option value="completed">Завершённый</option>
@@ -309,7 +312,7 @@ const NewsAdmin = () => {
 
             <div className="modal-section">
               <h3>Превью</h3>
-              {newsData.previewImage ? (
+              {previewImage ? (
                 <div
                   style={{
                     position: "relative",
@@ -318,15 +321,13 @@ const NewsAdmin = () => {
                   }}
                 >
                   <img
-                    src={URL.createObjectURL(newsData.previewImage)}
+                    src={URL.createObjectURL(previewImage)}
                     alt="preview"
                     style={{ width: "100%", borderRadius: "12px" }}
                   />
                   <button
                     type="button"
-                    onClick={() =>
-                      setNewsData((prev) => ({ ...prev, previewImage: null }))
-                    }
+                    onClick={() => setPreviewImage(null)}
                     style={{
                       position: "absolute",
                       top: "8px",
@@ -359,10 +360,7 @@ const NewsAdmin = () => {
                     onChange={(e) => {
                       const file = e.target.files[0];
                       if (file) {
-                        setNewsData((prev) => ({
-                          ...prev,
-                          previewImage: file,
-                        }));
+                        setPreviewImage(file);
                       }
                     }}
                   />

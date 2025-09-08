@@ -3,6 +3,8 @@ import Modal from "react-modal";
 import "./ProjectAdmin.scss";
 import axiosInstance from "../../API/axiosInstance";
 import usePerson from "../../API/usePerson";
+import { useForm } from "react-hook-form";
+import InputField from "../../utils/InputField";
 
 Modal.setAppElement("#root");
 
@@ -10,10 +12,10 @@ const ALLOWED_STATUS = ["active", "completed"];
 
 const toInputDate = (d) => {
   const pad = (n) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
-    d.getHours()
-  )}:${pad(d.getMinutes())}`;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 };
+
+const toServerDate = (input) => (input ? `${input} 00:00:00` : "");
 
 const ProjectAdmin = () => {
   const { person } = usePerson();
@@ -49,6 +51,15 @@ const ProjectAdmin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isParticipantsDropdownOpen, setIsParticipantsDropdownOpen] =
     useState(false);
+
+  const {
+    register,
+    handleSubmit: rhfHandleSubmit,
+    formState,
+  } = useForm({ mode: "onChange" });
+  const nameError = formState.errors["name"]?.message;
+  const startDateError = formState.errors["startDate"]?.message;
+  const endDateError = formState.errors["endDate"]?.message;
 
   const toggleParticipant = (userId) => {
     setProjectData((prev) => {
@@ -198,8 +209,8 @@ const ProjectAdmin = () => {
       status: ALLOWED_STATUS.includes(project.status)
         ? project.status
         : "active",
-      startDate: project.start_date.substring(0, 16),
-      endDate: project.end_date.substring(0, 16),
+      startDate: project.start_date.substring(0, 10),
+      endDate: project.end_date.substring(0, 10),
       participants: project.participants || [],
     });
     setFilePreview(project.preview_image);
@@ -218,8 +229,8 @@ const ProjectAdmin = () => {
       formData.append("name", projectData.name);
       formData.append("description", projectData.description);
       formData.append("status", projectData.status);
-      formData.append("start_date", projectData.startDate);
-      formData.append("end_date", projectData.endDate);
+      formData.append("start_date", toServerDate(projectData.startDate));
+      formData.append("end_date", toServerDate(projectData.endDate));
 
       projectData.participants.forEach((participantId) => {
         formData.append("participants[]", participantId);
@@ -246,8 +257,8 @@ const ProjectAdmin = () => {
       formData.append("name", projectData.name);
       formData.append("description", projectData.description);
       formData.append("status", projectData.status);
-      formData.append("start_date", projectData.startDate);
-      formData.append("end_date", projectData.endDate);
+      formData.append("start_date", toServerDate(projectData.startDate));
+      formData.append("end_date", toServerDate(projectData.endDate));
       formData.append("_method", "PUT");
 
       projectData.participants.forEach((participantId) => {
@@ -271,8 +282,7 @@ const ProjectAdmin = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleFormSubmit = async () => {
     if (isEditMode) await updateProject();
     else await createProject();
 
@@ -479,19 +489,21 @@ const ProjectAdmin = () => {
 
         <div className="modal-content">
           {isEditMode || isModalOpen ? (
-            <form onSubmit={handleSubmit} className="project-form">
+            <form onSubmit={rhfHandleSubmit(handleFormSubmit)} className="project-form">
               <div className="form-grid">
                 <div className="form-section">
                   <label className="form-label">
                     <span className="label-text">Название проекта *</span>
-                    <input
+                    <InputField
                       type="text"
                       name="name"
                       value={projectData.name}
                       onChange={handleInputChange}
                       className="form-input"
                       placeholder="Введите название проекта"
-                      required
+                      register={register}
+                      validation={{ required: "Введите название" }}
+                      error={nameError}
                     />
                   </label>
                 </div>
@@ -558,13 +570,26 @@ const ProjectAdmin = () => {
                 <div className="form-section">
                   <label className="form-label">
                     <span className="label-text">Дата начала *</span>
-                    <input
-                      type="datetime-local"
+                    <InputField
+                      type="date"
                       name="startDate"
                       value={projectData.startDate}
                       onChange={handleInputChange}
                       className="form-input"
-                      required
+                      register={register}
+                      validation={{
+                        required: "Укажите дату",
+                        validate: (value) => {
+                          const y = new Date(value).getFullYear();
+                          return (
+                            y >= 1900 && y <= 2100 ||
+                            "Год должен быть между 1900 и 2100"
+                          );
+                        },
+                      }}
+                      error={startDateError}
+                      min="1900-01-01"
+                      max="2100-12-31"
                     />
                   </label>
                 </div>
@@ -572,13 +597,26 @@ const ProjectAdmin = () => {
                 <div className="form-section">
                   <label className="form-label">
                     <span className="label-text">Дата окончания *</span>
-                    <input
-                      type="datetime-local"
+                    <InputField
+                      type="date"
                       name="endDate"
                       value={projectData.endDate}
                       onChange={handleInputChange}
                       className="form-input"
-                      required
+                      register={register}
+                      validation={{
+                        required: "Укажите дату",
+                        validate: (value) => {
+                          const y = new Date(value).getFullYear();
+                          return (
+                            y >= 1900 && y <= 2100 ||
+                            "Год должен быть между 1900 и 2100"
+                          );
+                        },
+                      }}
+                      error={endDateError}
+                      min="1900-01-01"
+                      max="2100-12-31"
                     />
                   </label>
                 </div>

@@ -164,7 +164,8 @@ const DocumentModal = ({ onDocumentAdded }) => {
                 className={style.dataDocum}
                 type="date"
                 name="startDate"
-                max={new Date().toISOString().slice(0, 10)} 
+                max={new Date().toISOString().slice(0, 10)}
+                min="1900-01-01"
                 value={myDocumObj.startDate}
                 onChange={handleInputChange}
               />

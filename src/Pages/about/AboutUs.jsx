@@ -39,7 +39,7 @@ const AboutUs = () => {
         <div className="about">
           <div className="infoAbout">
             <h2 style={{textAlign:"center"}}>Контакты</h2>
-            <form>
+            <div className="contact-form">
               <div>
                 <input
                   type="text"
@@ -69,7 +69,7 @@ const AboutUs = () => {
                   readOnly
                 />
               </div>
-            </form>
+            </div>
           </div>
 
           <div className="ifrMap">

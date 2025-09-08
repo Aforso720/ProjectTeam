@@ -200,6 +200,8 @@ const Profile = ({ handleLogout }) => {
                 value={formData.birthDate}
                 readOnly={!isEditing}
                 onChange={handleInputChange}
+                min="1900-01-01"
+                max="2100-12-31"
               />
             </div>
           </div>
