@@ -5,6 +5,7 @@ import "./Journals.scss";
 import Loader from "../../Component/Loader";
 import { AuthContext } from "../../context/AuthContext";
 import axiosInstance from "../../API/axiosInstance";
+import ConfirmModal from "../../Elements/ConfirmModal";
 // import Table from "../tables/Table";
 
 Modal.setAppElement("#root");
@@ -25,43 +26,75 @@ const Journals = () => {
   });
   const [availableParticipants, setAvailableParticipants] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
+  const [confirm, setConfirm] = useState({
+    isOpen: false,
+    message: "",
+    onConfirm: null,
+    confirmText: "Подтвердить",
+    hideCancel: false,
+  });
 
-  const handleDeleteJournal = async (id) => {
-    const ok = window.confirm("Удалить журнал?");
-    if (!ok) return;
+  const openConfirm = (message, onConfirm, options = {}) => {
+    setConfirm({
+      isOpen: true,
+      message,
+      onConfirm,
+      confirmText: options.confirmText || "Подтвердить",
+      hideCancel: options.hideCancel || false,
+    });
+  };
 
-    try {
-      setDeletingId(id);
-      await axiosInstance.delete(`/journals/${id}`);
+  const closeConfirm = () =>
+    setConfirm((prev) => ({ ...prev, isOpen: false }));
 
-      // если на странице остался один элемент, откатываем на предыдущую страницу
-      if (journals.length === 1 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      } else {
-        // перезапрашиваем текущую страницу
-        const endpoint =
-          active === "all"
-            ? `/journals?per_page=8&page=${currentPage}`
-            : `/journals?per_page=8&page=${currentPage}&type=${active}`;
-        const response = await axiosInstance.get(endpoint);
-        setJournals(
-          response.data.data.map((journal) => ({
-            id: journal.id.toString(),
-            type: journal.type,
-            title: journal.title,
-            date: journal.date,
-            participants: journal.participants,
-            user_created: journal.user_created,
-          }))
-        );
-        setTotalPages(response.data.meta.last_page);
-      }
-    } catch (error) {
-      console.error("Ошибка при удалении:", error.response?.data || error);
-      alert(error.response?.data?.message || "Не удалось удалить журнал");
-    } finally {
-      setDeletingId(null);
+  const handleConfirm = async () => {
+    if (confirm.onConfirm) {
+      await confirm.onConfirm();
     }
+    closeConfirm();
+  };
+
+  const handleDeleteJournal = (id) => {
+    openConfirm(
+      "Удалить журнал?",
+      async () => {
+        try {
+          setDeletingId(id);
+          await axiosInstance.delete(`/journals/${id}`);
+
+          if (journals.length === 1 && currentPage > 1) {
+            setCurrentPage((p) => p - 1);
+          } else {
+            const endpoint =
+              active === "all"
+                ? `/journals?per_page=8&page=${currentPage}`
+                : `/journals?per_page=8&page=${currentPage}&type=${active}`;
+            const response = await axiosInstance.get(endpoint);
+            setJournals(
+              response.data.data.map((journal) => ({
+                id: journal.id.toString(),
+                type: journal.type,
+                title: journal.title,
+                date: journal.date,
+                participants: journal.participants,
+                user_created: journal.user_created,
+              }))
+            );
+            setTotalPages(response.data.meta.last_page);
+          }
+        } catch (error) {
+          console.error("Ошибка при удалении:", error.response?.data || error);
+          openConfirm(
+            error.response?.data?.message || "Не удалось удалить журнал",
+            null,
+            { confirmText: "ОК", hideCancel: true }
+          );
+        } finally {
+          setDeletingId(null);
+        }
+      },
+      { confirmText: "Удалить" }
+    );
   };
 
   React.useEffect(() => {
@@ -139,7 +172,11 @@ const Journals = () => {
   };
 
   const handleCreateJournal = async () => {
-    if (!newJournal.title) return alert("Введите название журнала");
+    if (!newJournal.title)
+      return openConfirm("Введите название журнала", null, {
+        confirmText: "ОК",
+        hideCancel: true,
+      });
 
     try {
       const journalData = {
@@ -160,7 +197,10 @@ const Journals = () => {
 
       if (!created?.id) {
         console.error("Некорректный ответ от сервера:", response.data);
-        alert("Сервер не вернул ID журнала");
+        openConfirm("Сервер не вернул ID журнала", null, {
+          confirmText: "ОК",
+          hideCancel: true,
+        });
         return;
       }
 
@@ -176,7 +216,10 @@ const Journals = () => {
       setModalOpen(false);
     } catch (error) {
       console.error("Ошибка при создании журнала:", error);
-      alert("Не удалось создать журнал");
+      openConfirm("Не удалось создать журнал", null, {
+        confirmText: "ОК",
+        hideCancel: true,
+      });
     }
   };
 
@@ -418,6 +461,14 @@ const Journals = () => {
           </li>
         </ul>
       )}
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        message={confirm.message}
+        onConfirm={handleConfirm}
+        onCancel={confirm.hideCancel ? undefined : closeConfirm}
+        confirmText={confirm.confirmText}
+        hideCancel={confirm.hideCancel}
+      />
     </section>
   );
 };

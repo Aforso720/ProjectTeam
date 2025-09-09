@@ -5,6 +5,7 @@ import axiosInstance from "../../API/axiosInstance";
 import Loader from "../../Component/Loader";
 import { useForm } from "react-hook-form";
 import InputField from "../../utils/InputField";
+import ConfirmModal from "../../Elements/ConfirmModal";
 
 Modal.setAppElement("#root");
 
@@ -39,26 +40,60 @@ const EventAdmin = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [confirm, setConfirm] = useState({
+    isOpen: false,
+    message: "",
+    onConfirm: null,
+    confirmText: "Подтвердить",
+    hideCancel: false,
+  });
 
-  const handleDeleteEvent = async (eventId) => {
-    const ok = window.confirm("Удалить мероприятие?");
-    if (!ok) return;
-    try {
-      setDeletingId(eventId);
-      await axiosInstance.delete(`/events/${eventId}`);
+  const openConfirm = (message, onConfirm, options = {}) => {
+    setConfirm({
+      isOpen: true,
+      message,
+      onConfirm,
+      confirmText: options.confirmText || "Подтвердить",
+      hideCancel: options.hideCancel || false,
+    });
+  };
 
-      // если на странице оставался один элемент — уходим на предыдущую страницу
-      if (events.length === 1 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      } else {
-        await fetchEvents(currentPage);
-      }
-    } catch (error) {
-      console.error("Не удалось удалить:", error.response?.data || error);
-      alert(error.response?.data?.message || "Ошибка при удалении");
-    } finally {
-      setDeletingId(null);
+  const closeConfirm = () =>
+    setConfirm((prev) => ({ ...prev, isOpen: false }));
+
+  const handleConfirm = async () => {
+    if (confirm.onConfirm) {
+      await confirm.onConfirm();
     }
+    closeConfirm();
+  };
+
+  const handleDeleteEvent = (eventId) => {
+    openConfirm(
+      "Удалить мероприятие?",
+      async () => {
+        try {
+          setDeletingId(eventId);
+          await axiosInstance.delete(`/events/${eventId}`);
+
+          if (events.length === 1 && currentPage > 1) {
+            setCurrentPage((p) => p - 1);
+          } else {
+            await fetchEvents(currentPage);
+          }
+        } catch (error) {
+          console.error("Не удалось удалить:", error.response?.data || error);
+          openConfirm(
+            error.response?.data?.message || "Ошибка при удалении",
+            null,
+            { confirmText: "ОК", hideCancel: true }
+          );
+        } finally {
+          setDeletingId(null);
+        }
+      },
+      { confirmText: "Удалить" }
+    );
   };
 
   const formatDateTime = (dateString) => {
@@ -730,6 +765,14 @@ const EventAdmin = () => {
           </div>
         )}
       </Modal>
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        message={confirm.message}
+        onConfirm={handleConfirm}
+        onCancel={confirm.hideCancel ? undefined : closeConfirm}
+        confirmText={confirm.confirmText}
+        hideCancel={confirm.hideCancel}
+      />
     </section>
   );
 };
