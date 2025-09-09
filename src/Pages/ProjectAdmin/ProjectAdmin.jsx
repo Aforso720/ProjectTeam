@@ -5,6 +5,7 @@ import axiosInstance from "../../API/axiosInstance";
 import usePerson from "../../API/usePerson";
 import { useForm } from "react-hook-form";
 import InputField from "../../utils/InputField";
+import ConfirmModal from "../../Elements/ConfirmModal";
 
 Modal.setAppElement("#root");
 
@@ -46,6 +47,33 @@ const ProjectAdmin = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [approvingId, setApprovingId] = useState(null);
   const [rejectingId, setRejectingId] = useState(null);
+  const [confirm, setConfirm] = useState({
+    isOpen: false,
+    message: "",
+    onConfirm: null,
+    confirmText: "Подтвердить",
+    hideCancel: false,
+  });
+
+  const openConfirm = (message, onConfirm, options = {}) => {
+    setConfirm({
+      isOpen: true,
+      message,
+      onConfirm,
+      confirmText: options.confirmText || "Подтвердить",
+      hideCancel: options.hideCancel || false,
+    });
+  };
+
+  const closeConfirm = () =>
+    setConfirm((prev) => ({ ...prev, isOpen: false }));
+
+  const handleConfirm = async () => {
+    if (confirm.onConfirm) {
+      await confirm.onConfirm();
+    }
+    closeConfirm();
+  };
   const [selectedFile, setSelectedFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -142,17 +170,22 @@ const ProjectAdmin = () => {
     applyFilter(filter);
   }, [filter, allProjects]);
 
-  const handleDeleteProject = async (id) => {
-    if (!window.confirm("Удалить проект?")) return;
-    try {
-      setDeletingId(id);
-      await axiosInstance.delete(`/projects/${id}`);
-      await fetchAllProjects();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setDeletingId(null);
-    }
+  const handleDeleteProject = (id) => {
+    openConfirm(
+      "Удалить проект?",
+      async () => {
+        try {
+          setDeletingId(id);
+          await axiosInstance.delete(`/projects/${id}`);
+          await fetchAllProjects();
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setDeletingId(null);
+        }
+      },
+      { confirmText: "Удалить" }
+    );
   };
 
   const handleApproveProject = async (id) => {
@@ -167,17 +200,22 @@ const ProjectAdmin = () => {
     }
   };
 
-  const handleRejectProject = async (id) => {
-    if (!window.confirm("Отклонить проект?")) return;
-    try {
-      setRejectingId(id);
-      await axiosInstance.post(`/projects/${id}/reject`);
-      await fetchAllProjects();
-    } catch (err) {
-      console.error("Ошибка отклонения проекта:", err);
-    } finally {
-      setRejectingId(null);
-    }
+  const handleRejectProject = (id) => {
+    openConfirm(
+      "Отклонить проект?",
+      async () => {
+        try {
+          setRejectingId(id);
+          await axiosInstance.post(`/projects/${id}/reject`);
+          await fetchAllProjects();
+        } catch (err) {
+          console.error("Ошибка отклонения проекта:", err);
+        } finally {
+          setRejectingId(null);
+        }
+      },
+      { confirmText: "Отклонить" }
+    );
   };
 
   const handleInputChange = (e) => {
@@ -858,6 +896,14 @@ const ProjectAdmin = () => {
           )}
         </div>
       </Modal>
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        message={confirm.message}
+        onConfirm={handleConfirm}
+        onCancel={confirm.hideCancel ? undefined : closeConfirm}
+        confirmText={confirm.confirmText}
+        hideCancel={confirm.hideCancel}
+      />
     </section>
   );
 };

@@ -542,3 +542,105 @@
   justify-content: center;
   gap: 20px;
 }
+
+/* InfoModalProject styles */
+.projectImageSection {
+  display: flex;
+  justify-content: center;
+}
+
+.projectPreviewImage {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.projectName {
+  font-size: 22px;
+  font-weight: 600;
+  color: #4B1218;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.projectDescription {
+  h4 {
+    margin-bottom: 8px;
+    color: #4B1218;
+  }
+  p {
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.projectDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.detailLabel {
+  font-weight: 600;
+  color: #4B1218;
+}
+
+.detailValue {
+  color: #333;
+}
+
+.certificateSection {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.certificateLink {
+  color: #4B1218;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.certificateLink:hover {
+  text-decoration: underline;
+}
+
+.participantsSection {
+  margin-top: 20px;
+}
+
+.loadingText,
+.noParticipants {
+  text-align: center;
+  color: #666;
+}
+
+.participantsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.participantItem {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.participantName {
+  font-size: 16px;
+  color: #333;
+}
+
+.metaInfo {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

@@ -6,6 +6,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import InputField from "../../utils/InputField";
 import { useForm } from "react-hook-form";
+import ConfirmModal from "../../Elements/ConfirmModal";
 
 
 Modal.setAppElement("#root");
@@ -45,6 +46,33 @@ const NewsAdmin = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [confirm, setConfirm] = useState({
+    isOpen: false,
+    message: "",
+    onConfirm: null,
+    confirmText: "Подтвердить",
+    hideCancel: false,
+  });
+
+  const openConfirm = (message, onConfirm, options = {}) => {
+    setConfirm({
+      isOpen: true,
+      message,
+      onConfirm,
+      confirmText: options.confirmText || "Подтвердить",
+      hideCancel: options.hideCancel || false,
+    });
+  };
+
+  const closeConfirm = () =>
+    setConfirm((prev) => ({ ...prev, isOpen: false }));
+
+  const handleConfirm = async () => {
+    if (confirm.onConfirm) {
+      await confirm.onConfirm();
+    }
+    closeConfirm();
+  };
 
   const fetchNews = async (page = 1) => {
     setLoading(true);
@@ -61,23 +89,31 @@ const NewsAdmin = () => {
     }
   };
 
-  const handleDeleteNews = async (id) => {
-    const ok = window.confirm("Удалить новость?");
-    if (!ok) return;
-    try {
-      setDeletingId(id);
-      await axiosInstance.delete(`/news/${id}`);
-      if (newsList.length === 1 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      } else {
-        await fetchNews(currentPage);
-      }
-    } catch (error) {
-      console.error("Не удалось удалить:", error.response?.data || error);
-      alert(error.response?.data?.message || "Ошибка при удалении");
-    } finally {
-      setDeletingId(null);
-    }
+  const handleDeleteNews = (id) => {
+    openConfirm(
+      "Удалить новость?",
+      async () => {
+        try {
+          setDeletingId(id);
+          await axiosInstance.delete(`/news/${id}`);
+          if (newsList.length === 1 && currentPage > 1) {
+            setCurrentPage((p) => p - 1);
+          } else {
+            await fetchNews(currentPage);
+          }
+        } catch (error) {
+          console.error("Не удалось удалить:", error.response?.data || error);
+          openConfirm(
+            error.response?.data?.message || "Ошибка при удалении",
+            null,
+            { confirmText: "ОК", hideCancel: true }
+          );
+        } finally {
+          setDeletingId(null);
+        }
+      },
+      { confirmText: "Удалить" }
+    );
   };
 
   const handleEditNews = (news) => {
@@ -118,7 +154,11 @@ const NewsAdmin = () => {
         "Ошибка при создании новости:",
         error.response?.data || error
       );
-      alert(error.response?.data?.message || "Ошибка при создании");
+      openConfirm(
+        error.response?.data?.message || "Ошибка при создании",
+        null,
+        { confirmText: "ОК", hideCancel: true }
+      );
     }
   };
 
@@ -151,7 +191,11 @@ const NewsAdmin = () => {
         "Ошибка при обновлении новости:",
         error.response?.data || error
       );
-      alert(error.response?.data?.message || "Ошибка при обновлении");
+      openConfirm(
+        error.response?.data?.message || "Ошибка при обновлении",
+        null,
+        { confirmText: "ОК", hideCancel: true }
+      );
     }
   };
 
@@ -436,6 +480,14 @@ const NewsAdmin = () => {
           </div>
         )}
       </Modal>
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        message={confirm.message}
+        onConfirm={handleConfirm}
+        onCancel={confirm.hideCancel ? undefined : closeConfirm}
+        confirmText={confirm.confirmText}
+        hideCancel={confirm.hideCancel}
+      />
     </section>
   );
 };
