@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import style from "./MyEvents.module.scss";
 import axiosInstance from "../../API/axiosInstance";
 import { normalizeImageUrl } from "../imageUtils";
+import { InviteProjectButton } from "../../components/ProjectInvites";
 
 const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
   const [participants, setParticipants] = React.useState([]);
@@ -195,6 +196,10 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
               </span>
             </div>
           </div>
+        </div>
+
+        <div className={style.section}>
+          <InviteProjectButton projectId={project.id} projectName={project.name} />
         </div>
 
         {/* Кнопка закрытия */}
