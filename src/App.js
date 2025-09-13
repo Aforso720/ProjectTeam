@@ -32,6 +32,7 @@ import AdminFilterEvent from "./Component/adminHeaderEvent/adminHeaderEvent.jsx"
 
 import { NotificationProvider } from "./context/NotificationContext.js";
 import Notisfaction from "./Elements/Notisfaction/index.jsx";
+import { JoinProjectPage } from "./components/ProjectInvites";
 
 function App() {
   // AUTH
@@ -151,6 +152,7 @@ function App() {
 
               <Route path="/events/:id" element={<EventDetail />} />
               {/* <Route path="/events/:id" element={<EventDetail events={events} />} /> */}
+              <Route path="/join/:projectId" element={<JoinProjectPage />} />
             </Routes>
             {/* </Suspense> */}
           </main>
