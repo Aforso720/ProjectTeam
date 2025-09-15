@@ -37,7 +37,7 @@ export const InviteProjectButton = ({ projectId, projectName }) => {
 
   return (
     <>
-      <button onClick={handleShare} style={{ padding: "8px 16px", cursor: "pointer" }}>
+      <button onClick={handleShare} className="socModalButton">
         Поделиться приглашением
       </button>
       <Modal

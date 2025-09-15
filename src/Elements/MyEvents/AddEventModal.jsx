@@ -9,21 +9,62 @@ const AddEventModal = () => {
   const [description, setDescription] = React.useState("");
   const [startDate, setStartDate] = React.useState("");
   const [endDate, setEndDate] = React.useState("");
-  const [previewImage, setPreviewImage] = React.useState(null);
+  const [previewImage, setPreviewImage] = React.useState(null);  // файл
+  const [previewUrl, setPreviewUrl] = React.useState("");        // blob-URL для <img>
+  const [fileErr, setFileErr] = React.useState("");              // ошибки файла
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [selectedParticipants, setSelectedParticipants] = React.useState([]);
+
+  const MAX_MB = 5;
+
+  const revokePreview = React.useCallback(() => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => {
     setModalIsOpen(false);
     setError(null);
+    setFileErr("");
     setProjectName("");
     setDescription("");
     setStartDate("");
     setEndDate("");
     setPreviewImage(null);
+    revokePreview();
+    setPreviewUrl("");
   };
+
+  const validateFile = (file) => {
+    if (!file.type.startsWith("image/")) {
+      setFileErr("Поддерживаются только изображения (PNG, JPG).");
+      return false;
+    }
+    if (file.size > MAX_MB * 1024 * 1024) {
+      setFileErr(`Файл больше ${MAX_MB}MB.`);
+      return false;
+    }
+    setFileErr("");
+    return true;
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!validateFile(file)) return;
+    revokePreview();
+    const url = URL.createObjectURL(file);
+    setPreviewImage(file);
+    setPreviewUrl(url);
+  };
+
+  React.useEffect(() => {
+    return () => {
+      // очистка при размонтировании
+      revokePreview();
+    };
+  }, [revokePreview]);
 
   const handleSubmit = async () => {
     if (!projectName.trim()) {
@@ -66,25 +107,29 @@ const AddEventModal = () => {
       setIsLoading(false);
     }
   };
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      transform: "translate(-50%, -50%)",
-      width: "90%",
-      maxWidth: "640px",
-      padding: "0", // паддинги уже есть в .Modal
-      borderRadius: "16px",
-      backgroundColor: "#fff",
-      border: "1px solid #ccc",
-    },
-    overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.75)",
-      zIndex: 1000,
-    },
-  };
+
+ const customStyles = {
+  content: {
+    // вместо top/left/transform используем центрирование через overlay
+    inset: 'unset',
+    width: 'min(92vw, 720px)',
+    maxHeight: '88vh',            // <— ограничиваем высоту
+    padding: 0,
+    borderRadius: '16px',
+    backgroundColor: '#fff',
+    border: '1px solid #e5e7eb',           
+    overflow: "auto",
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    zIndex: 1000,
+    display: 'grid',              // <— центрирование окна
+    placeItems: 'center',
+    padding: '16px',              // чтобы окно не прилипало к краям
+    backdropFilter: 'blur(2px)',
+  },
+};
+
 
   return (
     <div>
@@ -150,24 +195,37 @@ const AddEventModal = () => {
             />
           </div>
 
-          {/* Файл */}
+          {/* Медиафайл с мгновенным превью */}
           <div className={style.section}>
             <h3>Медиафайлы</h3>
             <div className={style.fileList}>
               <label className={style.fileUpload}>
                 <input
                   type="file"
-                  hidden
-                  onChange={(e) => setPreviewImage(e.target.files[0])}
+                  accept="image/*"
+                  className={style.fileInput}
+                  onChange={handleFileChange}
                 />
-                <div>
-                  📁 {previewImage ? previewImage.name : "Прикрепить медиафайл"}
+                <div className={style.filePreview}>
+                  {previewUrl ? (
+                    <img
+                      src={previewUrl}
+                      alt="Превью"
+                      className={style.previewImage}
+                    />
+                  ) : (
+                    <div className={style.filePlaceholder}>
+                      <span>+ Загрузить изображение</span>
+                      <p>PNG, JPG до {MAX_MB}MB</p>
+                    </div>
+                  )}
                 </div>
               </label>
             </div>
+            {fileErr && <div className={style.fileError}>{fileErr}</div>}
           </div>
 
-          {/* Кнопка */}
+          {/* Кнопки */}
           <div className={style.section}>
             <section className={style.buttonsMyDocum}>
               <button
@@ -190,3 +248,4 @@ const AddEventModal = () => {
 };
 
 export default AddEventModal;
+  

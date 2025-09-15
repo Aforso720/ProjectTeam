@@ -644,3 +644,210 @@
   flex-direction: column;
   gap: 8px;
 }
+
+/* ▼▼▼ ДОБАВИТЬ: вспомогательные классы для превью */
+.fileInput {
+  // скрываем нативный инпут, но оставляем его в потоке для label
+  display: none;
+}
+
+.filePreview {
+  // border: 2px dashed #e8ecef;  
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filePlaceholder {
+  color: #b2bec3;
+
+  span {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #5b151b;
+  }
+
+  p {
+    margin: 0;
+    font-size: 12px;
+  }
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.fileError {
+  margin-top: 8px;
+  color: #b00020;
+  font-size: 12px;
+  background: #fff5f5;
+  border: 1px solid #ffd6d6;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+/* ==== InfoModalProject – доп.стили ==== */
+.projectImageFallback {
+  width: 100%;
+  max-height: 200px;
+  border-radius: 12px;
+  background: #fafafa;
+  border: 1px dashed #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  padding: 24px;
+  font-weight: 600;
+}
+
+.projectTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #374151;
+}
+.status_default { background: #f3f4f6; color: #374151; }
+.status_completed { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+.status_in_progress { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
+.status_planned { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+.status_draft { background: #f3f4f6; color: #374151; }
+
+.projectDescription .lineClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Участники — карточки, аватарки, почта и скелет */
+.participantsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.participantItem {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatarFallback {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4B1218;
+  letter-spacing: 0.5px;
+}
+
+.participantInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 4px;
+}
+.participantTopRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.participantName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.groupChip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #fdf2f8;
+  color: #9d174d;
+  border: 1px solid #fbcfe8;
+}
+.participantEmail {
+  font-size: 13px;
+  color: #6b7280;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Скелет-лоадер */
+.skeletonRow {
+  height: 52px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* Небольшие доработки существующих блоков */
+.projectDetails { gap: 10px; }
+.detailRow { font-size: 15px; }
+.certificateSection { text-align: center; margin-top: 8px; }
+.certificateLink {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #4B1218;
+  text-decoration: none;
+  font-weight: 700;
+  color: #4B1218;
+}
+.certificateLink:hover { background: #f9f5f5; }
+.buttonsMyDocum { justify-content: space-between; flex-wrap: wrap; }
+
