@@ -4,12 +4,25 @@ import style from "./MyEvents.module.scss";
 import axiosInstance from "../../API/axiosInstance";
 import { normalizeImageUrl } from "../imageUtils";
 import { InviteProjectButton } from "../../components/ProjectInvites";
+import ConfirmModal from "../ConfirmModal.jsx";
+import { AuthContext } from "../../context/AuthContext";
 
-const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
+const InfoModalProject = ({
+  project,
+  isOpen,
+  onRequestClose,
+  onProjectUpdate,
+  onProjectLeave,
+}) => {
+  const { user } = React.useContext(AuthContext);
+  const [projectData, setProjectData] = React.useState(project ?? null);
   const [participants, setParticipants] = React.useState([]);
   const [isLoadingParticipants, setIsLoadingParticipants] =
     React.useState(false);
   const [certificateUrl, setCertificateUrl] = React.useState("");
+  const [feedback, setFeedback] = React.useState({ error: "", success: "" });
+  const [isLeaveConfirmOpen, setIsLeaveConfirmOpen] = React.useState(false);
+  const [isLeaving, setIsLeaving] = React.useState(false);
   const customStyles = {
     content: {
       // вместо top/left/transform используем центрирование через overlay
@@ -32,28 +45,47 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
     },
   };
 
-  const hasParticipantsIds =
-    Array.isArray(project?.participants) && project.participants.length > 0;
-
   React.useEffect(() => {
-    if (!project) return;
-    if (project.certificate) {
-      setCertificateUrl(normalizeImageUrl(project.certificate));
-    } else {
-      setCertificateUrl("");
-    }
+    setProjectData(project ?? null);
   }, [project]);
 
   React.useEffect(() => {
-    if (!isOpen || !hasParticipantsIds) return;
-    fetchParticipants();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, project?.participants]);
+    if (!isOpen) {
+      setFeedback({ error: "", success: "" });
+      setIsLeaveConfirmOpen(false);
+    }
+  }, [isOpen]);
 
-  const fetchParticipants = async () => {
+  React.useEffect(() => {
+    if (projectData?.certificate) {
+      // CERTIFICATE: нормализуем ссылку на сертификат для кнопки
+      setCertificateUrl(normalizeImageUrl(projectData.certificate));
+    } else {
+      setCertificateUrl("");
+    }
+  }, [projectData?.certificate]);
+
+  const participantIds = React.useMemo(() => {
+    if (!Array.isArray(projectData?.participants)) return [];
+    return projectData.participants
+      .map((participant) => {
+        if (participant && typeof participant === "object") {
+          return participant.id ?? participant.user_id ?? null;
+        }
+        return participant;
+      })
+      .filter((id) => id !== null && id !== undefined);
+  }, [projectData?.participants]);
+
+  const fetchParticipants = React.useCallback(async () => {
+    if (!participantIds.length) {
+      setParticipants([]);
+      return;
+    }
+
     setIsLoadingParticipants(true);
     try {
-      const requests = project.participants.map((participantId) =>
+      const requests = participantIds.map((participantId) =>
         axiosInstance.get(`/users/${participantId}`)
       );
 
@@ -75,7 +107,99 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
     } finally {
       setIsLoadingParticipants(false);
     }
-  };
+  }, [participantIds]);
+
+  React.useEffect(() => {
+    if (!isOpen) return;
+    fetchParticipants();
+  }, [fetchParticipants, isOpen]);
+
+  const currentUserId = user?.id;
+
+  const isCurrentUserParticipant = React.useMemo(() => {
+    if (!currentUserId) return false;
+    if (!Array.isArray(projectData?.participants)) return false;
+    return projectData.participants.some((participant) => {
+      if (participant && typeof participant === "object") {
+        const participantId = participant.id ?? participant.user_id;
+        return Number(participantId) === Number(currentUserId);
+      }
+      return Number(participant) === Number(currentUserId);
+    });
+  }, [currentUserId, projectData?.participants]);
+
+  const canLeaveProject = Boolean(projectData?.id) && isCurrentUserParticipant;
+
+  const handleOpenCertificate = React.useCallback(() => {
+    if (!certificateUrl) return;
+    window.open(certificateUrl, "_blank", "noopener,noreferrer");
+  }, [certificateUrl]);
+
+  const openLeaveConfirm = React.useCallback(() => {
+    if (isLeaving) return;
+    setFeedback((prev) => ({ ...prev, error: "" }));
+    setIsLeaveConfirmOpen(true);
+  }, [isLeaving]);
+
+  const closeLeaveConfirm = React.useCallback(() => {
+    if (isLeaving) return;
+    setIsLeaveConfirmOpen(false);
+  }, [isLeaving]);
+
+  const handleLeaveProject = React.useCallback(async () => {
+    if (isLeaving) return;
+    if (!projectData?.id || !currentUserId) return;
+
+    setIsLeaving(true);
+    setFeedback({ error: "", success: "" });
+
+    try {
+      // LEAVE: отправляем запрос на выход из проекта
+      await axiosInstance.post(`/projects/${projectData.id}/leave`);
+
+      const updatedParticipants = Array.isArray(projectData.participants)
+        ? projectData.participants.filter((participant) => {
+            if (participant && typeof participant === "object") {
+              const participantId = participant.id ?? participant.user_id;
+              return Number(participantId) !== Number(currentUserId);
+            }
+            return Number(participant) !== Number(currentUserId);
+          })
+        : [];
+
+      const updatedProject = {
+        ...projectData,
+        participants: updatedParticipants,
+      };
+
+      setProjectData(updatedProject);
+      setParticipants((prev) =>
+        prev.filter((participant) => {
+          const participantId = participant?.id ?? participant?.user_id;
+          return Number(participantId) !== Number(currentUserId);
+        })
+      );
+      setFeedback({ error: "", success: "Вы вышли из проекта" });
+      onProjectUpdate?.(updatedProject);
+
+      window.setTimeout(() => {
+        onProjectLeave?.(projectData.id);
+      }, 1200);
+    } catch (error) {
+      const message =
+        error?.response?.data?.message || "Не удалось выйти из проекта";
+      setFeedback({ error: message, success: "" });
+    } finally {
+      setIsLeaving(false);
+      setIsLeaveConfirmOpen(false);
+    }
+  }, [
+    currentUserId,
+    isLeaving,
+    onProjectLeave,
+    onProjectUpdate,
+    projectData,
+  ]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "Не указана";
@@ -114,7 +238,7 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
 
   const getAvatarSrc = (u) => (u?.avatar ? normalizeImageUrl(u.avatar) : null);
 
-  if (!project) return null;
+  if (!projectData) return null;
 
   return (
     <Modal
@@ -138,12 +262,23 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
           </button>
         </div>
 
+        {(feedback.error || feedback.success) && (
+          <div>
+            {feedback.error && (
+              <div className={style.errorMessage}>{feedback.error}</div>
+            )}
+            {feedback.success && (
+              <div className={style.successMessage}>{feedback.success}</div>
+            )}
+          </div>
+        )}
+
         <div className={style.section}>
           {/* Превью */}
-          {project.preview_image ? (
+          {projectData.preview_image ? (
             <div className={style.projectImageSection}>
               <img
-                src={normalizeImageUrl(project.preview_image)}
+                src={normalizeImageUrl(projectData.preview_image)}
                 alt="Превью проекта"
                 className={style.projectPreviewImage}
                 onError={(e) => {
@@ -159,16 +294,18 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
 
           {/* Название + статус */}
           <div className={style.projectTitleRow}>
-            <h3 className={style.projectName}>{project.name}</h3>
+            <h3 className={style.projectName}>{projectData.name}</h3>
             <span
               className={`${style.statusBadge} ${
-                project.status
-                  ? style[`status_${project.status}`] || style.status_default
+                projectData.status
+                  ?
+                    style[`status_${projectData.status}`] ||
+                    style.status_default
                   : style.status_default
               }`}
-              title={`Статус: ${getStatusText(project.status)}`}
+              title={`Статус: ${getStatusText(projectData.status)}`}
             >
-              {getStatusText(project.status)}
+              {getStatusText(projectData.status)}
             </span>
           </div>
 
@@ -176,7 +313,7 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
           <div className={style.projectDescription}>
             <h4>Описание</h4>
             <p className={style.lineClamp}>
-              {project.description || "Описание отсутствует"}
+              {projectData.description || "Описание отсутствует"}
             </p>
           </div>
 
@@ -185,21 +322,21 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
             <div className={style.detailRow}>
               <span className={style.detailLabel}>Дата начала:</span>
               <span className={style.detailValue}>
-                {formatDate(project.start_date)}
+                {formatDate(projectData.start_date)}
               </span>
             </div>
 
             <div className={style.detailRow}>
               <span className={style.detailLabel}>Дата окончания:</span>
               <span className={style.detailValue}>
-                {formatDate(project.end_date)}
+                {formatDate(projectData.end_date)}
               </span>
             </div>
 
             <div className={style.detailRow}>
               <span className={style.detailLabel}>Подтвержден:</span>
               <span className={style.detailValue}>
-                {project.is_approved ? "Да" : "Нет"}
+                {projectData.is_approved ? "Да" : "Нет"}
               </span>
             </div>
           </div>
@@ -207,14 +344,15 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
           {/* Сертификат */}
           {certificateUrl && (
             <div className={style.certificateSection}>
-              <a
-                href={certificateUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={style.certificateLink}
+              <button
+                type="button"
+                className={style.primaryButton}
+                onClick={handleOpenCertificate}
+                aria-label="Получить сертификат"
               >
-                📄 Посмотреть сертификат
-              </a>
+                {/* CERTIFICATE: кнопка для открытия сертификата */}
+                Получить сертификат
+              </button>
             </div>
           )}
 
@@ -281,9 +419,20 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
         {/* Действия */}
         <div className={style.section}>
           <div className={style.buttonsMyDocum}>
+            {canLeaveProject && (
+              <button
+                type="button"
+                className={style.dangerButton}
+                onClick={openLeaveConfirm}
+                disabled={isLeaving}
+              >
+                {/* LEAVE: основной триггер для выхода из проекта */}
+                {isLeaving ? "Выходим..." : "Выйти из проекта"}
+              </button>
+            )}
             <InviteProjectButton
-              projectId={project.id}
-              projectName={project.name}
+              projectId={projectData.id}
+              projectName={projectData.name}
             />
             <button className={style.secondaryButton} onClick={onRequestClose}>
               Закрыть
@@ -291,6 +440,14 @@ const InfoModalProject = ({ project, isOpen, onRequestClose }) => {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        isOpen={isLeaveConfirmOpen}
+        message="Вы действительно хотите выйти из проекта?"
+        onConfirm={handleLeaveProject}
+        onCancel={closeLeaveConfirm}
+        confirmText={isLeaving ? "Выходим..." : "Выйти"}
+        cancelText="Отмена"
+      />
     </Modal>
   );
 };
