@@ -505,6 +505,17 @@
   font-size: 14px;
 }
 
+.successMessage {
+  color: #0f5132;
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #d1e7dd;
+  border-radius: 8px;
+  border: 1px solid #badbcc;
+  width: 100%;
+  font-size: 14px;
+}
+
 .primaryButton {
   background-color: #4B1218;
   color: #fff;
@@ -537,10 +548,34 @@
   color: #111;
 }
 
+.dangerButton {
+  background-color: #ffe8e8;
+  border: 1.5px solid #f5b1b1;
+  color: #b42318;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.dangerButton:hover {
+  background-color: #ffd0d0;
+  border-color: #e08a8a;
+  color: #8f1a10;
+}
+
+.dangerButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .buttonsMyDocum{
   display: flex;
   justify-content: center;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 /* InfoModalProject styles */

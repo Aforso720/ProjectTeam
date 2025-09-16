@@ -14,7 +14,7 @@ const MyEvents = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = React.useState(false);
   const itemsPerPage = 5; 
 
-  const { myEvents, loading, meta } = useMyEvents({
+  const { myEvents, setMyEvents, loading, meta } = useMyEvents({
     user,
     page: currentPage,
     perPage: itemsPerPage
@@ -38,6 +38,28 @@ const MyEvents = () => {
     setIsInfoModalOpen(false);
     setSelectedProject(null);
   };
+
+  const handleProjectUpdate = React.useCallback(
+    (updatedProject) => {
+      if (!updatedProject) return;
+      setMyEvents((prev) =>
+        prev.map((item) => (item.id === updatedProject.id ? updatedProject : item))
+      );
+      setSelectedProject((prev) =>
+        prev?.id === updatedProject.id ? updatedProject : prev
+      );
+    },
+    [setMyEvents]
+  );
+
+  const handleProjectLeave = React.useCallback(
+    (projectId) => {
+      setMyEvents((prev) => prev.filter((item) => item.id !== projectId));
+      setSelectedProject(null);
+      setIsInfoModalOpen(false);
+    },
+    [setMyEvents]
+  );
 
   const handleNextPage = () => {
     if (currentPage < meta.last_page) {
@@ -90,6 +112,8 @@ const MyEvents = () => {
         project={selectedProject}
         isOpen={isInfoModalOpen}
         onRequestClose={closeInfoModal}
+        onProjectUpdate={handleProjectUpdate}
+        onProjectLeave={handleProjectLeave}
       />
 
       {meta.last_page > 1 && (

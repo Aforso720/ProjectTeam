@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router";
+import React, { useState, useCallback, useContext, useEffect, useRef } from "react";
+import { useParams, useNavigate, useLocation } from "react-router";
 import Modal from "react-modal";
 import axiosInstance from "../API/axiosInstance";
+import { AuthContext } from "../context/AuthContext";
 
 export const InviteProjectButton = ({ projectId, projectName }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -118,50 +119,187 @@ export const InviteProjectButton = ({ projectId, projectName }) => {
 export const JoinProjectPage = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const location = useLocation();
+  const authContext = useContext(AuthContext);
+  const isAuthenticated = authContext?.isAuthenticated;
+  const setPendingJoinIntent = authContext?.setPendingJoinIntent;
+  const [status, setStatus] = useState("idle");
+  const [infoMessage, setInfoMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const joinAttemptRef = useRef(false);
 
-  const handleJoin = async () => {
-    setLoading(true);
-    setError("");
+  useEffect(() => {
+    setErrorMessage("");
+    setInfoMessage("");
+    joinAttemptRef.current = false;
+  }, [projectId]);
+
+  const redirectToLogin = useCallback(() => {
+    if (!projectId) {
+      setErrorMessage("Приглашение недействительно или проект не найден");
+      return;
+    }
+
+    const redirectTo = `/join/${projectId}`;
+    if (typeof setPendingJoinIntent === "function") {
+      setPendingJoinIntent({
+        type: "join_project",
+        projectId,
+        redirectTo,
+        createdAt: Date.now(),
+      });
+    }
+
+    // JOIN: сохраняем маршрут и перенаправляем на авторизацию
+    navigate(`/login?next=${encodeURIComponent(redirectTo)}`, {
+      replace: true,
+      state: { from: location },
+    });
+  }, [location, navigate, projectId, setPendingJoinIntent]);
+
+  const handleJoinRequest = useCallback(async () => {
+    if (!projectId) {
+      setErrorMessage("Приглашение недействительно или проект не найден");
+      return;
+    }
+
+    if (joinAttemptRef.current) return;
+    joinAttemptRef.current = true;
+
+    setStatus("loading");
+    setErrorMessage("");
+    setInfoMessage("Присоединяем к проекту…");
+
+    let redirectAfterAuth = false;
+    let openProfileAfter = false;
+
     try {
+      // JOIN: обращаемся к серверу для вступления в проект
       await axiosInstance.post(`/projects/${projectId}/join`, {});
-      setMessage("Готово!");
-      setTimeout(() => {
-        navigate(`/projects/${projectId}`);
-      }, 1500);
+      setInfoMessage("Вы присоединились к проекту");
+      if (typeof setPendingJoinIntent === "function") {
+        setPendingJoinIntent(null);
+      }
+      localStorage.setItem("accountActiveTab", "MyEvents");
+      openProfileAfter = true;
     } catch (err) {
-      const status = err.response?.status;
-      if (status === 401) {
-        navigate(`/login?next=/join/${projectId}`);
+      const statusCode = err?.response?.status;
+
+      if (statusCode === 401 || statusCode === 403) {
+        redirectAfterAuth = true;
+        setInfoMessage("");
+        if (typeof setPendingJoinIntent === "function") {
+          setPendingJoinIntent({
+            type: "join_project",
+            projectId,
+            redirectTo: `/join/${projectId}`,
+            createdAt: Date.now(),
+          });
+        }
+      } else if (statusCode === 404) {
+        setErrorMessage("Приглашение недействительно или проект не найден");
+      } else if (statusCode === 409) {
+        setInfoMessage("Вы уже участвуете в проекте");
+        if (typeof setPendingJoinIntent === "function") {
+          setPendingJoinIntent(null);
+        }
+        openProfileAfter = true;
       } else {
-        setError(err.response?.data?.message || "Не удалось вступить в проект");
+        setErrorMessage(
+          err?.response?.data?.message || "Не удалось присоединиться к проекту"
+        );
       }
     } finally {
-      setLoading(false);
+      setStatus("idle");
+      joinAttemptRef.current = false;
     }
-  };
+
+    if (redirectAfterAuth) {
+      redirectToLogin();
+      return;
+    }
+
+    if (openProfileAfter) {
+      window.setTimeout(() => {
+        navigate("/profile", { replace: true });
+      }, 1500);
+    }
+  }, [navigate, projectId, redirectToLogin, setPendingJoinIntent]);
+
+  useEffect(() => {
+    if (!projectId) {
+      setErrorMessage("Приглашение недействительно или проект не найден");
+      return;
+    }
+
+    if (!isAuthenticated) {
+      joinAttemptRef.current = false;
+      redirectToLogin();
+      return;
+    }
+
+    if (!joinAttemptRef.current) {
+      // JOIN: авторизованный пользователь присоединяется автоматически
+      handleJoinRequest();
+    }
+  }, [handleJoinRequest, isAuthenticated, projectId, redirectToLogin]);
 
   return (
-    <div style={{ padding: "20px", textAlign: "center" }}>
-      <h1>Присоединиться к проекту</h1>
-      <p>ID проекта: {projectId}</p>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message ? (
-        <p>{message}</p>
-      ) : (
-        <button
-          onClick={handleJoin}
-          disabled={loading}
-          style={{ padding: "8px 16px" }}
-        >
-          {loading ? "Загрузка..." : "Вступить в проект"}
-        </button>
+    <div
+      style={{
+        padding: "32px 16px",
+        textAlign: "center",
+        maxWidth: 480,
+        margin: "0 auto",
+      }}
+    >
+      <h1 style={{ marginBottom: 12 }}>Присоединение к проекту</h1>
+      <p style={{ marginBottom: 24 }}>ID проекта: {projectId || "—"}</p>
+      {infoMessage && (
+        <p style={{ color: "#4B1218", fontWeight: 600 }}>{infoMessage}</p>
       )}
-      <div style={{ marginTop: "20px" }}>
-        <button onClick={() => navigate(-1)} style={{ padding: "6px 12px" }}>
-          Назад
+      {errorMessage && (
+        <p style={{ color: "#b42318", fontWeight: 600 }}>{errorMessage}</p>
+      )}
+      <div
+        style={{
+          marginTop: 24,
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+          alignItems: "center",
+        }}
+      >
+        <button
+          onClick={handleJoinRequest}
+          disabled={status === "loading" || !isAuthenticated}
+          style={{
+            padding: "10px 20px",
+            borderRadius: 12,
+            border: "1.5px solid #4B1218",
+            backgroundColor: status === "loading" ? "#f5f0f0" : "#4B1218",
+            color: status === "loading" ? "#4B1218" : "#fff",
+            fontWeight: 600,
+            cursor: status === "loading" || !isAuthenticated ? "default" : "pointer",
+            minWidth: 220,
+          }}
+        >
+          {status === "loading"
+            ? "Присоединяем к проекту…"
+            : "Повторить попытку"}
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          style={{
+            padding: "8px 20px",
+            borderRadius: 12,
+            border: "1.5px solid #ccc",
+            backgroundColor: "transparent",
+            cursor: "pointer",
+            minWidth: 220,
+          }}
+        >
+          На главную
         </button>
       </div>
     </div>
