@@ -1,63 +1,144 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from "react-modal";
 import style from "./MyDocument.module.scss";
 import axiosInstance from "../../API/axiosInstance";
 
 const DocumentModal = ({ onDocumentAdded }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const fileInputRef = useRef(null);               // NEW: ref на скрытый <input>
+  const prevUrlRef = useRef(null);                 // NEW: чтобы корректно revokeObjectURL
+  const [isDragging, setIsDragging] = useState(false); // NEW: drag state
+
   const [myDocumObj, setMyDocumObj] = useState({
     id: Date.now(),
-    image: "",
+    image: "",          // objectURL для превью
+    file: null,         // исходный файл
+    fileType: "",       // "image" | "pdf"
+    fileName: "",       // имя файла (для PDF-карточки)
     description: "",
     startDate: "",
   });
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [shouldSubmit, setShouldSubmit] = useState(false);
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
+  const openModal = () => setModalIsOpen(true);
 
-  const closeModal = () => {
+  const resetState = () => {
+    // корректно чистим предыдущий objectURL
+    if (prevUrlRef.current) {
+      URL.revokeObjectURL(prevUrlRef.current);
+      prevUrlRef.current = null;
+    }
     setMyDocumObj({
       id: Date.now(),
       image: "",
+      file: null,
+      fileType: "",
+      fileName: "",
       description: "",
       startDate: "",
     });
-    setModalIsOpen(false);
     setError(null);
     setShouldSubmit(false);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setMyDocumObj((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const closeModal = () => {
+    resetState();
+    setModalIsOpen(false);
   };
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setMyDocumObj((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Открыть системный выбор файла
+  const openFilePicker = () => fileInputRef.current?.click();
+
+  const handleKeyDownField = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openFilePicker();
+    }
+  };
+
+  // Универсальная обработка выбора/перетаскивания
+  const applyFile = (file) => {
     if (!file) return;
 
-    const allowed = ["image/png", "image/jpeg", "image/jpg", "application/pdf"];
-    if (!allowed.includes(file.type)) {
-      setError("Разрешены только JPG/PNG/PDF");
+    // Разрешенные типы: картинка или PDF
+    const isImage = file.type?.startsWith("image/");
+    const isPdf = file.type === "application/pdf";
+
+    if (!isImage && !isPdf) {
+      setError("Разрешены только изображения (JPG/PNG/HEIC) или PDF");
       return;
     }
 
-    const imageUrl = URL.createObjectURL(file);
+    // освобождаем предыдущий objectURL
+    if (prevUrlRef.current) {
+      URL.revokeObjectURL(prevUrlRef.current);
+      prevUrlRef.current = null;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    prevUrlRef.current = objectUrl;
+
     setMyDocumObj((prev) => ({
       ...prev,
-      image: imageUrl, 
-      file, 
+      image: objectUrl,
+      file,
+      fileType: isPdf ? "pdf" : "image",
+      fileName: file.name || "",
+    }));
+    setError(null);
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    applyFile(file);
+    // очищаем значение, чтобы можно было выбрать тот же файл повторно
+    e.target.value = "";
+  };
+
+  // Drag & Drop
+  const onDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+  const onDragLeave = () => setIsDragging(false);
+  const onDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    applyFile(file);
+  };
+
+  const clearFile = (e) => {
+    e.stopPropagation();
+    if (prevUrlRef.current) {
+      URL.revokeObjectURL(prevUrlRef.current);
+      prevUrlRef.current = null;
+    }
+    setMyDocumObj((prev) => ({
+      ...prev,
+      image: "",
+      file: null,
+      fileType: "",
+      fileName: "",
     }));
   };
 
-   const validateForm = () => {
+  useEffect(() => {
+    return () => {
+      // revoke при размонтировании модалки
+      if (prevUrlRef.current) URL.revokeObjectURL(prevUrlRef.current);
+    };
+  }, []);
+
+  const validateForm = () => {
     if (!myDocumObj.description || !myDocumObj.startDate || !myDocumObj.file) {
       setError("Пожалуйста, заполните все поля и загрузите файл");
       return false;
@@ -84,24 +165,18 @@ const DocumentModal = ({ onDocumentAdded }) => {
 
       try {
         const formData = new FormData();
-        formData.append("file", myDocumObj.file); 
-        formData.append("issued_by", myDocumObj.description); 
-        formData.append("issue_date", myDocumObj.startDate); 
-
+        formData.append("file", myDocumObj.file);
+        formData.append("issued_by", myDocumObj.description);
+        formData.append("issue_date", myDocumObj.startDate);
 
         const response = await axiosInstance.post("/certificates", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
-        console.log("Сертификат успешно создан:", response.data);
-
         closeModal();
         onDocumentAdded?.(response.data);
       } catch (err) {
-        console.error(
-          "Ошибка при сохранении сертификата:",
-          err.response?.data || err
-        );
+        console.error("Ошибка при сохранении сертификата:", err.response?.data || err);
         setError(
           err.response?.data?.message ||
             "Произошла ошибка при сохранении. Попробуйте снова."
@@ -142,6 +217,7 @@ const DocumentModal = ({ onDocumentAdded }) => {
         <img src="img/folder-2.png" alt="img" />
         <button onClick={openModal}>Добавить сертификат</button>
       </div>
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -151,8 +227,10 @@ const DocumentModal = ({ onDocumentAdded }) => {
       >
         <div className={style.Modal}>
           <h2>Добавить сертификат</h2>
+
           <div className={style.contentDocum}>
             {error && <div className={style.errorMessage}>{error}</div>}
+
             <div className={style.inputGroup}>
               <input
                 name="description"
@@ -171,39 +249,77 @@ const DocumentModal = ({ onDocumentAdded }) => {
               />
             </div>
 
-            {myDocumObj.image ? (
-              <div className={style.imagePreview}>
-                <img
-                  src={myDocumObj.image}
-                  alt="Preview"
-                  className={style.fullWidthImage}
-                />
-                <button
-                  className={style.changeImageButton}
-                  onClick={() =>
-                    setMyDocumObj((prev) => ({
-                      ...prev,
-                      image: "",
-                      file: null,
-                    }))
-                  }
-                >
-                  Изменить изображение
-                </button>
-              </div>
-            ) : (
-              <label className={style.addedPhoto}>
-                <input
-                  type="file"
-                  accept="image/*,.pdf"
-                  style={{ display: "none" }}
-                  onChange={handleFileUpload}
-                />
+            {/* === ЕДИНОЕ КЛИКАБЕЛЬНОЕ ПОЛЕ ЗАГРУЗКИ/СМЕНЫ ФАЙЛА === */}
+            <div
+              className={`${style.uploadField} ${isDragging ? style.uploadFieldDragging : ""} ${myDocumObj.image ? style.uploadWithPreview : style.uploadEmpty}`}
+              role="button"
+              tabIndex={0}
+              onClick={openFilePicker}
+              onKeyDown={handleKeyDownField}
+              onDragOver={onDragOver}
+              onDragEnter={onDragOver}
+              onDragLeave={onDragLeave}
+              onDrop={onDrop}
+              aria-label={myDocumObj.image ? "Нажмите, чтобы сменить файл" : "Нажмите или перетащите файл для загрузки"}
+            >
+              {/* Скрытый input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*,application/pdf"
+                className={style.visuallyHidden}
+                onChange={handleFileUpload}
+              />
 
-                <img src="img/gallery-add.png" alt="" />
-                <p>Загрузите сертификат</p>
-              </label>
-            )}
+              {/* Превью */}
+              {myDocumObj.image ? (
+                <>
+                  {myDocumObj.fileType === "image" ? (
+                    <img
+                      src={myDocumObj.image}
+                      alt="Предпросмотр сертификата"
+                      className={style.previewImage}
+                    />
+                  ) : (
+                    <div className={style.previewPdf}>
+                      <img src="img/pdf-icon.svg" alt="PDF" />
+                      <div className={style.fileInfo}>
+                        <span className={style.fileName} title={myDocumObj.fileName}>
+                          {myDocumObj.fileName || "Файл PDF"}
+                        </span>
+                        <span className={style.fileBadge}>PDF</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Ховер-подсказка */}
+                  <div className={style.overlayHint}>
+                    Нажмите, чтобы поменять
+                  </div>
+
+                  {/* Кнопка очистки в углу */}
+                  <button
+                    type="button"
+                    className={style.removeBtn}
+                    onClick={clearFile}
+                    aria-label="Очистить файл"
+                    title="Очистить"
+                  >
+                    ×
+                  </button>
+                </>
+              ) : (
+                // Пустое состояние (иконка + текст)
+                <div className={style.uploadEmptyInner}>
+                  <img src="img/gallery-add.png" alt="" aria-hidden="true" />
+                  <p>
+                    Перетащите изображение или PDF<br />
+                    <span className={style.muted}>или нажмите, чтобы выбрать</span>
+                  </p>
+                </div>
+              )}
+            </div>
+            {/* === / ЕДИНОЕ ПОЛЕ === */}
           </div>
 
           <section className={style.buttonsMyDocum}>
@@ -214,7 +330,6 @@ const DocumentModal = ({ onDocumentAdded }) => {
             >
               {isLoading ? "Отправка..." : "Сохранить"}
             </button>
-
             <button className={style.secondaryButton} onClick={closeModal}>
               Отмена
             </button>

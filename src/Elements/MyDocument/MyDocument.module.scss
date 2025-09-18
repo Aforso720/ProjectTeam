@@ -457,4 +457,153 @@ h2 {
     width: 100%;
   }
 }
+/* ===================== Upload Field (кликабельное превью) ===================== */
 
+.uploadField {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 500px;
+  border: 2px dashed #4B1218;
+  border-radius: 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .25s ease, background .25s ease, box-shadow .25s ease;
+  overflow: hidden;
+  user-select: none;
+  outline: none;
+}
+.uploadField:hover {
+  border-color: #64181f;
+  background: #fafafa;
+}
+.uploadField:focus-visible {
+  box-shadow: 0 0 0 3px rgba(100,24,31,0.15);
+}
+.uploadFieldDragging {
+  border-color: #64181f;
+  background: #f5efef;
+  box-shadow: inset 0 0 0 2px rgba(100,24,31,0.15);
+}
+
+.uploadEmptyInner {
+  text-align: center;
+  display: grid;
+  gap: 8px;
+  place-items: center;
+}
+.uploadEmptyInner p {
+  margin: 0;
+  font-weight: 600;
+  color: #4B1218;
+  line-height: 1.25;
+}
+.muted {
+  font-weight: 500;
+  color: #6b6b6b;
+}
+
+/* когда есть превью — убираем пунктир, делаем чистую карту */
+.uploadWithPreview {
+  border-style: solid;
+  border-color: #e7e7e7;
+  background: #fff;
+}
+
+/* Превью изображения */
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Превью PDF (иконка + имя файла) */
+.previewPdf {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  width: 100%;
+}
+.previewPdf img {
+  width: 56px;
+  height: 56px;
+}
+.fileInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.fileName {
+  font-weight: 600;
+  color: #4B1218;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fileBadge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4B1218;
+  border: 1px solid #4B1218;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* Ховер-подсказка поверх превью */
+.overlayHint {
+  position: absolute;
+  inset: auto 12px 12px 12px;
+  justify-self: center;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+}
+.uploadField:hover .overlayHint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Кнопка очистки (крестик) */
+.removeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #e3e3e3;
+  background: #fff;
+  color: #333;
+  font-size: 20px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+}
+.removeBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background: #f7f7f7;
+}
+
+/* Визуально скрытый input */
+.visuallyHidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0; padding: 0; margin: -1px;
+}
