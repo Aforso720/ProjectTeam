@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./PersonSetting.scss";
 import usePeople from "../../API/usePeople";
 import axiosInstance from "../../API/axiosInstance";
-import Loader from '../../Component/Loader'
+import Loader from "../../Component/Loader";
+import Seo from "../../components/Seo/Seo";
 
 const PersonSetting = () => {
   const { person: initialPeople, isLoadingTop: initialPeopleLoad } =
@@ -193,194 +194,204 @@ const PersonSetting = () => {
     }
   };
 
-  if(initialPeopleLoad) return <Loader/>
+  if (initialPeopleLoad) return <Loader />;
 
   return (
-    <section className="person-setting">
-      <header className="header">
-        <h2 style={{color:'white'}}>Управление участниками</h2>
-        <div className="header-controls">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Поиск участников..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
-            <span className="search-icon">🔍</span>
-          </div>
-          <button className="add-btn" onClick={() => setIsModalOpen(true)}>
-            Добавить
-          </button>
-        </div>
-      </header>
-
-      {error && <div className="error-message">{error}</div>}
-
-      <ul className="people-list">
-        {filteredPeople.map((person) => (
-          <li className="person-card" key={person.id}>
-            <div className="person-info">
-              <img src={person.image || "/img/kot.jpg"} alt="Ava" />
-              <div>
-                <h3>
-                  {person.first_name} {person.last_name}
-                </h3>
-                <p>{person.middle_name || ""}</p>
-              </div>
+    <>
+      <Seo
+        title="Администрирование участников — Project Team"
+        description="Редактируйте роли, рейтинги и учетные записи участников команды Project Team."
+        canonicalPath="/admin/managing"
+        ogTitle="Администрирование участников"
+        ogDescription="Панель управления участниками Project Team доступна только администраторам."
+        robots="noindex, nofollow"
+      />
+      <section className="person-setting">
+        <header className="header">
+          <h2 style={{ color: "white" }}>Управление участниками</h2>
+          <div className="header-controls">
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Поиск участников..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <span className="search-icon">🔍</span>
             </div>
+            <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+              Добавить
+            </button>
+          </div>
+        </header>
 
-            <div className="person-controls">
-              <div className="rating-edit">
-                <input
-                  type="number"
-                  value={person.rating}
-                  onChange={(e) =>
-                    handleRatingChange(person.id, e.target.value)
-                  }
-                  onFocus={() => handleEditClick(person.id)}
-                  onBlur={() => handleBlur(person.id)}
-                />
-                {editStates[person.id] && (
-                  <button
-                    className="save-btn"
-                    onClick={() => handleSaveRating(person.id)}
-                    onMouseDown={(e) => e.preventDefault()}
-                  >
-                    Сохранить
-                  </button>
-                )}
+        {error && <div className="error-message">{error}</div>}
+
+        <ul className="people-list">
+          {filteredPeople.map((person) => (
+            <li className="person-card" key={person.id}>
+              <div className="person-info">
+                <img src={person.image || "/img/kot.jpg"} alt="Ava" />
+                <div>
+                  <h3>
+                    {person.first_name} {person.last_name}
+                  </h3>
+                  <p>{person.middle_name || ""}</p>
+                </div>
               </div>
 
-              <div className="buttons">
-                <select
-                  value={person.role}
-                  onChange={(e) => handleRoleChange(person.id, e.target.value)}
-                >
-                  <option value="Админ">Админ</option>
-                  <option value="Стандарт">Стандарт</option>
-                </select>
+              <div className="person-controls">
+                <div className="rating-edit">
+                  <input
+                    type="number"
+                    value={person.rating}
+                    onChange={(e) =>
+                      handleRatingChange(person.id, e.target.value)
+                    }
+                    onFocus={() => handleEditClick(person.id)}
+                    onBlur={() => handleBlur(person.id)}
+                  />
+                  {editStates[person.id] && (
+                    <button
+                      className="save-btn"
+                      onClick={() => handleSaveRating(person.id)}
+                      onMouseDown={(e) => e.preventDefault()}
+                    >
+                      Сохранить
+                    </button>
+                  )}
+                </div>
+
+                <div className="buttons">
+                  <select
+                    value={person.role}
+                    onChange={(e) => handleRoleChange(person.id, e.target.value)}
+                  >
+                    <option value="Админ">Админ</option>
+                    <option value="Стандарт">Стандарт</option>
+                  </select>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDeleteUser(person.id)}
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {isModalOpen && (
+          <article className="modal-overlay">
+            <section className="modal">
+              <h2>Добавить участника</h2>
+
+              <div className="input-row">
+                <div>
+                  <label>Фамилия</label>
+                  <input
+                    type="text"
+                    value={newUser.lastName || ""}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, lastName: e.target.value })
+                    }
+                    placeholder="Введите фамилию"
+                  />
+                </div>
+                <div>
+                  <label>Имя</label>
+                  <input
+                    type="text"
+                    value={newUser.firstName || ""}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, firstName: e.target.value })
+                    }
+                    placeholder="Введите имя"
+                  />
+                </div>
+                <div>
+                  <label>Отчество</label>
+                  <input
+                    type="text"
+                    value={newUser.middleName || ""}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, middleName: e.target.value })
+                    }
+                    placeholder="Введите отчество"
+                  />
+                </div>
+              </div>
+
+              <div className="input-row">
+                <div>
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    value={newUser.email}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, email: e.target.value })
+                    }
+                    placeholder="example@domain.com"
+                  />
+                </div>
+                <div>
+                  <label>Номер телефона</label>
+                  <input
+                    type="text"
+                    value={newUser.phone}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, phone: e.target.value })
+                    }
+                    placeholder="8(999) 999-99-99"
+                  />
+                </div>
+              </div>
+
+              <div className="input-row">
+                <div>
+                  <label>Группа</label>
+                  <input
+                    type="text"
+                    value={newUser.group}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, group: e.target.value })
+                    }
+                    placeholder="ПИ-22-1"
+                  />
+                </div>
+                <div>
+                  <label>Статус</label>
+                  <select
+                    value={newUser.role}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, role: e.target.value })
+                    }
+                    className="status-select"
+                  >
+                    <option value="Админ">Админ</option>
+                    <option value="Стандарт">Участник</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="modal-actions">
                 <button
-                  className="delete-btn"
-                  onClick={() => handleDeleteUser(person.id)}
+                  className="cancel-btn"
+                  onClick={() => setIsModalOpen(false)}
                 >
-                  Удалить
+                  Закрыть
+                </button>
+                <button className="confirm-btn" onClick={handleAddUser}>
+                  Добавить
                 </button>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      {isModalOpen && (
-        <article className="modal-overlay">
-          <section className="modal">
-            <h2>Добавить участника</h2>
-
-            <div className="input-row">
-              <div>
-                <label>Фамилия</label>
-                <input
-                  type="text"
-                  value={newUser.lastName || ""}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, lastName: e.target.value })
-                  }
-                  placeholder="Введите фамилию"
-                />
-              </div>
-              <div>
-                <label>Имя</label>
-                <input
-                  type="text"
-                  value={newUser.firstName || ""}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, firstName: e.target.value })
-                  }
-                  placeholder="Введите имя"
-                />
-              </div>
-              <div>
-                <label>Отчество</label>
-                <input
-                  type="text"
-                  value={newUser.middleName || ""}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, middleName: e.target.value })
-                  }
-                  placeholder="Введите отчество"
-                />
-              </div>
-            </div>
-
-            <div className="input-row">
-              <div>
-                <label>Email</label>
-                <input
-                  type="email"
-                  value={newUser.email}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, email: e.target.value })
-                  }
-                  placeholder="example@domain.com"
-                />
-              </div>
-              <div>
-                <label>Номер телефона</label>
-                <input
-                  type="text"
-                  value={newUser.phone}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, phone: e.target.value })
-                  }
-                  placeholder="8(999) 999-99-99"
-                />
-              </div>
-            </div>
-
-            <div className="input-row">
-              <div>
-                <label>Группа</label>
-                <input
-                  type="text"
-                  value={newUser.group}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, group: e.target.value })
-                  }
-                  placeholder="ПИ-22-1"
-                />
-              </div>
-              <div>
-                <label>Статус</label>
-                <select
-                  value={newUser.role}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, role: e.target.value })
-                  }
-                  className="status-select"
-                >
-                  <option value="Админ">Админ</option>
-                  <option value="Стандарт">Участник</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="modal-actions">
-              <button
-                className="cancel-btn"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Закрыть
-              </button>
-              <button className="confirm-btn" onClick={handleAddUser}>
-                Добавить
-              </button>
-            </div>
-          </section>
-        </article>
-      )}
-    </section>
+            </section>
+          </article>
+        )}
+      </section>
+    </>
   );
 };
 
