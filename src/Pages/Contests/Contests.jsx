@@ -12,6 +12,7 @@ import { AuthContext } from '../../context/AuthContext';
 import useEvent from '../../API/useEvent';
 import { useNavigate } from 'react-router';
 import Loader from '../../Component/Loader';
+import Seo from "../../components/Seo/Seo";
 
 const Contests = () => {
   const [status, setSelectedStatus] = React.useState('active');
@@ -57,121 +58,145 @@ const Contests = () => {
   };
 
   return (
-    <section className='Contests'>
-      {isAuthenticated && (
-        <div className='MyEvents'>
-          <h2>Мои конкурсы</h2>
-          <div className="slider_cont">
-            <Slider eventCategory={'Мои конкурсы'} />
+    <>
+      <Seo
+        title="Конкурсы Project Team — действующие и завершённые проекты"
+        description="Свежие конкурсы Project Team: участвуйте в стартапах, грантах и IT-проектах. Фильтруйте события по статусу и переходите к карточкам мероприятий."
+        canonicalPath="/contests"
+        ogTitle="Конкурсы Project Team"
+        ogDescription="Активные и завершённые конкурсы Project Team с подробностями и ссылками на события."
+        ogImage="/img/image2.webp"
+        ogImageAlt="Афиша конкурсов Project Team"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Конкурсы Project Team",
+          url: "https://project-team.site/contests",
+          description:
+            "Список действующих и завершённых конкурсов Project Team с переходами на карточки событий.",
+          about: {
+            "@type": "EducationalOrganization",
+            name: "Project Team GGNTU",
+            url: "https://project-team.site/",
+          },
+        }}
+      />
+      <section className="Contests">
+        {isAuthenticated && (
+          <div className="MyEvents">
+            <h2>Мои конкурсы</h2>
+            <div className="slider_cont">
+              <Slider eventCategory={"Мои конкурсы"} />
+            </div>
           </div>
-        </div>
-      )}
-      <article className='BannerCont'>
-        <div className='bannerSlider'>
-          <Swiper
-            ref={swiperRef}
-            modules={[Navigation]}
-            spaceBetween={200}
-            slidesPerView={1}
-            navigation
-            centeredSlides
-            effect="flip"
-            loop
-          >
-            {loadingNewsloadingMyNews ? <Loader/> : (
-              news.map((item) => (
-                <SwiperSlide key={item.id}>
-                  <img
-                    onClick={() => handleSlideClick(item.id)}
-                    src={ item.image ? 'item.image' : '/img/image2.webp'}
-                    alt={item.title}
-                    className="BannerImg"
-                  />
-                </SwiperSlide>
-              ))
-            )}
-          </Swiper>
-        </div>
-      </article>
-
-      <section className='EventsCont'>
-        <ul className='statesCont'>
-          {["active", "completed"].map((cat) => (
-            <li
-              key={cat}
-              className={`stateEvent ${status === cat ? "activeCont" : ""}`}
-              onClick={() => handleCategoryClick(cat)}
-            >
-              <b>{cat === "active" ? "Активные" : "Завершенные"}</b>
-            </li>
-          ))}
-        </ul>
-
-        {loading ? (
-          isMobileView ? (
-              <Loader/>
-          ) : (
-            <div className='arrEvents'>
-              <Loader/>
-            </div>
-          )
-        ) : currentEvents.length > 0 ? (
-          isMobileView ? (
-            <Swiper
-              modules={[Navigation]}
-              navigation
-              spaceBetween={20}
-              slidesPerView={2}
-              breakpoints={{
-              320: {
-                slidesPerView: 1,
-              },
-              900: {
-                slidesPerView: 2,
-              },
-              }}
-              className='mobSlaiderCont'
-            >
-              {currentEvents.map(item => (
-                <SwiperSlide key={item.id}>
-                  <Event {...item} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          ) : (
-            <div className='arrEvents'>
-              {currentEvents.map(item => (
-                <Event key={item.id} {...item} />
-              ))}
-            </div>
-          )
-        ) : ( 
-            <Loader />
         )}
+        <article className="BannerCont">
+          <div className="bannerSlider">
+            <Swiper
+              ref={swiperRef}
+              modules={[Navigation]}
+              spaceBetween={200}
+              slidesPerView={1}
+              navigation
+              centeredSlides
+              effect="flip"
+              loop
+            >
+              {loadingNewsloadingMyNews ? (
+                <Loader />
+              ) : (
+                news.map((item) => (
+                  <SwiperSlide key={item.id}>
+                    <img
+                      onClick={() => handleSlideClick(item.id)}
+                      src={item.image ? item.image : "/img/image2.webp"}
+                      alt={item.title}
+                      className="BannerImg"
+                    />
+                  </SwiperSlide>
+                ))
+              )}
+            </Swiper>
+          </div>
+        </article>
 
-        {currentEvents?.length > 0 && (
-          currentEvents?.length < 1 && (
-          <ul className='paginationEvents'>
-            <li onClick={handlePrevPage}>
-              <img src='/img/arrow-circle-left.png' alt='Назад' />
-            </li>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+        <section className="EventsCont">
+          <ul className="statesCont">
+            {["active", "completed"].map((cat) => (
               <li
-                key={page}
-                onClick={() => handlePageClick(page)}
-                className={currentPage === page ? 'active_page' : ''}
+                key={cat}
+                className={`stateEvent ${status === cat ? "activeCont" : ""}`}
+                onClick={() => handleCategoryClick(cat)}
               >
-                {page}
+                <b>{cat === "active" ? "Активные" : "Завершенные"}</b>
               </li>
             ))}
-            <li onClick={handleNextPage}>
-              <img src='/img/arrow-circle-left.png' alt='Вперед' />
-            </li>
           </ul>
-          )
-        )}
+
+          {loading ? (
+            isMobileView ? (
+              <Loader />
+            ) : (
+              <div className="arrEvents">
+                <Loader />
+              </div>
+            )
+          ) : currentEvents.length > 0 ? (
+            isMobileView ? (
+              <Swiper
+                modules={[Navigation]}
+                navigation
+                spaceBetween={20}
+                slidesPerView={2}
+                breakpoints={{
+                  320: {
+                    slidesPerView: 1,
+                  },
+                  900: {
+                    slidesPerView: 2,
+                  },
+                }}
+                className="mobSlaiderCont"
+              >
+                {currentEvents.map((item) => (
+                  <SwiperSlide key={item.id}>
+                    <Event {...item} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <div className="arrEvents">
+                {currentEvents.map((item) => (
+                  <Event key={item.id} {...item} />
+                ))}
+              </div>
+            )
+          ) : (
+            <Loader />
+          )}
+
+          {totalPages > 1 && (
+            <ul className="paginationEvents">
+              <li onClick={handlePrevPage}>
+                <img src="/img/arrow-circle-left.png" alt="Назад" />
+              </li>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <li
+                  key={page}
+                  onClick={() => handlePageClick(page)}
+                  className={currentPage === page ? "active_page" : ""}
+                >
+                  {page}
+                </li>
+              ))}
+              <li onClick={handleNextPage}>
+                <img src="/img/arrow-circle-left.png" alt="Вперед" />
+              </li>
+            </ul>
+          )}
+        </section>
       </section>
-    </section>
+    </>
   );
 };
 
