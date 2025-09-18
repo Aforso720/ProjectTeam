@@ -1,11 +1,27 @@
 const fs = require('fs');
 const path = require('path');
 
+const DEFAULT_SITE_DOMAIN = 'https://project-team.site';
+
+const normaliseBaseUrl = (value, fallback) => {
+  const source = value || fallback;
+  if (!source) {
+    throw new Error('Не удалось определить домен сайта для генерации sitemap');
+  }
+
+  return source.replace(/\/$/, '');
+};
+
+const buildApiUrl = (base, pathname) => {
+  const url = new URL(pathname, `${base}/`);
+  return url.toString();
+};
+
 // Получение всех событий
-async function fetchAllEvents() {
+async function fetchAllEvents(apiBaseUrl) {
   try {
     console.log('🔄 Получение списка всех событий...');
-    const response = await fetch('http://gstouteam.dpdns.org:5555/api/events');
+    const response = await fetch(buildApiUrl(apiBaseUrl, '/api/events'));
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -32,10 +48,10 @@ async function fetchAllEvents() {
 }
 
 // Получение всех новостей
-async function fetchAllNews() {
+async function fetchAllNews(apiBaseUrl) {
   try {
     console.log('🔄 Получение списка всех новостей...');
-    const response = await fetch('http://gstouteam.dpdns.org:5555/api/news');
+    const response = await fetch(buildApiUrl(apiBaseUrl, '/api/news'));
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -151,6 +167,20 @@ function generateNewsSitemap(news, hostname) {
   return sitemap;
 }
 
+function getRuntimeConfig(overrides = {}) {
+  const siteDomain = normaliseBaseUrl(
+    overrides.siteDomain || process.env.SITE_DOMAIN,
+    DEFAULT_SITE_DOMAIN
+  );
+
+  const apiBaseUrl = normaliseBaseUrl(
+    overrides.apiBaseUrl || process.env.API_BASE_URL || process.env.SITE_API_DOMAIN,
+    siteDomain
+  );
+
+  return { siteDomain, apiBaseUrl };
+}
+
 // Генерация sitemap index (в формате Victorious)
 function generateSitemapIndex(hostname) {
   const now = new Date().toISOString();
@@ -181,16 +211,17 @@ function generateSitemapIndex(hostname) {
 }
 
 // Основная функция генерации
-async function generateSitemap() {
-  const hostname = 'http://gstouteam.dpdns.org'; // ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ ДОМЕН
-  
+async function generateSitemap(options = {}) {
+  const { siteDomain, apiBaseUrl } = getRuntimeConfig(options);
+
   console.log('🚀 Начинаем генерацию sitemap в формате Victorious...');
-  console.log(`🌐 Домен: ${hostname}`);
-  
+  console.log(`🌐 Домен сайта: ${siteDomain}`);
+  console.log(`🔌 API источник: ${apiBaseUrl}`);
+
   try {
     // Получаем данные
-    const events = await fetchAllEvents();
-    const news = await fetchAllNews();
+    const events = await fetchAllEvents(apiBaseUrl);
+    const news = await fetchAllNews(apiBaseUrl);
     
     // Создаем директорию если её нет
     const publicDir = path.join(__dirname, '../public');
@@ -199,10 +230,10 @@ async function generateSitemap() {
     }
     
     // Генерируем отдельные sitemap файлы
-    const staticSitemap = generateStaticSitemap(hostname);
-    const eventsSitemap = generateEventsSitemap(events, hostname);
-    const newsSitemap = generateNewsSitemap(news, hostname);
-    const sitemapIndex = generateSitemapIndex(hostname);
+    const staticSitemap = generateStaticSitemap(siteDomain);
+    const eventsSitemap = generateEventsSitemap(events, siteDomain);
+    const newsSitemap = generateNewsSitemap(news, siteDomain);
+    const sitemapIndex = generateSitemapIndex(siteDomain);
     
     // Сохраняем файлы
     const files = [
@@ -220,7 +251,7 @@ async function generateSitemap() {
     
     console.log('\n✅ Все sitemap файлы успешно сгенерированы!');
     console.log(`📁 Файлы сохранены в: ${publicDir}`);
-    console.log(`🔗 Основной sitemap: ${hostname}/sitemap.xml`);
+    console.log(`🔗 Основной sitemap: ${siteDomain}/sitemap.xml`);
     
     // Статистика
     console.log(`\n📈 Статистика:`);
@@ -244,8 +275,9 @@ if (require.main === module) {
 Использование: node sitemap-generator.js [опции]
 
 Опции:
-  --help, -h    Показать помощь
-  --domain      Указать домен (например: --domain http://mysite.ru)
+  --help, -h          Показать помощь
+  --domain <url>      Указать домен сайта (например: --domain https://project-team.site)
+  --api <url>         Задать базовый URL API для получения событий и новостей
 
 Примеры:
   node sitemap-generator.js
@@ -255,12 +287,19 @@ if (require.main === module) {
   }
   
   // Проверяем, передан ли домен через аргументы
+  const cliOptions = {};
+
   const domainIndex = args.indexOf('--domain');
   if (domainIndex !== -1 && args[domainIndex + 1]) {
-    process.env.SITE_DOMAIN = args[domainIndex + 1];
+    cliOptions.siteDomain = args[domainIndex + 1];
   }
-  
-  generateSitemap();
+
+  const apiIndex = args.indexOf('--api');
+  if (apiIndex !== -1 && args[apiIndex + 1]) {
+    cliOptions.apiBaseUrl = args[apiIndex + 1];
+  }
+
+  generateSitemap(cliOptions);
 }
 
 module.exports = { generateSitemap };

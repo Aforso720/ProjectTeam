@@ -20,7 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "sitemap": "node scripts/sitemap-generator.js",
-    "sitemap:prod": "node scripts/sitemap-generator.js --domain http://gstouteam.dpdns.org"
+    "sitemap:prod": "node scripts/sitemap-generator.js --domain https://project-team.site"
   },
   "eslintConfig": {
     "extends": [

@@ -6,6 +6,7 @@ import Loader from "../../Component/Loader";
 import { AuthContext } from "../../context/AuthContext";
 import axiosInstance from "../../API/axiosInstance";
 import ConfirmModal from "../../Elements/ConfirmModal";
+import Seo from "../../components/Seo/Seo";
 // import Table from "../tables/Table";
 
 Modal.setAppElement("#root");
@@ -284,192 +285,201 @@ const Journals = () => {
   if (error) return <div className="container">Ошибка: {error}</div>;
 
   return (
-    <section className="container">
-      <div className="nav-container">
-        <ul>
-          {types.map(([type, name]) => (
-            <li
-              key={type}
-              className={active === type ? "active" : ""}
-              onClick={() => handleFilterClick(type)}
-            >
-              {name}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="journals-container">
-        <div className="addJournal" onClick={() => setModalOpen(!modalOpen)}>
-          <img src="/img/adminAddJournal.png" alt="" />
-          <div>Добавить</div>
+    <>
+      <Seo
+        title="Администрирование журналов — Project Team"
+        description="Управление журналами мероприятий и встреч в административной панели Project Team."
+        canonicalPath="/admin/journal"
+        ogTitle="Администрирование журналов"
+        ogDescription="Редактирование журналов Project Team доступно только администраторам."
+        robots="noindex, nofollow"
+      />
+      <section className="container">
+        <div className="nav-container">
+          <ul>
+            {types.map(([type, name]) => (
+              <li
+                key={type}
+                className={active === type ? "active" : ""}
+                onClick={() => handleFilterClick(type)}
+              >
+                {name}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {filteredJournals.map((j) => (
-          <div key={j.id} className="journal-card-modern">
-            {/* Кнопка удаления */}
-            <button
-              className="journal-delete"
-              aria-label="Удалить журнал"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDeleteJournal(j.id);
-              }}
-              disabled={deletingId === j.id}
-              title="Удалить"
-            >
-              <img src="/img/DeleteCor.svg" alt="" />
-            </button>
+        <div className="journals-container">
+          <div className="addJournal" onClick={() => setModalOpen(!modalOpen)}>
+            <img src="/img/adminAddJournal.png" alt="" />
+            <div>Добавить</div>
+          </div>
 
-            <div className="journal-header">
-              <h4>
-                {new Date(j.date)
-                  .toLocaleString("ru-RU", {
-                    month: "long",
-                    year: "numeric",
-                  })
-                  .replace(/^./, (char) => char.toUpperCase())}
-              </h4>
-              <p className="subtitle">{j.title}</p>
-            </div>
+          {filteredJournals.map((j) => (
+            <div key={j.id} className="journal-card-modern">
+              <button
+                className="journal-delete"
+                aria-label="Удалить журнал"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteJournal(j.id);
+                }}
+                disabled={deletingId === j.id}
+                title="Удалить"
+              >
+                <img src="/img/DeleteCor.svg" alt="" />
+              </button>
 
-            <div className="journal-footer">
-              <span className="date">
-                {new Date(j.date).toLocaleDateString("ru-RU")}
-              </span>
-              <div className="buttons">
-                <button
-                  className="btn-outline"
-                  onClick={() =>
-                    navigate(`/admin/journals/${j.id}`, {
-                      state: {
-                        title: j.title,
-                        date: j.date,
-                        type: j.type,
-                        students: j.participants.map((p) => ({
-                          name: p.full_name,
-                          group: "—",
-                          mark: p.status === "present",
-                        })),
-                      },
+              <div className="journal-header">
+                <h4>
+                  {new Date(j.date)
+                    .toLocaleString("ru-RU", {
+                      month: "long",
+                      year: "numeric",
                     })
-                  }
-                >
-                  Посмотреть
-                </button>
+                    .replace(/^./, (char) => char.toUpperCase())}
+                </h4>
+                <p className="subtitle">{j.title}</p>
+              </div>
+
+              <div className="journal-footer">
+                <span className="date">
+                  {new Date(j.date).toLocaleDateString("ru-RU")}
+                </span>
+                <div className="buttons">
+                  <button
+                    className="btn-outline"
+                    onClick={() =>
+                      navigate(`/admin/journals/${j.id}`, {
+                        state: {
+                          title: j.title,
+                          date: j.date,
+                          type: j.type,
+                          students: j.participants.map((p) => ({
+                            name: p.full_name,
+                            group: "—",
+                            mark: p.status === "present",
+                          })),
+                        },
+                      })
+                    }
+                  >
+                    Посмотреть
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <Modal
-        isOpen={modalOpen}
-        onRequestClose={() => setModalOpen(false)}
-        className="modal-journal"
-        overlayClassName="modal-overlay"
-      >
-        <h2>Создание журнала</h2>
-
-        <input
-          type="text"
-          placeholder="Название журнала"
-          value={newJournal.title}
-          onChange={(e) =>
-            setNewJournal({ ...newJournal, title: e.target.value })
-          }
-        />
-
-        <select
-          value={newJournal.type}
-          onChange={(e) =>
-            setNewJournal({ ...newJournal, type: e.target.value })
-          }
+        <Modal
+          isOpen={modalOpen}
+          onRequestClose={() => setModalOpen(false)}
+          className="modal-journal"
+          overlayClassName="modal-overlay"
         >
-          <option value="meeting">Собрание</option>
-          <option value="event">Мероприятие</option>
-        </select>
+          <h2>Создание журнала</h2>
 
-        <div className="attendees">
-          <p>Отметьте присутствующих:</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Имя</th>
-                <th>Присутствует</th>
-              </tr>
-            </thead>
-            <tbody>
-              {availableParticipants.map((person) => {
-                const isPresent = newJournal.attendees.includes(person.id);
-                return (
-                  <tr key={person.id}>
-                    <td>{person.name}</td>
-                    <td
-                      className="icon-cell"
-                      onClick={() => toggleAttendance(person.id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img
-                        src={isPresent ? "/img/was.png" : "/img/wasNot.png"}
-                        alt={isPresent ? "Присутствовал" : "Отсутствовал"}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+          <input
+            type="text"
+            placeholder="Название журнала"
+            value={newJournal.title}
+            onChange={(e) =>
+              setNewJournal({ ...newJournal, title: e.target.value })
+            }
+          />
 
-        <div className="actions">
-          <button className="save" onClick={handleCreateJournal}>
-            Сохранить
-          </button>
-          <button className="cancel" onClick={() => setModalOpen(false)}>
-            Отмена
-          </button>
-        </div>
-      </Modal>
+          <select
+            value={newJournal.type}
+            onChange={(e) =>
+              setNewJournal({ ...newJournal, type: e.target.value })
+            }
+          >
+            <option value="meeting">Собрание</option>
+            <option value="event">Мероприятие</option>
+          </select>
 
-      {totalPages > 1 && (
-        <ul className="pagination">
-          <li onClick={handlePrevPage}>
-            <img src="/img/arrow-circle-left.png" alt="prev" />
-          </li>
+          <div className="attendees">
+            <p>Отметьте присутствующих:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Имя</th>
+                  <th>Присутствует</th>
+                </tr>
+              </thead>
+              <tbody>
+                {availableParticipants.map((person) => {
+                  const isPresent = newJournal.attendees.includes(person.id);
+                  return (
+                    <tr key={person.id}>
+                      <td>{person.name}</td>
+                      <td
+                        className="icon-cell"
+                        onClick={() => toggleAttendance(person.id)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <img
+                          src={isPresent ? "/img/was.png" : "/img/wasNot.png"}
+                          alt={isPresent ? "Присутствовал" : "Отсутствовал"}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
-          {loading ? (
-            <li className="active_page">Загрузка...</li>
-          ) : (
-            Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <li
-                key={page}
-                onClick={() => handlePageClick(page)}
-                className={currentPage === page ? "active_page" : ""}
-              >
-                {page}
-              </li>
-            ))
-          )}
+          <div className="actions">
+            <button className="save" onClick={handleCreateJournal}>
+              Сохранить
+            </button>
+            <button className="cancel" onClick={() => setModalOpen(false)}>
+              Отмена
+            </button>
+          </div>
+        </Modal>
 
-          <li onClick={handleNextPage}>
-            <img
-              src="/img/arrow-circle-left.png"
-              alt="next"
-              style={{ transform: "rotate(180deg)" }}
-            />
-          </li>
-        </ul>
-      )}
-      <ConfirmModal
-        isOpen={confirm.isOpen}
-        message={confirm.message}
-        onConfirm={handleConfirm}
-        onCancel={confirm.hideCancel ? undefined : closeConfirm}
-        confirmText={confirm.confirmText}
-        hideCancel={confirm.hideCancel}
-      />
-    </section>
+        {totalPages > 1 && (
+          <ul className="pagination">
+            <li onClick={handlePrevPage}>
+              <img src="/img/arrow-circle-left.png" alt="prev" />
+            </li>
+
+            {loading ? (
+              <li className="active_page">Загрузка...</li>
+            ) : (
+              Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <li
+                  key={page}
+                  onClick={() => handlePageClick(page)}
+                  className={currentPage === page ? "active_page" : ""}
+                >
+                  {page}
+                </li>
+              ))
+            )}
+
+            <li onClick={handleNextPage}>
+              <img
+                src="/img/arrow-circle-left.png"
+                alt="next"
+                style={{ transform: "rotate(180deg)" }}
+              />
+            </li>
+          </ul>
+        )}
+        <ConfirmModal
+          isOpen={confirm.isOpen}
+          message={confirm.message}
+          onConfirm={handleConfirm}
+          onCancel={confirm.hideCancel ? undefined : closeConfirm}
+          confirmText={confirm.confirmText}
+          hideCancel={confirm.hideCancel}
+        />
+      </section>
+    </>
   );
 };
 

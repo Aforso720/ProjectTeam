@@ -1,5 +1,6 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow: /admin/
+Disallow: /profile
 
-Sitemap: http://gstouteam.dpdns.org/sitemap.xml
+Sitemap: https://project-team.site/sitemap.xml
