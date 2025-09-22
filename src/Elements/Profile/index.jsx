@@ -192,7 +192,7 @@ const Profile = ({ handleLogout }) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className={style.inputGroup}>
+            {/* <div className={style.inputGroup}>
               <p>Дата рождения</p>
               <input
                 type="date"
@@ -203,7 +203,7 @@ const Profile = ({ handleLogout }) => {
                 min="1900-01-01"
                 max="2100-12-31"
               />
-            </div>
+            </div> */}
           </div>
           <span>
             <img

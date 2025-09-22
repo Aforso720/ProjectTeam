@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router";
 import Modal from "react-modal";
 import axiosInstance from "../API/axiosInstance";
 import { AuthContext } from "../context/AuthContext";
+import useMyEvents from "../API/useMyEvents";
 
 export const InviteProjectButton = ({ projectId, projectName }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -122,11 +123,21 @@ export const JoinProjectPage = () => {
   const location = useLocation();
   const authContext = useContext(AuthContext);
   const isAuthenticated = authContext?.isAuthenticated;
+  const user = authContext?.user;
   const setPendingJoinIntent = authContext?.setPendingJoinIntent;
   const [status, setStatus] = useState("idle");
   const [infoMessage, setInfoMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const joinAttemptRef = useRef(false);
+
+  // получаем проекты пользователя
+  const { myEvents, loading: myEventsLoading, refresh } = useMyEvents({
+    user,
+    page: 1,
+    perPage: 100,
+  });
+
+  const alreadyInProject = myEvents?.some((p) => String(p.id) === String(projectId));
 
   useEffect(() => {
     setErrorMessage("");
@@ -150,7 +161,6 @@ export const JoinProjectPage = () => {
       });
     }
 
-    // JOIN: сохраняем маршрут и перенаправляем на авторизацию
     navigate(`/login?next=${encodeURIComponent(redirectTo)}`, {
       replace: true,
       state: { from: location },
@@ -174,7 +184,6 @@ export const JoinProjectPage = () => {
     let openProfileAfter = false;
 
     try {
-      // JOIN: обращаемся к серверу для вступления в проект
       await axiosInstance.post(`/projects/${projectId}/join`, {});
       setInfoMessage("Вы присоединились к проекту");
       if (typeof setPendingJoinIntent === "function") {
@@ -182,6 +191,7 @@ export const JoinProjectPage = () => {
       }
       localStorage.setItem("accountActiveTab", "MyEvents");
       openProfileAfter = true;
+      refresh(); // обновляем список проектов
     } catch (err) {
       const statusCode = err?.response?.status;
 
@@ -224,7 +234,7 @@ export const JoinProjectPage = () => {
         navigate("/profile", { replace: true });
       }, 1500);
     }
-  }, [navigate, projectId, redirectToLogin, setPendingJoinIntent]);
+  }, [navigate, projectId, redirectToLogin, setPendingJoinIntent, refresh]);
 
   useEffect(() => {
     if (!projectId) {
@@ -238,11 +248,15 @@ export const JoinProjectPage = () => {
       return;
     }
 
+    if (alreadyInProject) {
+      setInfoMessage("Вы уже участвуете в проекте");
+      return;
+    }
+
     if (!joinAttemptRef.current) {
-      // JOIN: авторизованный пользователь присоединяется автоматически
       handleJoinRequest();
     }
-  }, [handleJoinRequest, isAuthenticated, projectId, redirectToLogin]);
+  }, [handleJoinRequest, isAuthenticated, projectId, redirectToLogin, alreadyInProject]);
 
   return (
     <div
@@ -261,47 +275,67 @@ export const JoinProjectPage = () => {
       {errorMessage && (
         <p style={{ color: "#b42318", fontWeight: 600 }}>{errorMessage}</p>
       )}
-      <div
-        style={{
-          marginTop: 24,
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-          alignItems: "center",
-        }}
-      >
-        <button
-          onClick={handleJoinRequest}
-          disabled={status === "loading" || !isAuthenticated}
+      {!alreadyInProject && (
+        <div
           style={{
+            marginTop: 24,
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+            alignItems: "center",
+          }}
+        >
+          <button
+            onClick={handleJoinRequest}
+            disabled={status === "loading" || !isAuthenticated}
+            style={{
+              padding: "10px 20px",
+              borderRadius: 12,
+              border: "1.5px solid #4B1218",
+              backgroundColor: status === "loading" ? "#f5f0f0" : "#4B1218",
+              color: status === "loading" ? "#4B1218" : "#fff",
+              fontWeight: 600,
+              cursor: status === "loading" || !isAuthenticated ? "default" : "pointer",
+              minWidth: 220,
+            }}
+          >
+            {status === "loading"
+              ? "Присоединяем к проекту…"
+              : "Присоединиться"}
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            style={{
+              padding: "8px 20px",
+              borderRadius: 12,
+              border: "1.5px solid #ccc",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              minWidth: 220,
+            }}
+          >
+            На главную
+          </button>
+        </div>
+      )}
+      {alreadyInProject && (
+        <button
+          onClick={() => navigate("/profile")}
+          style={{
+            marginTop: 24,
             padding: "10px 20px",
             borderRadius: 12,
             border: "1.5px solid #4B1218",
-            backgroundColor: status === "loading" ? "#f5f0f0" : "#4B1218",
-            color: status === "loading" ? "#4B1218" : "#fff",
+            backgroundColor: "#fff",
+            color: "#4B1218",
             fontWeight: 600,
-            cursor: status === "loading" || !isAuthenticated ? "default" : "pointer",
-            minWidth: 220,
-          }}
-        >
-          {status === "loading"
-            ? "Присоединяем к проекту…"
-            : "Повторить попытку"}
-        </button>
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            padding: "8px 20px",
-            borderRadius: 12,
-            border: "1.5px solid #ccc",
-            backgroundColor: "transparent",
             cursor: "pointer",
             minWidth: 220,
           }}
         >
-          На главную
+          Перейти в профиль
         </button>
-      </div>
+      )}
     </div>
   );
 };

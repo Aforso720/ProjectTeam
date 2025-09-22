@@ -32,8 +32,8 @@ const PersonSetting = () => {
         is_admin: newUser.role === "Админ",
         group: newUser.group || null,
         avatar: null,
-        phone: newUser.phone, // Добавь это
-        email: newUser.email, // Добавь это
+        phone: newUser.phone,
+        email: newUser.email, 
       };
 
       const response = await axiosInstance.post("/register", payload);

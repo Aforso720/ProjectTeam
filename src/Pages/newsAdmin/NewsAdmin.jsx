@@ -8,10 +8,8 @@ import InputField from "../../utils/InputField";
 import { useForm } from "react-hook-form";
 import ConfirmModal from "../../Elements/ConfirmModal";
 
-
 Modal.setAppElement("#root");
 
-// хелперы для даты
 const toInputDate = (d) => {
   const pad = (n) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -25,7 +23,7 @@ const NewsAdmin = () => {
     mode: "onChange",
     defaultValues: {
       title: "",
-      date: toInputDate(new Date()),
+      date: "", // по умолчанию пустая дата
       status: "active",
     },
   });
@@ -122,7 +120,7 @@ const NewsAdmin = () => {
     setIsEditMode(true);
     reset({
       title: news.title || "",
-      date: news.date ? news.date.substring(0, 10) : toInputDate(new Date()),
+      date: news.date ? news.date.substring(0, 10) : "",
       status: ALLOWED.includes(news.status) ? news.status : "active",
     });
     setContent(news.content || "");
@@ -206,7 +204,8 @@ const NewsAdmin = () => {
       await createNews(data);
       setIsModalOpen(false);
     }
-    reset({ title: "", date: toInputDate(new Date()), status: "active" });
+    // Полный сброс формы после сохранения
+    reset({ title: "", date: "", status: "active" });
     setContent("");
     setPreviewImage(null);
   };
@@ -221,7 +220,8 @@ const NewsAdmin = () => {
         <div
           className="addNews"
           onClick={() => {
-            reset({ title: "", date: toInputDate(new Date()), status: "active" });
+            // Полный сброс перед открытием формы
+            reset({ title: "", date: "", status: "active" });
             setContent("");
             setPreviewImage(null);
             setIsEditMode(false);
@@ -332,7 +332,7 @@ const NewsAdmin = () => {
                   validate: (value) => {
                     const year = new Date(value).getFullYear();
                     return (
-                      year >= 1900 && year <= 2100 ||
+                      (year >= 1900 && year <= 2100) ||
                       "Год должен быть между 1900 и 2100"
                     );
                   },
@@ -450,7 +450,13 @@ const NewsAdmin = () => {
             {currentNews?.date && (
               <div className="modal-section">
                 <h3>Дата</h3>
-                <p>{new Date(currentNews.date).toLocaleString()}</p>
+                <p>
+                  {new Date(currentNews.date).toLocaleDateString("ru-RU", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
+                </p>
               </div>
             )}
 

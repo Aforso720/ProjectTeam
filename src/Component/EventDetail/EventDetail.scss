@@ -53,12 +53,12 @@
     }
   }
 
-  h1 {
+  .eventMainPage {
     color: #4B1218;
     font-size: 2.5rem;
     margin-bottom: 30px;
     text-align: center;
-    border-bottom: 2px solid #4B1218;
+    // border-bottom: 2px solid #4B1218;
     padding-bottom: 15px;
   }
 
@@ -76,6 +76,7 @@
     line-height: 1.7;
     margin-bottom: 20px;
     padding: 0 15px;
+    color: black;
   }
 
   .event-section {
