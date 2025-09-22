@@ -73,7 +73,8 @@ function App() {
   const handleLogout = useCallback(() => {
     logout();
     setPendingJoinIntent(null);
-  }, [logout, setPendingJoinIntent]);
+    navigate('/');
+  }, [logout, setPendingJoinIntent, navigate]);
 
   const isAdminPage = location.pathname.includes("/admin");
 
