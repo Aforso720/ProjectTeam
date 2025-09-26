@@ -275,11 +275,12 @@ const DocumentModal = ({ onDocumentAdded }) => {
               {myDocumObj.image ? (
                 <>
                   {myDocumObj.fileType === "image" ? (
-                    <img
-                      src={myDocumObj.image}
-                      alt="Предпросмотр сертификата"
-                      className={style.previewImage}
-                    />
+                    <div className={`media-contain ${style.previewImageWrapper}`}>
+                      <img
+                        src={myDocumObj.image}
+                        alt="Предпросмотр сертификата"
+                      />
+                    </div>
                   ) : (
                     <div className={style.previewPdf}>
                       <img src="img/pdf-icon.svg" alt="PDF" />
