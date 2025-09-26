@@ -60,26 +60,26 @@
         }
 
         @media (max-width: 1400px) {
-          width: 800px;
-          padding: 0;
+            
+        }
 
-            .swiper-button-prev{
+        @media (max-width: 1400px) {
+          width: 600px;
+          padding: 0;
+          margin: 20px 0;
+
+          .swiper-slide{
+                  display: flex;
+                  justify-content: center;
+                }
+
+                .swiper-button-prev{
                   transform: translateX(0em);
               }
 
               .swiper-button-next{
                   transform: translateX(0em);
               }
-        }
-
-        @media (max-width: 1400px) {
-          width: 600px;
-          padding: 0;
-
-          .swiper-slide{
-                  display: flex;
-                  justify-content: center;
-                }
         }
 
       }

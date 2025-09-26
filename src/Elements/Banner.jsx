@@ -56,7 +56,7 @@ const Banner = () => {
           >
             {/* {console.log(item.preview_image)} */}
             <img
-              src={item.image ? item.image : "/img/image2.webp"}
+              src={item?.image }
               alt="Слайд"
               width="1440"
               height="487"

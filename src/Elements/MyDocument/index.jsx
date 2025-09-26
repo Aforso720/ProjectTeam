@@ -62,7 +62,7 @@ const MyDocument = () => {
               onClick={() => openModal(item)}
             >
               <h3 className={style.cardTitle}>
-                {item.event?.title || 'Без названия'}
+                {item.issued_by || 'Без названия'}
               </h3>
               <p className={style.cardDate}>
                 {new Date(item.issue_date).toLocaleDateString('ru-RU')}
