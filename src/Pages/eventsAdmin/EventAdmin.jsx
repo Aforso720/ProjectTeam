@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "react-modal";
 import "./EventAdmin.scss";
 import axiosInstance from "../../API/axiosInstance";
@@ -9,6 +9,17 @@ import ConfirmModal from "../../Elements/ConfirmModal";
 
 Modal.setAppElement("#root");
 
+const createEmptyEventData = () => ({
+  type: "forums",
+  title: "",
+  startDate: "",
+  endDate: "",
+  description: "",
+  previewImageFile: null,
+  previewImageUrl: "",
+  status: "active",
+});
+
 const EventAdmin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isParticipantModalOpen, setIsParticipantModalOpen] = useState(false);
@@ -16,15 +27,8 @@ const EventAdmin = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [eventData, setEventData] = useState({
-    type: "forums",
-    title: "",
-    startDate: "",
-    endDate: "",
-    description: "",
-    previewImage: null,
-    status: "active",
-  });
+  const [eventData, setEventData] = useState(createEmptyEventData);
+  const previewUrlRef = useRef(null);
 
   const {
     register,
@@ -34,6 +38,76 @@ const EventAdmin = () => {
   const titleError = formState.errors["title"]?.message;
   const startDateError = formState.errors["startDate"]?.message;
   const endDateError = formState.errors["endDate"]?.message;
+
+  const revokePreviewObjectUrl = () => {
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = null;
+    }
+  };
+
+  const updatePreviewImage = (file) => {
+    setEventData((prev) => {
+      revokePreviewObjectUrl();
+
+      if (!file) {
+        return {
+          ...prev,
+          previewImageFile: null,
+          previewImageUrl: "",
+        };
+      }
+
+      const objectUrl = URL.createObjectURL(file);
+      previewUrlRef.current = objectUrl;
+
+      return {
+        ...prev,
+        previewImageFile: file,
+        previewImageUrl: objectUrl,
+      };
+    });
+  };
+
+  const handlePreviewInputChange = (event) => {
+    const file = event.target.files?.[0];
+    updatePreviewImage(file || null);
+    // allow re-selecting the same file
+    event.target.value = "";
+  };
+
+  const handleRemovePreview = () => {
+    if (eventData.previewImageFile || previewUrlRef.current) {
+      updatePreviewImage(null);
+      if (currentEvent?.preview_image) {
+        setEventData((prev) => ({
+          ...prev,
+          previewImageUrl: currentEvent.preview_image,
+        }));
+      }
+    }
+  };
+
+  const resetEventDataState = () => {
+    revokePreviewObjectUrl();
+    setEventData(createEmptyEventData());
+  };
+
+  const closeCreateModal = () => {
+    setIsModalOpen(false);
+    resetEventDataState();
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+    setIsEditMode(false);
+    resetEventDataState();
+    setCurrentEvent(null);
+  };
+
+  React.useEffect(() => () => {
+    revokePreviewObjectUrl();
+  }, []);
 
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -129,6 +203,7 @@ const EventAdmin = () => {
   };
 
   const handleEditEvent = (event) => {
+    revokePreviewObjectUrl();
     setCurrentEvent(event);
     setIsViewModalOpen(true);
     setIsEditMode(true);
@@ -136,10 +211,12 @@ const EventAdmin = () => {
     setEventData({
       type: event.type,
       title: event.title,
-      startDate: event.start_date.split(" ")[0], // YYYY-MM-DD
-      endDate: event.end_date.split(" ")[0],
+      startDate: event.start_date?.split(" ")[0] || "", // YYYY-MM-DD
+      endDate: event.end_date?.split(" ")[0] || "",
       status: event.status,
       description: event.description,
+      previewImageFile: null,
+      previewImageUrl: event.preview_image || "",
     });
   };
 
@@ -170,18 +247,23 @@ const EventAdmin = () => {
     if (!currentEvent) return;
 
     try {
-      const payload = {
-        title: eventData.title,
-        description: eventData.description,
-        start_date: formatDateTime(eventData.startDate),
-        end_date: formatDateTime(eventData.endDate),
-        status: eventData.status,
-        project_id: currentEvent.project_id || 4,
-      };
+      const formData = new FormData();
+      formData.append("title", eventData.title);
+      formData.append("description", eventData.description || "");
+      formData.append("start_date", formatDateTime(eventData.startDate));
+      formData.append("end_date", formatDateTime(eventData.endDate));
+      formData.append("status", eventData.status);
+      formData.append("type", eventData.type);
+      formData.append("project_id", currentEvent.project_id || 4);
+      formData.append("_method", "PUT");
 
-      const response = await axiosInstance.put(
+      if (eventData.previewImageFile instanceof File) {
+        formData.append("preview_image", eventData.previewImageFile);
+      }
+
+      const response = await axiosInstance.post(
         `/events/${currentEvent.id}`,
-        payload
+        formData
       );
 
       const updatedEvent = response.data.data;
@@ -192,15 +274,13 @@ const EventAdmin = () => {
           event.id === updatedEvent.id ? updatedEvent : event
         )
       );
-
-      setIsViewModalOpen(false);
-      setIsEditMode(false);
-      setCurrentEvent(null);
+      return true;
     } catch (error) {
       console.error(
         "Ошибка при обновлении мероприятия:",
         error.response?.data || error
       );
+      return false;
     }
   };
 
@@ -210,45 +290,46 @@ const EventAdmin = () => {
 
   const createEvent = async () => {
     try {
-      const payload = {
-        title: eventData.title,
-        description: eventData.description,
-        start_date: formatDateTime(eventData.startDate),
-        end_date: formatDateTime(eventData.endDate),
-        status: eventData.status, // "active" или "completed"
-        project_id: 2,
-      };
+      const formData = new FormData();
+      formData.append("title", eventData.title);
+      formData.append("description", eventData.description || "");
+      formData.append("start_date", formatDateTime(eventData.startDate));
+      formData.append("end_date", formatDateTime(eventData.endDate));
+      formData.append("status", eventData.status);
+      formData.append("type", eventData.type);
+      formData.append("project_id", 2);
 
-      const response = await axiosInstance.post("/events", payload);
-      console.log(response);
+      if (eventData.previewImageFile) {
+        formData.append("preview_image", eventData.previewImageFile);
+      }
+
+      const response = await axiosInstance.post("/events", formData);
       const createdEvent = response.data.data;
-      
+
       console.log("Создано мероприятие:", createdEvent);
       await fetchEvents(currentPage);
+      return true;
     } catch (error) {
       console.error(
         "Ошибка при создании мероприятия:",
         error.response?.data || error
       );
+      return false;
     }
   };
 
   const handleFormSubmit = async () => {
     if (isEditMode && currentEvent) {
-      await updateEvent();
+      const success = await updateEvent();
+      if (success) {
+        closeViewModal();
+      }
     } else {
-      await createEvent();
-      setIsModalOpen(false);
+      const success = await createEvent();
+      if (success) {
+        closeCreateModal();
+      }
     }
-    setEventData({
-      type: "forums",
-      title: "",
-      startDate: "",
-      endDate: "",
-      description: "",
-      previewImage: null,
-      status: "active",
-    });
   };
 
   if (loading) return <Loader />;
@@ -259,13 +340,7 @@ const EventAdmin = () => {
         <div
           className="addEvent"
           onClick={() => {
-            setEventData({
-              type: "forums",
-              title: "",
-              startDate: "",
-              endDate: "",
-              description: "",
-            });
+            resetEventDataState();
             setIsEditMode(false); // убедимся, что не редактирование
             setIsModalOpen(true);
           }}
@@ -290,10 +365,17 @@ const EventAdmin = () => {
               <img src="/img/DeleteCor.svg" alt="" />
             </button>
 
-            <div
-              className="event-image"
-              style={{ backgroundImage: `url(${event.preview_image})` }}
-            />
+            <div className="event-image">
+              <div className="media-cover">
+                <img
+                  src={event.preview_image || "/img/DefaultImage.webp"}
+                  alt={`Превью мероприятия ${event.title || ""}`.trim()}
+                  onError={(e) => {
+                    e.currentTarget.src = "/img/DefaultImage.webp";
+                  }}
+                />
+              </div>
+            </div>
             <div className="event-details">
               <h3>{event.title}</h3>
               {event.description && <p>{event.description}</p>}
@@ -353,7 +435,7 @@ const EventAdmin = () => {
 
       <Modal
         isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
+        onRequestClose={closeCreateModal}
         className="event-modal"
         overlayClassName="event-modal-overlay"
       >
@@ -462,28 +544,36 @@ const EventAdmin = () => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) =>
-                  setEventData((prev) => ({
-                    ...prev,
-                    previewImage: e.target.files[0],
-                  }))
-                }
+                onChange={handlePreviewInputChange}
               />
               <img src="/img/gallery-add.png" alt="Добавить изображение" />
               <p>Загрузите изображение</p>
             </label>
 
-            {eventData.previewImage && (
-              <div className="file-selected">
-                <span className="file-name">{eventData.previewImage.name}</span>
-                <span
-                  className="file-remove"
-                  onClick={() =>
-                    setEventData((prev) => ({ ...prev, previewImage: null }))
-                  }
-                >
-                  ×
-                </span>
+            {eventData.previewImageUrl && (
+              <div className="image-preview">
+                <div className="media-contain">
+                  <img
+                    src={eventData.previewImageUrl}
+                    alt="Превью мероприятия"
+                  />
+                </div>
+
+                <div className="file-selected">
+                  <span className="file-name">
+                    {eventData.previewImageFile?.name || "Текущее изображение"}
+                  </span>
+                  {eventData.previewImageFile && (
+                    <button
+                      type="button"
+                      className="file-remove"
+                      onClick={handleRemovePreview}
+                      aria-label="Очистить выбранное изображение"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -505,7 +595,7 @@ const EventAdmin = () => {
             <button
               type="button"
               className="modal-cancel"
-              onClick={() => setIsModalOpen(false)}
+              onClick={closeCreateModal}
             >
               Отменить
             </button>
@@ -566,7 +656,7 @@ const EventAdmin = () => {
       {/* Модальное окно просмотра/редактирования мероприятия */}
       <Modal
         isOpen={isViewModalOpen}
-        onRequestClose={() => setIsViewModalOpen(false)}
+        onRequestClose={closeViewModal}
         className="event-modal"
         overlayClassName="event-modal-overlay"
       >
@@ -673,18 +763,40 @@ const EventAdmin = () => {
 
             <div className="modal-section">
               <h3>Превью мероприятия</h3>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  setEventData((prev) => ({
-                    ...prev,
-                    previewImage: e.target.files[0],
-                  }))
-                }
-              />
-              {eventData.previewImage && (
-                <p>Выбран файл: {eventData.previewImage.name}</p>
+              <label className="file-upload-label inline">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePreviewInputChange}
+                />
+                <img src="/img/gallery-add.png" alt="Добавить изображение" />
+                <p>Заменить изображение</p>
+              </label>
+
+              {eventData.previewImageUrl && (
+                <div className="image-preview">
+                  <div className="media-contain">
+                    <img
+                      src={eventData.previewImageUrl}
+                      alt="Текущее превью мероприятия"
+                    />
+                  </div>
+                  <div className="file-selected">
+                    <span className="file-name">
+                      {eventData.previewImageFile?.name || "Текущее изображение"}
+                    </span>
+                    {eventData.previewImageFile && (
+                      <button
+                        type="button"
+                        className="file-remove"
+                        onClick={handleRemovePreview}
+                        aria-label="Очистить выбранное изображение"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
 
@@ -705,7 +817,7 @@ const EventAdmin = () => {
               <button
                 type="button"
                 className="modal-cancel"
-                onClick={() => setIsViewModalOpen(false)}
+                onClick={closeViewModal}
               >
                 Отменить
               </button>
@@ -720,6 +832,23 @@ const EventAdmin = () => {
               <h3>Тип мероприятия</h3>
               <p>{currentEvent?.type === "forums" ? "Форум" : "Конкурс"}</p>
             </div> */}
+
+            {currentEvent?.preview_image && (
+              <div className="modal-section">
+                <h3>Превью мероприятия</h3>
+                <div className="image-preview">
+                  <div className="media-contain">
+                    <img
+                      src={currentEvent.preview_image}
+                      alt={`Превью мероприятия ${currentEvent.title || ""}`.trim()}
+                      onError={(e) => {
+                        e.currentTarget.src = "/img/DefaultImage.webp";
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="modal-section">
               <h3>Название мероприятия</h3>
@@ -750,7 +879,7 @@ const EventAdmin = () => {
               <button
                 type="button"
                 className="modal-cancel"
-                onClick={() => setIsViewModalOpen(false)}
+                onClick={closeViewModal}
               >
                 Закрыть
               </button>
