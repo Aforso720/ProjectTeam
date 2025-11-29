@@ -2,7 +2,6 @@ import React from "react";
 import Modal from "react-modal";
 import style from "./MyEvents.module.scss";
 import axiosInstance from "../../API/axiosInstance";
-import { normalizeImageUrl } from "../imageUtils";
 import { InviteProjectButton } from "../../components/ProjectInvites";
 import ConfirmModal from "../ConfirmModal.jsx";
 import { AuthContext } from "../../context/AuthContext";
@@ -59,7 +58,7 @@ const InfoModalProject = ({
   React.useEffect(() => {
     if (projectData?.certificate) {
       // CERTIFICATE: нормализуем ссылку на сертификат для кнопки
-      setCertificateUrl(normalizeImageUrl(projectData.certificate));
+      setCertificateUrl(projectData.certificate);
     } else {
       setCertificateUrl("");
     }
@@ -236,7 +235,7 @@ const InfoModalProject = ({
     return parts.map((p) => p[0]?.toUpperCase()).join("") || "U";
   };
 
-  const getAvatarSrc = (u) => (u?.avatar ? normalizeImageUrl(u.avatar) : null);
+  const getAvatarSrc = (u) => (u?.avatar ? u.avatar : null);
 
   if (!projectData) return null;
 
@@ -278,7 +277,7 @@ const InfoModalProject = ({
           {projectData.preview_image ? (
             <div className={style.projectImageSection}>
               <img
-                src={normalizeImageUrl(projectData.preview_image)}
+                src={projectData.preview_image}
                 alt="Превью проекта"
                 className={style.projectPreviewImage}
                 onError={(e) => {

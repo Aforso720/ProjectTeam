@@ -162,7 +162,7 @@
               }
 
               .swiper-button-next{
-                  transform: translateX(3em);
+                  transform: translateX(-3em);
               }
           }
 
@@ -245,6 +245,7 @@
           list-style-type: none;
           margin: 0;
           padding: 0;
+          object-fit: cover;
       
           img {
             border-radius: 50%;

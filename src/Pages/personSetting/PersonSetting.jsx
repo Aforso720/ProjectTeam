@@ -21,46 +21,61 @@ const PersonSetting = () => {
     role: "Стандарт",
   });
   const [error, setError] = useState(null);
+  // для модалки с паролем
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [generatedPassword, setGeneratedPassword] = useState("");
+  const [createdUserEmail, setCreatedUserEmail] = useState("");
+  const [copyOk, setCopyOk] = useState(false);
 
   const handleAddUser = async () => {
     try {
       const payload = {
         first_name: newUser.firstName,
         last_name: newUser.lastName,
-        password: "password123",
-        password_confirmation: "password123",
         is_admin: newUser.role === "Админ",
         group: newUser.group || null,
         avatar: null,
         phone: newUser.phone,
-        email: newUser.email, 
+        email: newUser.email,
       };
 
       const response = await axiosInstance.post("/register", payload);
-
-      console.log("✅ Пользователь создан:", response.data);
+      // ОСТОРОЖНО: пароль показываем только в UI, в консоль НЕ логируем
+      const { user, password } = response.data || {};
 
       setPeople((prev) => [
         ...prev,
         {
-          ...response.data.user,
+          ...user,
           role: payload.is_admin ? "Админ" : "Стандарт",
           rating: 0,
         },
       ]);
 
+      // закроем форму добавления
       setIsModalOpen(false);
+
+      // очистим форму
       setNewUser({
         name: "",
         group: "",
         phone: "",
-        email: "", // Добавь это
+        email: "",
         role: "Стандарт",
         firstName: "",
         lastName: "",
         middleName: "",
       });
+
       setError(null);
+
+      // откроем модалку с паролем
+      if (password) {
+        setGeneratedPassword(password);
+        setCreatedUserEmail(user?.email || "");
+        setIsPasswordModalOpen(true);
+        setCopyOk(false);
+      }
     } catch (error) {
       console.error(
         "❌ Ошибка при создании пользователя:",
@@ -266,7 +281,9 @@ const PersonSetting = () => {
                 <div className="buttons">
                   <select
                     value={person.role}
-                    onChange={(e) => handleRoleChange(person.id, e.target.value)}
+                    onChange={(e) =>
+                      handleRoleChange(person.id, e.target.value)
+                    }
                   >
                     <option value="Админ">Админ</option>
                     <option value="Стандарт">Стандарт</option>
@@ -387,6 +404,64 @@ const PersonSetting = () => {
                   Добавить
                 </button>
               </div>
+            </section>
+          </article>
+        )}
+        {isPasswordModalOpen && (
+          <article className="modal-overlay">
+            <section className="modal">
+              <h2>Пароль для нового пользователя</h2>
+
+              {createdUserEmail && (
+                <p className="hint">
+                  Пользователь: <b>{createdUserEmail}</b>
+                </p>
+              )}
+
+              <div className="password-box">
+                <input
+                  type="text"
+                  value={generatedPassword}
+                  readOnly
+                  className="password-input"
+                  onFocus={(e) => e.currentTarget.select()}
+                />
+                <button
+                  className="copy-btn"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(
+                        generatedPassword
+                      );
+                      setCopyOk(true);
+                      setTimeout(() => setCopyOk(false), 2000);
+                    } catch {
+                      // fallback: выделим текст, пусть пользователь скопирует вручную
+                      setCopyOk(false);
+                    }
+                  }}
+                >
+                  Скопировать
+                </button>
+              </div>
+
+              <p className="warning">
+                Пожалуйста, сохраните этот пароль. Он отображается только
+                один раз.
+              </p>
+
+              <div className="modal-actions">
+                <button
+                  className="confirm-btn"
+                  onClick={() => setIsPasswordModalOpen(false)}
+                >
+                  Готово
+                </button>
+              </div>
+
+              {copyOk && (
+                <div className="copied-toast">Скопировано ✅</div>
+              )}
             </section>
           </article>
         )}

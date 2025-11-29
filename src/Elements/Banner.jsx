@@ -8,11 +8,17 @@ import { Navigation } from "swiper/modules";
 import usePosts from "../API/usePosts";
 
 const Banner = () => {
-  const { data: news  } = usePosts();
+  // const { data: news  } = usePosts();
+  const image = [
+    '/img/image2.webp',
+    '/img/image 6.png',
+    '/img/image2.webp',
+    '/img/image 6.png'
+  ]
   const navigate = useNavigate();
 
   const handleSlideClick = (eventId) => {
-    navigate(`/events/${eventId}`);
+    navigate(`/news/${eventId}`);
   };
 
   return (
@@ -48,7 +54,7 @@ const Banner = () => {
           },
         }}
       >
-        {news?.map((item) => (
+        {image?.map((item) => (
           <SwiperSlide
             key={item.id}
             onClick={() => handleSlideClick(item.id)}
@@ -56,7 +62,7 @@ const Banner = () => {
           >
             {/* {console.log(item.preview_image)} */}
             <img
-              src={item?.image }
+              src={item}
               alt="Слайд"
               width="1440"
               height="487"

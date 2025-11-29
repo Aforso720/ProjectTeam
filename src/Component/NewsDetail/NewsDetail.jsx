@@ -1,50 +1,23 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
-import { useParams, useNavigate } from "react-router"; // <-- исправлено
+import React, { useMemo, useRef, useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
 import DOMPurify from "dompurify";
-import "./EventDetail.scss";
-import axiosInstance from "../../API/axiosInstance.js";
+import "./NewsDetail.scss";
+import usePosts from "../../API/usePosts";
 import Seo from "../../components/Seo/Seo";
 
 const stripTags = (html = "") => html.replace(/<[^>]+>/g, "");
 const hasHtml = (s = "") => /<\/?[a-z][\s\S]*>/i.test(s);
 
-const EventDetail = () => {
+const NewsDetail = () => {
+  const { data: news } = usePosts();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [event, setEvent] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const event = news?.find((item) => item.id?.toString() === id);
+  const canonicalPath = `/news/${id}`;
 
-  // грузим ОДНО событие по id
-  useEffect(() => {
-    let canceled = false;
-    (async () => {
-      setLoading(true);
-      setLoadError(null);
-      try {
-        // чаще всего бэк отдаёт { data: { ...event } }
-        const res = await axiosInstance.get(`/events/${id}`);
-        const ev = res?.data?.data ?? res?.data ?? null;
-        if (!canceled) setEvent(ev);
-      } catch (e) {
-        if (!canceled) setLoadError("Не удалось загрузить событие");
-        console.error("Ошибка загрузки события:", e);
-      } finally {
-        if (!canceled) setLoading(false);
-      }
-    })();
-    return () => {
-      canceled = true;
-    };
-  }, [id]);
-
-  const canonicalPath = `/events/${id}`;
-
-  // у некоторых записей текст может жить в content или description
-  const rawContent = event?.content ?? event?.description ?? "";
-  const ogImage =
-    event?.preview_image || event?.img || "/img/DefaultImage.webp";
+  const rawContent = event?.content ?? "";
+  const ogImage = event?.preview_image || event?.img || "/img/DefaultImage.webp";
 
   const descriptionSnippet = event
     ? (rawContent && stripTags(rawContent).slice(0, 160)) ||
@@ -96,16 +69,11 @@ const EventDetail = () => {
         />
       )}
 
-      <section className="event-detail">
-        {loading ? (
-          <div className="loading">Загрузка…</div>
-        ) : loadError ? (
-          <div className="errorHeader">{loadError}</div>
-        ) : !event ? (
+      <section className="news-detail">
+        {!event ? (
           <div className="errorHeader">Событие не найдено</div>
         ) : (
           <>
-            {/* Крышка/обложка события (если есть) */}
             {event.img && (
               <img
                 src={event.img}
@@ -117,22 +85,15 @@ const EventDetail = () => {
 
             <h1 className="eventMainPage">{event.title}</h1>
 
-            {/* Превью события */}
             {event.preview_image && (
-              <div className="event-preview-box">
-                <img
-                  src={event.preview_image}
-                  alt={event.title}
-                  className="event-preview"
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.src = "/img/DefaultImage.webp";
-                  }}
-                />
-              </div>
+              <img
+                src={event.preview_image}
+                alt={event.title}
+                className="event-preview"
+                loading="lazy"
+              />
             )}
 
-            {/* Контент */}
             <div className="event-section content">
               {sanitizedHtml ? (
                 <div
@@ -145,19 +106,18 @@ const EventDetail = () => {
               )}
             </div>
 
-            {/* Даты: у тебя на бэке есть start_date / end_date */}
-            {(event.start_date || event.end_date) && (
+            {event.date && (
               <p className="event-meta">
-                Даты:{" "}
-                {event.start_date
-                  ? new Date(event.start_date).toLocaleDateString("ru-RU")
-                  : "—"}{" "}
-                –{" "}
-                {event.end_date
-                  ? new Date(event.end_date).toLocaleDateString("ru-RU")
-                  : "—"}
+                Дата:{" "}
+                {new Date(event.date).toLocaleDateString("ru-RU", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
               </p>
             )}
+
+            {/* {event.status && <p className="event-meta">Статус: {event.status}</p>} */}
 
             <button onClick={() => navigate(-1)}>Назад</button>
           </>
@@ -167,4 +127,4 @@ const EventDetail = () => {
   );
 };
 
-export default EventDetail;
+export default NewsDetail;

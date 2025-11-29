@@ -5,7 +5,6 @@ import AddEventModal from './AddEventModal';
 import InfoModalProject from './infoModalProject';
 import { AuthContext } from '../../context/AuthContext';
 import Loader from '../../Component/Loader';
-import { normalizeImageUrl } from '../imageUtils'
 
 const MyEvents = () => {
   const { user } = React.useContext(AuthContext);
@@ -25,7 +24,7 @@ const MyEvents = () => {
 
     return myEvents.map(event => ({
       ...event,
-      preview_image: normalizeImageUrl(event.preview_image)
+      preview_image: event.preview_image
     }));
   }, [myEvents]);
 

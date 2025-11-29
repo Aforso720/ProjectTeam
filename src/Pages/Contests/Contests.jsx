@@ -57,6 +57,13 @@ const Contests = () => {
     navigate(`/events/${eventId}`);
   };
 
+  const image = [
+    '/img/image2.webp',
+    '/img/image 6.png',
+    '/img/image2.webp',
+    '/img/image 6.png'
+  ]
+
   return (
     <>
       <Seo
@@ -105,11 +112,11 @@ const Contests = () => {
               {loadingNewsloadingMyNews ? (
                 <Loader />
               ) : (
-                news.map((item) => (
+                image.map((item) => (
                   <SwiperSlide key={item.id}>
                     <img
                       onClick={() => handleSlideClick(item.id)}
-                      src={item.image ? item.image : "/img/image2.webp"}
+                      src={item}
                       alt={item.title}
                       className="BannerImg"
                     />

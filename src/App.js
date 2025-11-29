@@ -29,9 +29,11 @@ import { useAuth } from "./API/auth";
 // Contexts
 import { AuthContext } from "./context/AuthContext";
 import EventDetail from "./Component/EventDetail/EventDetail.jsx";
+import NewsDetail from "./Component/NewsDetail/NewsDetail.jsx";
 import AdminFilterEvent from "./Component/adminHeaderEvent/adminHeaderEvent.jsx";
 
 import { NotificationProvider } from "./context/NotificationContext.js";
+import ProjectDetail from "./Component/ProjectDetail/ProjectDetail.jsx";
 import Notisfaction from "./Elements/Notisfaction/index.jsx";
 import { JoinProjectPage } from "./components/ProjectInvites";
 
@@ -199,7 +201,8 @@ function App() {
               />
 
               <Route path="/events/:id" element={<EventDetail />} />
-              {/* <Route path="/events/:id" element={<EventDetail events={events} />} /> */}
+              <Route path="/news/:id" element={<NewsDetail />} />
+              <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/join/:projectId" element={<JoinProjectPage />} />
               <Route path="/login" element={<LoginPage />} />
             </Routes>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import style from "./Event.module.scss";
 
-const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
+const Event = ({ id, preview_image, description, contMyEvent, homeEvent }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -22,7 +22,7 @@ const Event = ({ id, image, description, contMyEvent, homeEvent }) => {
       style={{ cursor: "pointer" }}
     >
       <img
-        src={image === null ? image : "/img/DefaultImage.webp"}
+        src={preview_image === null ? preview_image : "/img/DefaultImage.webp"}
         alt="Slide 1"
         className={style.SliderImg}
       />

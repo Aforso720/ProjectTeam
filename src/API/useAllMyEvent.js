@@ -23,7 +23,7 @@ const useAllMyEvents = ({ user }) => {
     };
 
     fetchData();
-  }, [user?.id,]);
+  }, [user?.id]);
 
   return { myEvents, loading};
 };

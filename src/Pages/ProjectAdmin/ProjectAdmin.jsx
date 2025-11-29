@@ -766,35 +766,212 @@ const ProjectAdmin = () => {
             <div className="view-mode">
               {currentProject && (
                 <>
+                  {/* Большое превью */}
+                  {currentProject.preview_image && (
+                    <img
+                      src={currentProject.preview_image}
+                      alt={currentProject.name}
+                      className="preview-image-large"
+                      loading="lazy"
+                    />
+                  )}
+
+                  {/* Основная инфа по сетке */}
                   <div className="info-grid">
-                    {/* ... */}
+                    <div className="info-section">
+                      <h3 className="info-label">Название</h3>
+                      <p className="info-value">{currentProject.name || "—"}</p>
+                    </div>
+
+                    <div className="info-section">
+                      <h3 className="info-label">Статус</h3>
+                      <span
+                        className={
+                          "status-badge " +
+                          (currentProject.status === "active"
+                            ? "status-active"
+                            : currentProject.status === "completed"
+                            ? "status-completed"
+                            : "status-pending")
+                        }
+                      >
+                        {currentProject.status === "active"
+                          ? "Активный"
+                          : currentProject.status === "completed"
+                          ? "Завершённый"
+                          : "Ожидает"}
+                      </span>
+                    </div>
+
+                    <div className="info-section">
+                      <h3 className="info-label">Создатель</h3>
+                      <p className="info-value">
+                        {(() => {
+                          const creator = person.find(
+                            (p) => p.id === currentProject.user_id
+                          );
+                          return creator
+                            ? `${creator.first_name} ${creator.last_name}`
+                            : "—";
+                        })()}
+                      </p>
+                    </div>
+
+                    <div className="info-section">
+                      <h3 className="info-label">Подтверждение</h3>
+                      <span
+                        className={
+                          currentProject.is_approved
+                            ? "status-badge status-approved"
+                            : "status-badge status-pending"
+                        }
+                      >
+                        {currentProject.is_approved
+                          ? "Подтверждено"
+                          : "Ожидает подтверждения"}
+                      </span>
+                    </div>
+
                     <div className="info-section">
                       <h3 className="info-label">Дата начала</h3>
                       <p className="info-value">
-                        {new Date(currentProject.start_date).toLocaleDateString(
-                          "ru-RU",
-                          {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                          }
-                        )}
+                        {currentProject.start_date
+                          ? new Date(
+                              currentProject.start_date
+                            ).toLocaleDateString("ru-RU", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            })
+                          : "—"}
                       </p>
                     </div>
+
                     <div className="info-section">
                       <h3 className="info-label">Дата окончания</h3>
                       <p className="info-value">
-                        {new Date(currentProject.end_date).toLocaleDateString(
-                          "ru-RU",
-                          {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                          }
-                        )}
+                        {currentProject.end_date
+                          ? new Date(
+                              currentProject.end_date
+                            ).toLocaleDateString("ru-RU", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            })
+                          : "—"}
                       </p>
                     </div>
-                    {/* ... */}
+
+                    {/* Участники */}
+                    <div className="info-section full-width">
+                      <h3 className="info-label">Участники</h3>
+                      <div className="participants-list">
+                        {Array.isArray(currentProject.participants) &&
+                        currentProject.participants.length > 0 ? (
+                          currentProject.participants.map((uid) => {
+                            const u = person.find((p) => p.id === uid);
+                            return (
+                              <span key={uid} className="participant-tag">
+                                {u
+                                  ? `${u.first_name} ${u.last_name}`
+                                  : `ID ${uid}`}
+                              </span>
+                            );
+                          })
+                        ) : (
+                          <p className="info-value">—</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Описание */}
+                    <div className="info-section full-width">
+                      <h3 className="info-label">Описание</h3>
+                      <div className="description-text">
+                        {currentProject.description || "—"}
+                      </div>
+                    </div>
+
+                    {/* Сертификат (если есть) */}
+                    {currentProject.certificate && (
+                      <div className="info-section full-width">
+                        <h3 className="info-label">Сертификат</h3>
+                        <p className="info-value">
+                          <a
+                            href={currentProject.certificate}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Открыть сертификат
+                          </a>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Кнопки действий */}
+                  <div className="view-actions">
+                    {!currentProject.is_approved ? (
+                      <>
+                        <button
+                          className="btn-secondary"
+                          onClick={() => handleRejectProject(currentProject.id)}
+                          disabled={rejectingId === currentProject.id}
+                        >
+                          {rejectingId === currentProject.id
+                            ? "Отклонение..."
+                            : "Отклонить"}
+                        </button>
+                        <button
+                          className="btn-primary"
+                          onClick={() =>
+                            handleApproveProject(currentProject.id)
+                          }
+                          disabled={approvingId === currentProject.id}
+                        >
+                          {approvingId === currentProject.id
+                            ? "Подтверждение..."
+                            : "Подтвердить"}
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className="btn-primary"
+                        onClick={() => {
+                          setIsEditMode(true);
+                          setProjectData({
+                            name: currentProject.name || "",
+                            description: currentProject.description || "",
+                            previewImage: null,
+                            certificate: null,
+                            status: ["active", "completed"].includes(
+                              currentProject.status
+                            )
+                              ? currentProject.status
+                              : "active",
+                            startDate: (
+                              currentProject.start_date || ""
+                            ).substring(0, 10),
+                            endDate: (currentProject.end_date || "").substring(
+                              0,
+                              10
+                            ),
+                            participants: Array.isArray(
+                              currentProject.participants
+                            )
+                              ? currentProject.participants
+                              : [],
+                          });
+                          setFilePreview(currentProject.preview_image || null);
+                        }}
+                      >
+                        Редактировать
+                      </button>
+                    )}
+
+                    <button className="btn-secondary" onClick={closeModal}>
+                      Закрыть
+                    </button>
                   </div>
                 </>
               )}

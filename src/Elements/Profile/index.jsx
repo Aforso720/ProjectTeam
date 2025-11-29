@@ -1,13 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import style from "./Profile.module.scss";
 import { AuthContext } from "../../context/AuthContext";
 import axiosInstance from "../../API/axiosInstance";
 
+const DEFAULT_AVATAR = "/img/kot.jpg";
+
 const Profile = ({ handleLogout }) => {
   const { user } = useContext(AuthContext);
-  const [photoUrl, setPhotoUrl] = useState("/img/kot.jpg");
+
+  const [photoUrl, setPhotoUrl] = useState(DEFAULT_AVATAR);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [removeAvatarRequested, setRemoveAvatarRequested] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
   const [formData, setFormData] = useState({
     lastName: "",
     firstName: "",
@@ -17,101 +22,138 @@ const Profile = ({ handleLogout }) => {
     birthDate: "",
   });
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await axiosInstance.get(`/users/${user.id}`);
-        const userData = data.data;
+  // Храним текущий objectURL, чтобы освобождать память
+  const objectUrlRef = useRef(null);
 
-        setFormData({
-          lastName: userData?.last_name || "",
-          firstName: userData?.first_name || "",
-          middleName: userData?.middle_name || "",
-          email: userData?.email || "",
-          phone: userData?.phone || "",
-          birthDate: userData?.birth_date || "",
-        });
+  const fetchUser = async () => {
+    try {
+      const { data } = await axiosInstance.get(`/users/${user.id}`);
+      const userData = data.data;
 
-        if (userData.avatar) {
-          setPhotoUrl(userData.avatar);
-        } else {
-          setPhotoUrl("/img/kot.jpg");
-        }
-      } catch (err) {
-        console.log("Ошибка загрузки профиля:", err);
-      }
-    };
+      setFormData({
+        lastName: userData?.last_name || "",
+        firstName: userData?.first_name || "",
+        middleName: userData?.middle_name || "",
+        email: userData?.email || "",
+        phone: userData?.phone || "",
+        birthDate: userData?.birth_date || "",
+      });
 
-    fetchUser();
-  }, [user.id]);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      setPhotoUrl(URL.createObjectURL(file)); // превью
+      setPhotoUrl(userData?.avatar || DEFAULT_AVATAR);
+    } catch (err) {
+      console.log("Ошибка загрузки профиля:", err);
     }
   };
 
+  useEffect(() => {
+    fetchUser();
+
+    // cleanup objectURL при размонтировании
+    return () => {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+        objectUrlRef.current = null;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.id]);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    setRemoveAvatarRequested(false); // если выбрали новый файл, точно не удаляем
+
+    // освобождаем предыдущий objectURL, если был
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+      objectUrlRef.current = null;
+    }
+
+    const url = URL.createObjectURL(file);
+    objectUrlRef.current = url;
+    setPhotoUrl(url);
+  };
+
   const handleDeletePhoto = () => {
+    // освобождаем objectURL, если был
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+      objectUrlRef.current = null;
+    }
     setSelectedFile(null);
-    setPhotoUrl("/img/kot.jpg");
+    setRemoveAvatarRequested(true);
+    setPhotoUrl(DEFAULT_AVATAR);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
+    }));
+  };
+
+  // --- новые отдельные вызовы API для аватара ---
+  const uploadAvatar = async (file) => {
+    const form = new FormData();
+    form.append("avatar", file);
+    await axiosInstance.post(`/users/avatar`, form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  };
+
+  const deleteAvatar = async () => {
+    await axiosInstance.delete(`/users/avatar`);
+  };
+
+  const updateProfileFields = async () => {
+    const form = new FormData();
+    form.append("first_name", formData.firstName);
+    form.append("middle_name", formData.middleName);
+    form.append("last_name", formData.lastName);
+    form.append("email", formData.email);
+    form.append("phone", formData.phone);
+    if (formData.birthDate) form.append("birth_date", formData.birthDate);
+
+    // ВНИМАНИЕ: файл НЕ отправляем в этот запрос
+    await axiosInstance.post(`/users/${user.id}?_method=PUT`, form, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
   };
 
   const handleEditClick = async () => {
     if (isEditing) {
       try {
-        const form = new FormData();
-        form.append("id", user.id);
-        form.append("first_name", formData.firstName);
-        form.append("middle_name", formData.middleName);
-        form.append("last_name", formData.lastName);
-        form.append("email", formData.email);
-        form.append("phone", formData.phone);
-        form.append("birth_date", formData.birthDate);
+        // 1) обновляем текстовые поля
+        await updateProfileFields();
 
-        if (selectedFile) {
-          form.append("avatar", selectedFile);
-        } else if (photoUrl === "/img/kot.jpg") {
-          form.append("avatar", ""); // удаляем фото
+        // 2) обрабатываем аватар отдельно
+        if (selectedFile instanceof File) {
+          await uploadAvatar(selectedFile);
+        } else if (removeAvatarRequested) {
+          await deleteAvatar();
         }
 
-        const { data } = await axiosInstance.put(`/users/${user.id}`, form, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-
-        const updatedUser = data.data;
-
-        setFormData({
-          lastName: updatedUser.last_name,
-          firstName: updatedUser.first_name,
-          middleName: updatedUser.middle_name,
-          email: updatedUser.email,
-          phone: updatedUser.phone,
-          birthDate: updatedUser.birth_date,
-        });
-
-        if (updatedUser.avatar) {
-          setPhotoUrl(updatedUser.avatar);
-        } else {
-          setPhotoUrl("/img/kot.jpg");
+        // очистим objectURL, если был
+        if (objectUrlRef.current) {
+          URL.revokeObjectURL(objectUrlRef.current);
+          objectUrlRef.current = null;
         }
 
+        // 3) перезагрузим пользователя
+        await fetchUser();
+
+        // 4) сброс локальных состояний
         setSelectedFile(null);
+        setRemoveAvatarRequested(false);
       } catch (error) {
-        console.error("Ошибка при обновлении профиля:", error);
+        console.error("Ошибка при сохранении профиля:", error);
       }
     }
 
-    setIsEditing(!isEditing);
+    setIsEditing((prev) => !prev);
   };
 
   return (
@@ -171,6 +213,7 @@ const Profile = ({ handleLogout }) => {
               />
             </div>
           </div>
+
           <div>
             <div className={style.inputGroup}>
               <p>Email</p>
@@ -192,6 +235,8 @@ const Profile = ({ handleLogout }) => {
                 onChange={handleInputChange}
               />
             </div>
+
+            {/* Если нужна дата рождения — раскомментируй */}
             {/* <div className={style.inputGroup}>
               <p>Дата рождения</p>
               <input
@@ -205,6 +250,7 @@ const Profile = ({ handleLogout }) => {
               />
             </div> */}
           </div>
+
           <span>
             <img
               src="/img/icons8-exit-50.png"
@@ -213,6 +259,7 @@ const Profile = ({ handleLogout }) => {
             />
           </span>
         </div>
+
         <button className={style.buttonEdit} onClick={handleEditClick}>
           {isEditing ? "Сохранить" : "Редактировать"}
         </button>
